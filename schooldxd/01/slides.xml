@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<flash_parameters copyright="anvsoftPFMTheme">
+    <preferences>
+        <global>
+            <basic_property html_title="Title" backgroundColor="0xc0c0c0" anvsoftMenu="false" hideAdobeMenu="true" enableURL="false"/>
+            <title_property showTitle="true" photoTitleColor="0x000000" backgroundColor="" alpha="50" boxWidth="500" boxHeight="40"/>
+            <music_property path="" stream="false" loop="false"/>
+        </global>
+        <photo>
+            <basic_property PhotoMaxWidth="1300" PhotoMaxHeight="1000"/>
+        </photo>
+        <thumbnail>
+            <basic_property thumWidth="80" thumHeight="60" thumEllipseSize="7" thumBgColor="" thumBgWidth="600" thumBgHeight="60" thumSpacing="6" thumborder="6" borderColor="0x000000" buttonSpacing="10"/>
+        </thumbnail>
+    </preferences>
+    <album>
+        <slide jpegURL="thumbs/t_0001.jpg" d_URL="slides/p_0001.jpg" transition="0" panzoom="1" URLTarget="0" phototime="2" transitiontime="2" url="" title="Highschool_DxD_v01_ch01_02" width="703" height="1000"/>
+        <slide jpegURL="thumbs/t_0002.jpg" d_URL="slides/p_0002.jpg" transition="0" panzoom="1" URLTarget="0" phototime="2" transitiontime="2" url="" title="Highschool_DxD_v01_ch01_02" width="705" height="1000"/>
+        <slide jpegURL="thumbs/t_0003.jpg" d_URL="slides/p_0003.jpg" transition="0" panzoom="1" URLTarget="0" phototime="2" transitiontime="2" url="" title="Highschool_DxD_v01_ch01_02" width="701" height="1000"/>
+        <slide jpegURL="thumbs/t_0004.jpg" d_URL="slides/p_0004.jpg" transition="0" panzoom="1" URLTarget="0" phototime="2" transitiontime="2" url="" title="Highschool_DxD_v01_ch01_02" width="1300" height="920"/>
+        <slide jpegURL="thumbs/t_0005.jpg" d_URL="slides/p_0005.jpg" transition="0" panzoom="1" URLTarget="0" phototime="2" transitiontime="2" url="" title="Highschool_DxD_v01_ch01_02" width="702" height="1000"/>
+        <slide jpegURL="thumbs/t_0006.jpg" d_URL="slides/p_0006.jpg" transition="0" panzoom="1" URLTarget="0" phototime="2" transitiontime="2" url="" title="Highschool_DxD_v01_ch01_02" width="706" height="1000"/>
+        <slide jpegURL="thumbs/t_0007.jpg" d_URL="slides/p_0007.jpg" transition="0" panzoom="1" URLTarget="0" phototime="2" transitiontime="2" url="" title="Highschool_DxD_v01_ch01_02" width="702" height="1000"/>
+        <slide jpegURL="thumbs/t_0008.jpg" d_URL="slides/p_0008.jpg" transition="0" panzoom="1" URLTarget="0" phototime="2" transitiontime="2" url="" title="Highschool_DxD_v01_ch01_02" width="705" height="1000"/>
+        <slide jpegURL="thumbs/t_0009.jpg" d_URL="slides/p_0009.jpg" transition="0" panzoom="1" URLTarget="0" phototime="2" transitiontime="2" url="" title="Highschool_DxD_v01_ch01_02" width="700" height="1000"/>
+        <slide jpegURL="thumbs/t_0010.jpg" d_URL="slides/p_0010.jpg" transition="0" panzoom="1" URLTarget="0" phototime="2" transitiontime="2" url="" title="Highschool_DxD_v01_ch01_02" width="705" height="1000"/>
+        <slide jpegURL="thumbs/t_0011.jpg" d_URL="slides/p_0011.jpg" transition="0" panzoom="1" URLTarget="0" phototime="2" transitiontime="2" url="" title="Highschool_DxD_v01_ch01_02" width="702" height="1000"/>
+        <slide jpegURL="thumbs/t_0012.jpg" d_URL="slides/p_0012.jpg" transition="0" panzoom="1" URLTarget="0" phototime="2" transitiontime="2" url="" title="Highschool_DxD_v01_ch01_02" width="702" height="1000"/>
+        <slide jpegURL="thumbs/t_0013.jpg" d_URL="slides/p_0013.jpg" transition="0" panzoom="1" URLTarget="0" phototime="2" transitiontime="2" url="" title="Highschool_DxD_v01_ch01_02" width="706" height="1000"/>
+        <slide jpegURL="thumbs/t_0014.jpg" d_URL="slides/p_0014.jpg" transition="0" panzoom="1" URLTarget="0" phototime="2" transitiontime="2" url="" title="Highschool_DxD_v01_ch01_02" width="703" height="1000"/>
+        <slide jpegURL="thumbs/t_0015.jpg" d_URL="slides/p_0015.jpg" transition="0" panzoom="1" URLTarget="0" phototime="2" transitiontime="2" url="" title="Highschool_DxD_v01_ch01_02" width="707" height="1000"/>
+        <slide jpegURL="thumbs/t_0016.jpg" d_URL="slides/p_0016.jpg" transition="0" panzoom="1" URLTarget="0" phototime="2" transitiontime="2" url="" title="Highschool_DxD_v01_ch01_02" width="701" height="1000"/>
+        <slide jpegURL="thumbs/t_0017.jpg" d_URL="slides/p_0017.jpg" transition="0" panzoom="1" URLTarget="0" phototime="2" transitiontime="2" url="" title="Highschool_DxD_v01_ch01_02" width="706" height="1000"/>
+        <slide jpegURL="thumbs/t_0018.jpg" d_URL="slides/p_0018.jpg" transition="0" panzoom="1" URLTarget="0" phototime="2" transitiontime="2" url="" title="Highschool_DxD_v01_ch01_02" width="702" height="1000"/>
+        <slide jpegURL="thumbs/t_0019.jpg" d_URL="slides/p_0019.jpg" transition="0" panzoom="1" URLTarget="0" phototime="2" transitiontime="2" url="" title="Highschool_DxD_v01_ch01_02" width="702" height="1000"/>
+        <slide jpegURL="thumbs/t_0020.jpg" d_URL="slides/p_0020.jpg" transition="0" panzoom="1" URLTarget="0" phototime="2" transitiontime="2" url="" title="Highschool_DxD_v01_ch01_02" width="702" height="1000"/>
+        <slide jpegURL="thumbs/t_0021.jpg" d_URL="slides/p_0021.jpg" transition="0" panzoom="1" URLTarget="0" phototime="2" transitiontime="2" url="" title="Highschool_DxD_v01_ch01_02" width="705" height="1000"/>
+        <slide jpegURL="thumbs/t_0022.jpg" d_URL="slides/p_0022.jpg" transition="0" panzoom="1" URLTarget="0" phototime="2" transitiontime="2" url="" title="Highschool_DxD_v01_ch01_02" width="707" height="1000"/>
+        <slide jpegURL="thumbs/t_0023.jpg" d_URL="slides/p_0023.jpg" transition="0" panzoom="1" URLTarget="0" phototime="2" transitiontime="2" url="" title="Highschool_DxD_v01_ch01_02" width="707" height="1000"/>
+        <slide jpegURL="thumbs/t_0024.jpg" d_URL="slides/p_0024.jpg" transition="0" panzoom="1" URLTarget="0" phototime="2" transitiontime="2" url="" title="Highschool_DxD_v01_ch01_02" width="705" height="1000"/>
+        <slide jpegURL="thumbs/t_0025.jpg" d_URL="slides/p_0025.jpg" transition="0" panzoom="1" URLTarget="0" phototime="2" transitiontime="2" url="" title="Highschool_DxD_v01_ch01_02" width="707" height="1000"/>
+        <slide jpegURL="thumbs/t_0026.jpg" d_URL="slides/p_0026.jpg" transition="0" panzoom="1" URLTarget="0" phototime="2" transitiontime="2" url="" title="Highschool_DxD_v01_ch01_02" width="706" height="1000"/>
+        <slide jpegURL="thumbs/t_0027.jpg" d_URL="slides/p_0027.jpg" transition="0" panzoom="1" URLTarget="0" phototime="2" transitiontime="2" url="" title="Highschool_DxD_v01_ch01_02" width="691" height="1000"/>
+        <slide jpegURL="thumbs/t_0028.jpg" d_URL="slides/p_0028.jpg" transition="0" panzoom="1" URLTarget="0" phototime="2" transitiontime="2" url="" title="Highschool_DxD_v01_ch01_02" width="703" height="1000"/>
+        <slide jpegURL="thumbs/t_0029.jpg" d_URL="slides/p_0029.jpg" transition="0" panzoom="1" URLTarget="0" phototime="2" transitiontime="2" url="" title="Highschool_DxD_v01_ch01_02" width="703" height="1000"/>
+        <slide jpegURL="thumbs/t_0030.jpg" d_URL="slides/p_0030.jpg" transition="0" panzoom="1" URLTarget="0" phototime="2" transitiontime="2" url="" title="Highschool_DxD_v01_ch01_02" width="706" height="1000"/>
+        <slide jpegURL="thumbs/t_0031.jpg" d_URL="slides/p_0031.jpg" transition="0" panzoom="1" URLTarget="0" phototime="2" transitiontime="2" url="" title="Highschool_DxD_v01_ch01_02" width="705" height="1000"/>
+        <slide jpegURL="thumbs/t_0032.jpg" d_URL="slides/p_0032.jpg" transition="0" panzoom="1" URLTarget="0" phototime="2" transitiontime="2" url="" title="Highschool_DxD_v01_ch01_02" width="686" height="1000"/>
+        <slide jpegURL="thumbs/t_0033.jpg" d_URL="slides/p_0033.jpg" transition="0" panzoom="1" URLTarget="0" phototime="2" transitiontime="2" url="" title="Highschool_DxD_v01_ch01_02" width="695" height="1000"/>
+        <slide jpegURL="thumbs/t_0034.jpg" d_URL="slides/p_0034.jpg" transition="0" panzoom="1" URLTarget="0" phototime="2" transitiontime="2" url="" title="Highschool_DxD_v01_ch01_02" width="705" height="1000"/>
+        <slide jpegURL="thumbs/t_0035.jpg" d_URL="slides/p_0035.jpg" transition="0" panzoom="1" URLTarget="0" phototime="2" transitiontime="2" url="" title="Highschool_DxD_v01_ch01_02" width="703" height="1000"/>
+        <slide jpegURL="thumbs/t_0036.jpg" d_URL="slides/p_0036.jpg" transition="0" panzoom="1" URLTarget="0" phototime="2" transitiontime="2" url="" title="Highschool_DxD_v01_ch01_02" width="702" height="1000"/>
+        <slide jpegURL="thumbs/t_0037.jpg" d_URL="slides/p_0037.jpg" transition="0" panzoom="1" URLTarget="0" phototime="2" transitiontime="2" url="" title="Highschool_DxD_v01_ch01_02" width="705" height="1000"/>
+        <slide jpegURL="thumbs/t_0038.jpg" d_URL="slides/p_0038.jpg" transition="0" panzoom="1" URLTarget="0" phototime="2" transitiontime="2" url="" title="Highschool_DxD_v01_ch01_02" width="706" height="1000"/>
+        <slide jpegURL="thumbs/t_0039.jpg" d_URL="slides/p_0039.jpg" transition="0" panzoom="1" URLTarget="0" phototime="2" transitiontime="2" url="" title="Highschool_DxD_v01_ch01_02" width="1300" height="920"/>
+        <slide jpegURL="thumbs/t_0040.jpg" d_URL="slides/p_0040.jpg" transition="0" panzoom="1" URLTarget="0" phototime="2" transitiontime="2" url="" title="Highschool_DxD_v01_ch01_02" width="700" height="1000"/>
+        <slide jpegURL="thumbs/t_0041.jpg" d_URL="slides/p_0041.jpg" transition="0" panzoom="1" URLTarget="0" phototime="2" transitiontime="2" url="" title="Highschool_DxD_v01_ch01_02" width="705" height="1000"/>
+        <slide jpegURL="thumbs/t_0042.jpg" d_URL="slides/p_0042.jpg" transition="0" panzoom="1" URLTarget="0" phototime="2" transitiontime="2" url="" title="Highschool_DxD_v01_ch01_02" width="705" height="1000"/>
+        <slide jpegURL="thumbs/t_0043.jpg" d_URL="slides/p_0043.jpg" transition="0" panzoom="1" URLTarget="0" phototime="2" transitiontime="2" url="" title="Highschool_DxD_v01_ch01_02" width="701" height="1000"/>
+        <slide jpegURL="thumbs/t_0044.jpg" d_URL="slides/p_0044.jpg" transition="0" panzoom="1" URLTarget="0" phototime="2" transitiontime="2" url="" title="Highschool_DxD_v01_ch01_02" width="705" height="1000"/>
+        <slide jpegURL="thumbs/t_0045.jpg" d_URL="slides/p_0045.jpg" transition="0" panzoom="1" URLTarget="0" phototime="2" transitiontime="2" url="" title="Highschool_DxD_v01_ch01_02" width="703" height="1000"/>
+        <slide jpegURL="thumbs/t_0046.jpg" d_URL="slides/p_0046.jpg" transition="0" panzoom="1" URLTarget="0" phototime="2" transitiontime="2" url="" title="Highschool_DxD_v01_ch01_02" width="702" height="1000"/>
+        <slide jpegURL="thumbs/t_0047.jpg" d_URL="slides/p_0047.jpg" transition="0" panzoom="1" URLTarget="0" phototime="2" transitiontime="2" url="" title="Highschool_DxD_v01_ch01_02" width="703" height="1000"/>
+        <slide jpegURL="thumbs/t_0048.jpg" d_URL="slides/p_0048.jpg" transition="0" panzoom="1" URLTarget="0" phototime="2" transitiontime="2" url="" title="Highschool_DxD_v01_ch01_02" width="693" height="1000"/>
+        <slide jpegURL="thumbs/t_0049.jpg" d_URL="slides/p_0049.jpg" transition="0" panzoom="1" URLTarget="0" phototime="2" transitiontime="2" url="" title="Highschool_DxD_v01_ch01_02" width="702" height="1000"/>
+        <slide jpegURL="thumbs/t_0050.jpg" d_URL="slides/p_0050.jpg" transition="0" panzoom="1" URLTarget="0" phototime="2" transitiontime="2" url="" title="Highschool_DxD_v01_ch01_02" width="704" height="1000"/>
+        <slide jpegURL="thumbs/t_0051.jpg" d_URL="slides/p_0051.jpg" transition="0" panzoom="1" URLTarget="0" phototime="2" transitiontime="2" url="" title="Highschool_DxD_v01_ch01_02" width="703" height="1000"/>
+        <slide jpegURL="thumbs/t_0052.jpg" d_URL="slides/p_0052.jpg" transition="0" panzoom="1" URLTarget="0" phototime="2" transitiontime="2" url="" title="Highschool_DxD_v01_ch01_02" width="703" height="1000"/>
+        <slide jpegURL="thumbs/t_0053.jpg" d_URL="slides/p_0053.jpg" transition="0" panzoom="1" URLTarget="0" phototime="2" transitiontime="2" url="" title="Highschool_DxD_v01_ch01_02" width="703" height="1000"/>
+        <slide jpegURL="thumbs/t_0054.jpg" d_URL="slides/p_0054.jpg" transition="0" panzoom="1" URLTarget="0" phototime="2" transitiontime="2" url="" title="Highschool_DxD_v01_ch01_02" width="705" height="1000"/>
+        <slide jpegURL="thumbs/t_0055.jpg" d_URL="slides/p_0055.jpg" transition="0" panzoom="1" URLTarget="0" phototime="2" transitiontime="2" url="" title="Highschool_DxD_v01_ch01_02" width="700" height="1000"/>
+        <slide jpegURL="thumbs/t_0056.jpg" d_URL="slides/p_0056.jpg" transition="0" panzoom="1" URLTarget="0" phototime="2" transitiontime="2" url="" title="Highschool_DxD_v01_ch01_02" width="705" height="1000"/>
+        <slide jpegURL="thumbs/t_0057.jpg" d_URL="slides/p_0057.jpg" transition="0" panzoom="1" URLTarget="0" phototime="2" transitiontime="2" url="" title="Highschool_DxD_v01_ch01_02" width="705" height="1000"/>
+        <slide jpegURL="thumbs/t_0058.jpg" d_URL="slides/p_0058.jpg" transition="0" panzoom="1" URLTarget="0" phototime="2" transitiontime="2" url="" title="Highschool_DxD_v01_ch01_02" width="704" height="1000"/>
+        <slide jpegURL="thumbs/t_0059.jpg" d_URL="slides/p_0059.jpg" transition="0" panzoom="1" URLTarget="0" phototime="2" transitiontime="2" url="" title="Highschool_DxD_v01_ch01_02" width="702" height="1000"/>
+        <slide jpegURL="thumbs/t_0060.jpg" d_URL="slides/p_0060.jpg" transition="0" panzoom="1" URLTarget="0" phototime="2" transitiontime="2" url="" title="Highschool_DxD_v01_ch01_02" width="692" height="1000"/>
+        <slide jpegURL="thumbs/t_0061.jpg" d_URL="slides/p_0061.jpg" transition="0" panzoom="1" URLTarget="0" phototime="2" transitiontime="2" url="" title="Highschool_DxD_v01_ch01_02" width="696" height="1000"/>
+        <slide jpegURL="thumbs/t_0062.jpg" d_URL="slides/p_0062.jpg" transition="0" panzoom="1" URLTarget="0" phototime="2" transitiontime="2" url="" title="Highschool_DxD_v01_ch01_02" width="705" height="1000"/>
+        <slide jpegURL="thumbs/t_0063.jpg" d_URL="slides/p_0063.jpg" transition="0" panzoom="1" URLTarget="0" phototime="2" transitiontime="2" url="" title="Highschool_DxD_v01_ch01_02" width="703" height="1000"/>
+        <slide jpegURL="thumbs/t_0064.jpg" d_URL="slides/p_0064.jpg" transition="0" panzoom="1" URLTarget="0" phototime="2" transitiontime="2" url="" title="Highschool_DxD_v01_ch01_02" width="1300" height="926"/>
+        <slide jpegURL="thumbs/t_0065.jpg" d_URL="slides/p_0065.jpg" transition="0" panzoom="1" URLTarget="0" phototime="2" transitiontime="2" url="" title="Highschool_DxD_v01_ch01_02" width="702" height="1000"/>
+        <slide jpegURL="thumbs/t_0066.jpg" d_URL="slides/p_0066.jpg" transition="0" panzoom="1" URLTarget="0" phototime="2" transitiontime="2" url="" title="Highschool_DxD_v01_ch01_02" width="690" height="1000"/>
+        <slide jpegURL="thumbs/t_0067.jpg" d_URL="slides/p_0067.jpg" transition="0" panzoom="1" URLTarget="0" phototime="2" transitiontime="2" url="" title="Highschool_DxD_v01_ch01_02" width="702" height="1000"/>
+        <slide jpegURL="thumbs/t_0068.jpg" d_URL="slides/p_0068.jpg" transition="0" panzoom="1" URLTarget="0" phototime="2" transitiontime="2" url="" title="Highschool_DxD_v01_ch01_02" width="697" height="1000"/>
+        <slide jpegURL="thumbs/t_0069.jpg" d_URL="slides/p_0069.jpg" transition="0" panzoom="1" URLTarget="0" phototime="2" transitiontime="2" url="" title="Highschool_DxD_v01_ch01_02" width="703" height="1000"/>
+        <slide jpegURL="thumbs/t_0070.jpg" d_URL="slides/p_0070.jpg" transition="0" panzoom="1" URLTarget="0" phototime="2" transitiontime="2" url="" title="Highschool_DxD_v01_ch01_02" width="704" height="1000"/>
+        <slide jpegURL="thumbs/t_0071.jpg" d_URL="slides/p_0071.jpg" transition="0" panzoom="1" URLTarget="0" phototime="2" transitiontime="2" url="" title="Highschool_DxD_v01_ch01_02" width="702" height="1000"/>
+        <slide jpegURL="thumbs/t_0072.jpg" d_URL="slides/p_0072.jpg" transition="0" panzoom="1" URLTarget="0" phototime="2" transitiontime="2" url="" title="Highschool_DxD_v01_ch01_02" width="702" height="1000"/>
+        <slide jpegURL="thumbs/t_0073.jpg" d_URL="slides/p_0073.jpg" transition="0" panzoom="1" URLTarget="0" phototime="2" transitiontime="2" url="" title="Highschool_DxD_v01_ch01_02" width="699" height="1000"/>
+        <slide jpegURL="thumbs/t_0074.jpg" d_URL="slides/p_0074.jpg" transition="0" panzoom="1" URLTarget="0" phototime="2" transitiontime="2" url="" title="Highschool_DxD_v01_ch01_02" width="702" height="1000"/>
+        <slide jpegURL="thumbs/t_0075.jpg" d_URL="slides/p_0075.jpg" transition="0" panzoom="1" URLTarget="0" phototime="2" transitiontime="2" url="" title="Highschool_DxD_v01_ch01_02" width="704" height="1000"/>
+        <slide jpegURL="thumbs/t_0076.jpg" d_URL="slides/p_0076.jpg" transition="0" panzoom="1" URLTarget="0" phototime="2" transitiontime="2" url="" title="Highschool_DxD_v01_ch01_02" width="705" height="1000"/>
+        <slide jpegURL="thumbs/t_0077.jpg" d_URL="slides/p_0077.jpg" transition="0" panzoom="1" URLTarget="0" phototime="2" transitiontime="2" url="" title="Highschool_DxD_v01_ch01_02" width="704" height="1000"/>
+        <slide jpegURL="thumbs/t_0078.jpg" d_URL="slides/p_0078.jpg" transition="0" panzoom="1" URLTarget="0" phototime="2" transitiontime="2" url="" title="Highschool_DxD_v01_ch01_02" width="704" height="1000"/>
+        <slide jpegURL="thumbs/t_0079.jpg" d_URL="slides/p_0079.jpg" transition="0" panzoom="1" URLTarget="0" phototime="2" transitiontime="2" url="" title="Highschool_DxD_v01_ch01_02" width="701" height="1000"/>
+        <slide jpegURL="thumbs/t_0080.jpg" d_URL="slides/p_0080.jpg" transition="0" panzoom="1" URLTarget="0" phototime="2" transitiontime="2" url="" title="Highschool_DxD_v01_ch01_02" width="707" height="1000"/>
+        <slide jpegURL="thumbs/t_0081.jpg" d_URL="slides/p_0081.jpg" transition="0" panzoom="1" URLTarget="0" phototime="2" transitiontime="2" url="" title="Highschool_DxD_v01_ch01_02" width="700" height="1000"/>
+        <slide jpegURL="thumbs/t_0082.jpg" d_URL="slides/p_0082.jpg" transition="0" panzoom="1" URLTarget="0" phototime="2" transitiontime="2" url="" title="Highschool_DxD_v01_ch01_02" width="705" height="1000"/>
+        <slide jpegURL="thumbs/t_0083.jpg" d_URL="slides/p_0083.jpg" transition="0" panzoom="1" URLTarget="0" phototime="2" transitiontime="2" url="" title="Highschool_DxD_v01_ch01_02" width="705" height="1000"/>
+        <slide jpegURL="thumbs/t_0084.jpg" d_URL="slides/p_0084.jpg" transition="0" panzoom="1" URLTarget="0" phototime="2" transitiontime="2" url="" title="Highschool_DxD_v01_ch01_02" width="702" height="1000"/>
+        <slide jpegURL="thumbs/t_0085.jpg" d_URL="slides/p_0085.jpg" transition="0" panzoom="1" URLTarget="0" phototime="2" transitiontime="2" url="" title="Highschool_DxD_v01_ch01_02" width="704" height="1000"/>
+        <slide jpegURL="thumbs/t_0086.jpg" d_URL="slides/p_0086.jpg" transition="0" panzoom="1" URLTarget="0" phototime="2" transitiontime="2" url="" title="Highschool_DxD_v01_ch01_02" width="702" height="1000"/>
+        <slide jpegURL="thumbs/t_0087.jpg" d_URL="slides/p_0087.jpg" transition="0" panzoom="1" URLTarget="0" phototime="2" transitiontime="2" url="" title="Highschool_DxD_v01_ch01_02" width="705" height="1000"/>
+        <slide jpegURL="thumbs/t_0088.jpg" d_URL="slides/p_0088.jpg" transition="0" panzoom="1" URLTarget="0" phototime="2" transitiontime="2" url="" title="Highschool_DxD_v01_ch01_02" width="702" height="1000"/>
+        <slide jpegURL="thumbs/t_0089.jpg" d_URL="slides/p_0089.jpg" transition="0" panzoom="1" URLTarget="0" phototime="2" transitiontime="2" url="" title="Highschool_DxD_v01_ch01_02" width="705" height="1000"/>
+        <slide jpegURL="thumbs/t_0090.jpg" d_URL="slides/p_0090.jpg" transition="0" panzoom="1" URLTarget="0" phototime="2" transitiontime="2" url="" title="Highschool_DxD_v01_ch01_02" width="700" height="1000"/>
+        <slide jpegURL="thumbs/t_0091.jpg" d_URL="slides/p_0091.jpg" transition="0" panzoom="1" URLTarget="0" phototime="2" transitiontime="2" url="" title="Highschool_DxD_v01_ch01_02" width="701" height="1000"/>
+        <slide jpegURL="thumbs/t_0092.jpg" d_URL="slides/p_0092.jpg" transition="0" panzoom="1" URLTarget="0" phototime="2" transitiontime="2" url="" title="Highschool_DxD_v01_ch01_02" width="702" height="1000"/>
+        <slide jpegURL="thumbs/t_0093.jpg" d_URL="slides/p_0093.jpg" transition="0" panzoom="1" URLTarget="0" phototime="2" transitiontime="2" url="" title="Highschool_DxD_v01_ch01_02" width="705" height="1000"/>
+        <slide jpegURL="thumbs/t_0094.jpg" d_URL="slides/p_0094.jpg" transition="0" panzoom="1" URLTarget="0" phototime="2" transitiontime="2" url="" title="Highschool_DxD_v01_ch01_02" width="703" height="1000"/>
+        <slide jpegURL="thumbs/t_0095.jpg" d_URL="slides/p_0095.jpg" transition="0" panzoom="1" URLTarget="0" phototime="2" transitiontime="2" url="" title="Highschool_DxD_v01_ch01_02" width="701" height="1000"/>
+        <slide jpegURL="thumbs/t_0096.jpg" d_URL="slides/p_0096.jpg" transition="0" panzoom="1" URLTarget="0" phototime="2" transitiontime="2" url="" title="Highschool_DxD_v01_ch01_02" width="699" height="1000"/>
+        <slide jpegURL="thumbs/t_0097.jpg" d_URL="slides/p_0097.jpg" transition="0" panzoom="1" URLTarget="0" phototime="2" transitiontime="2" url="" title="Highschool_DxD_v01_ch01_02" width="701" height="1000"/>
+        <slide jpegURL="thumbs/t_0098.jpg" d_URL="slides/p_0098.jpg" transition="0" panzoom="1" URLTarget="0" phototime="2" transitiontime="2" url="" title="Highschool_DxD_v01_ch01_02" width="701" height="1000"/>
+        <slide jpegURL="thumbs/t_0099.jpg" d_URL="slides/p_0099.jpg" transition="0" panzoom="1" URLTarget="0" phototime="2" transitiontime="2" url="" title="Highschool_DxD_v01_ch01_02" width="702" height="1000"/>
+        <slide jpegURL="thumbs/t_0100.jpg" d_URL="slides/p_0100.jpg" transition="0" panzoom="1" URLTarget="0" phototime="2" transitiontime="2" url="" title="Highschool_DxD_v01_ch01_02" width="700" height="1000"/>
+        <slide jpegURL="thumbs/t_0101.jpg" d_URL="slides/p_0101.jpg" transition="0" panzoom="1" URLTarget="0" phototime="2" transitiontime="2" url="" title="Highschool_DxD_v01_ch01_02" width="702" height="1000"/>
+        <slide jpegURL="thumbs/t_0102.jpg" d_URL="slides/p_0102.jpg" transition="0" panzoom="1" URLTarget="0" phototime="2" transitiontime="2" url="" title="Highschool_DxD_v01_ch01_02" width="700" height="1000"/>
+        <slide jpegURL="thumbs/t_0103.jpg" d_URL="slides/p_0103.jpg" transition="0" panzoom="1" URLTarget="0" phototime="2" transitiontime="2" url="" title="Highschool_DxD_v01_ch01_02" width="702" height="1000"/>
+        <slide jpegURL="thumbs/t_0104.jpg" d_URL="slides/p_0104.jpg" transition="0" panzoom="1" URLTarget="0" phototime="2" transitiontime="2" url="" title="Highschool_DxD_v01_ch01_02" width="702" height="1000"/>
+        <slide jpegURL="thumbs/t_0105.jpg" d_URL="slides/p_0105.jpg" transition="0" panzoom="1" URLTarget="0" phototime="2" transitiontime="2" url="" title="Highschool_DxD_v01_ch01_02" width="701" height="1000"/>
+        <slide jpegURL="thumbs/t_0106.jpg" d_URL="slides/p_0106.jpg" transition="0" panzoom="1" URLTarget="0" phototime="2" transitiontime="2" url="" title="Highschool_DxD_v01_ch01_02" width="701" height="1000"/>
+        <slide jpegURL="thumbs/t_0107.jpg" d_URL="slides/p_0107.jpg" transition="0" panzoom="1" URLTarget="0" phototime="2" transitiontime="2" url="" title="Highschool_DxD_v01_ch01_02" width="700" height="1000"/>
+        <slide jpegURL="thumbs/t_0108.jpg" d_URL="slides/p_0108.jpg" transition="0" panzoom="1" URLTarget="0" phototime="2" transitiontime="2" url="" title="Highschool_DxD_v01_ch01_02" width="697" height="1000"/>
+        <slide jpegURL="thumbs/t_0109.jpg" d_URL="slides/p_0109.jpg" transition="0" panzoom="1" URLTarget="0" phototime="2" transitiontime="2" url="" title="Highschool_DxD_v01_ch01_02" width="702" height="1000"/>
+        <slide jpegURL="thumbs/t_0110.jpg" d_URL="slides/p_0110.jpg" transition="0" panzoom="1" URLTarget="0" phototime="2" transitiontime="2" url="" title="Highschool_DxD_v01_ch01_02" width="692" height="1000"/>
+        <slide jpegURL="thumbs/t_0111.jpg" d_URL="slides/p_0111.jpg" transition="0" panzoom="1" URLTarget="0" phototime="2" transitiontime="2" url="" title="Highschool_DxD_v01_ch01_02" width="701" height="1000"/>
+        <slide jpegURL="thumbs/t_0112.jpg" d_URL="slides/p_0112.jpg" transition="0" panzoom="1" URLTarget="0" phototime="2" transitiontime="2" url="" title="Highschool_DxD_v01_ch01_02" width="700" height="1000"/>
+        <slide jpegURL="thumbs/t_0113.jpg" d_URL="slides/p_0113.jpg" transition="0" panzoom="1" URLTarget="0" phototime="2" transitiontime="2" url="" title="Highschool_DxD_v01_ch01_02" width="700" height="1000"/>
+        <slide jpegURL="thumbs/t_0114.jpg" d_URL="slides/p_0114.jpg" transition="0" panzoom="1" URLTarget="0" phototime="2" transitiontime="2" url="" title="Highschool_DxD_v01_ch01_02" width="702" height="1000"/>
+        <slide jpegURL="thumbs/t_0115.jpg" d_URL="slides/p_0115.jpg" transition="0" panzoom="1" URLTarget="0" phototime="2" transitiontime="2" url="" title="Highschool_DxD_v01_ch01_02" width="700" height="1000"/>
+        <slide jpegURL="thumbs/t_0116.jpg" d_URL="slides/p_0116.jpg" transition="0" panzoom="1" URLTarget="0" phototime="2" transitiontime="2" url="" title="Highschool_DxD_v01_ch01_02" width="694" height="1000"/>
+        <slide jpegURL="thumbs/t_0117.jpg" d_URL="slides/p_0117.jpg" transition="0" panzoom="1" URLTarget="0" phototime="2" transitiontime="2" url="" title="Highschool_DxD_v01_ch01_02" width="700" height="1000"/>
+        <slide jpegURL="thumbs/t_0118.jpg" d_URL="slides/p_0118.jpg" transition="0" panzoom="1" URLTarget="0" phototime="2" transitiontime="2" url="" title="Highschool_DxD_v01_ch01_02" width="695" height="1000"/>
+        <slide jpegURL="thumbs/t_0119.jpg" d_URL="slides/p_0119.jpg" transition="0" panzoom="1" URLTarget="0" phototime="2" transitiontime="2" url="" title="Highschool_DxD_v01_ch01_02" width="697" height="1000"/>
+        <slide jpegURL="thumbs/t_0120.jpg" d_URL="slides/p_0120.jpg" transition="0" panzoom="1" URLTarget="0" phototime="2" transitiontime="2" url="" title="Highschool_DxD_v01_ch01_02" width="702" height="1000"/>
+        <slide jpegURL="thumbs/t_0121.jpg" d_URL="slides/p_0121.jpg" transition="0" panzoom="1" URLTarget="0" phototime="2" transitiontime="2" url="" title="Highschool_DxD_v01_ch01_02" width="705" height="1000"/>
+        <slide jpegURL="thumbs/t_0122.jpg" d_URL="slides/p_0122.jpg" transition="0" panzoom="1" URLTarget="0" phototime="2" transitiontime="2" url="" title="Highschool_DxD_v01_ch01_02" width="702" height="1000"/>
+        <slide jpegURL="thumbs/t_0123.jpg" d_URL="slides/p_0123.jpg" transition="0" panzoom="1" URLTarget="0" phototime="2" transitiontime="2" url="" title="Highschool_DxD_v01_ch01_02" width="702" height="1000"/>
+        <slide jpegURL="thumbs/t_0124.jpg" d_URL="slides/p_0124.jpg" transition="0" panzoom="1" URLTarget="0" phototime="2" transitiontime="2" url="" title="Highschool_DxD_v01_ch01_02" width="700" height="1000"/>
+        <slide jpegURL="thumbs/t_0125.jpg" d_URL="slides/p_0125.jpg" transition="0" panzoom="1" URLTarget="0" phototime="2" transitiontime="2" url="" title="Highschool_DxD_v01_ch01_02" width="704" height="1000"/>
+        <slide jpegURL="thumbs/t_0126.jpg" d_URL="slides/p_0126.jpg" transition="0" panzoom="1" URLTarget="0" phototime="2" transitiontime="2" url="" title="Highschool_DxD_v01_ch01_02" width="701" height="1000"/>
+        <slide jpegURL="thumbs/t_0127.jpg" d_URL="slides/p_0127.jpg" transition="0" panzoom="1" URLTarget="0" phototime="2" transitiontime="2" url="" title="Highschool_DxD_v01_ch01_02" width="704" height="1000"/>
+        <slide jpegURL="thumbs/t_0128.jpg" d_URL="slides/p_0128.jpg" transition="0" panzoom="1" URLTarget="0" phototime="2" transitiontime="2" url="" title="Highschool_DxD_v01_ch01_02" width="697" height="1000"/>
+        <slide jpegURL="thumbs/t_0129.jpg" d_URL="slides/p_0129.jpg" transition="0" panzoom="1" URLTarget="0" phototime="2" transitiontime="2" url="" title="Highschool_DxD_v01_ch01_02" width="701" height="1000"/>
+        <slide jpegURL="thumbs/t_0130.jpg" d_URL="slides/p_0130.jpg" transition="0" panzoom="1" URLTarget="0" phototime="2" transitiontime="2" url="" title="Highschool_DxD_v01_ch01_02" width="700" height="1000"/>
+        <slide jpegURL="thumbs/t_0131.jpg" d_URL="slides/p_0131.jpg" transition="0" panzoom="1" URLTarget="0" phototime="2" transitiontime="2" url="" title="Highschool_DxD_v01_ch01_02" width="701" height="1000"/>
+        <slide jpegURL="thumbs/t_0132.jpg" d_URL="slides/p_0132.jpg" transition="0" panzoom="1" URLTarget="0" phototime="2" transitiontime="2" url="" title="Highschool_DxD_v01_ch01_02" width="700" height="1000"/>
+        <slide jpegURL="thumbs/t_0133.jpg" d_URL="slides/p_0133.jpg" transition="0" panzoom="1" URLTarget="0" phototime="2" transitiontime="2" url="" title="Highschool_DxD_v01_ch01_02" width="701" height="1000"/>
+        <slide jpegURL="thumbs/t_0134.jpg" d_URL="slides/p_0134.jpg" transition="0" panzoom="1" URLTarget="0" phototime="2" transitiontime="2" url="" title="Highschool_DxD_v01_ch01_02" width="699" height="1000"/>
+        <slide jpegURL="thumbs/t_0135.jpg" d_URL="slides/p_0135.jpg" transition="0" panzoom="1" URLTarget="0" phototime="2" transitiontime="2" url="" title="Highschool_DxD_v01_ch01_02" width="700" height="1000"/>
+        <slide jpegURL="thumbs/t_0136.jpg" d_URL="slides/p_0136.jpg" transition="0" panzoom="1" URLTarget="0" phototime="2" transitiontime="2" url="" title="Highschool_DxD_v01_ch01_02" width="703" height="1000"/>
+        <slide jpegURL="thumbs/t_0137.jpg" d_URL="slides/p_0137.jpg" transition="0" panzoom="1" URLTarget="0" phototime="2" transitiontime="2" url="" title="Highschool_DxD_v01_ch01_02" width="701" height="1000"/>
+        <slide jpegURL="thumbs/t_0138.jpg" d_URL="slides/p_0138.jpg" transition="0" panzoom="1" URLTarget="0" phototime="2" transitiontime="2" url="" title="Highschool_DxD_v01_ch01_02" width="704" height="1000"/>
+        <slide jpegURL="thumbs/t_0139.jpg" d_URL="slides/p_0139.jpg" transition="0" panzoom="1" URLTarget="0" phototime="2" transitiontime="2" url="" title="Highschool_DxD_v01_ch01_02" width="701" height="1000"/>
+        <slide jpegURL="thumbs/t_0140.jpg" d_URL="slides/p_0140.jpg" transition="0" panzoom="1" URLTarget="0" phototime="2" transitiontime="2" url="" title="Highschool_DxD_v01_ch01_02" width="701" height="1000"/>
+        <slide jpegURL="thumbs/t_0141.jpg" d_URL="slides/p_0141.jpg" transition="0" panzoom="1" URLTarget="0" phototime="2" transitiontime="2" url="" title="Highschool_DxD_v01_ch01_02" width="700" height="1000"/>
+        <slide jpegURL="thumbs/t_0142.jpg" d_URL="slides/p_0142.jpg" transition="0" panzoom="1" URLTarget="0" phototime="2" transitiontime="2" url="" title="Highschool_DxD_v01_ch01_02" width="699" height="1000"/>
+        <slide jpegURL="thumbs/t_0143.jpg" d_URL="slides/p_0143.jpg" transition="0" panzoom="1" URLTarget="0" phototime="2" transitiontime="2" url="" title="Highschool_DxD_v01_ch01_02" width="700" height="1000"/>
+        <slide jpegURL="thumbs/t_0144.jpg" d_URL="slides/p_0144.jpg" transition="0" panzoom="1" URLTarget="0" phototime="2" transitiontime="2" url="" title="Highschool_DxD_v01_ch01_02" width="697" height="1000"/>
+        <slide jpegURL="thumbs/t_0145.jpg" d_URL="slides/p_0145.jpg" transition="0" panzoom="1" URLTarget="0" phototime="2" transitiontime="2" url="" title="Highschool_DxD_v01_ch01_02" width="699" height="1000"/>
+        <slide jpegURL="thumbs/t_0146.jpg" d_URL="slides/p_0146.jpg" transition="0" panzoom="1" URLTarget="0" phototime="2" transitiontime="2" url="" title="Highschool_DxD_v01_ch01_02" width="696" height="1000"/>
+        <slide jpegURL="thumbs/t_0147.jpg" d_URL="slides/p_0147.jpg" transition="0" panzoom="1" URLTarget="0" phototime="2" transitiontime="2" url="" title="Highschool_DxD_v01_ch01_02" width="699" height="1000"/>
+        <slide jpegURL="thumbs/t_0148.jpg" d_URL="slides/p_0148.jpg" transition="0" panzoom="1" URLTarget="0" phototime="2" transitiontime="2" url="" title="Highschool_DxD_v01_ch01_02" width="700" height="1000"/>
+        <slide jpegURL="thumbs/t_0149.jpg" d_URL="slides/p_0149.jpg" transition="0" panzoom="1" URLTarget="0" phototime="2" transitiontime="2" url="" title="Highschool_DxD_v01_ch01_02" width="700" height="1000"/>
+        <slide jpegURL="thumbs/t_0150.jpg" d_URL="slides/p_0150.jpg" transition="0" panzoom="1" URLTarget="0" phototime="2" transitiontime="2" url="" title="Highschool_DxD_v01_ch01_02" width="700" height="1000"/>
+        <slide jpegURL="thumbs/t_0151.jpg" d_URL="slides/p_0151.jpg" transition="0" panzoom="1" URLTarget="0" phototime="2" transitiontime="2" url="" title="Highschool_DxD_v01_ch01_02" width="699" height="1000"/>
+        <slide jpegURL="thumbs/t_0152.jpg" d_URL="slides/p_0152.jpg" transition="0" panzoom="1" URLTarget="0" phototime="2" transitiontime="2" url="" title="Highschool_DxD_v01_ch01_02" width="700" height="1000"/>
+        <slide jpegURL="thumbs/t_0153.jpg" d_URL="slides/p_0153.jpg" transition="0" panzoom="1" URLTarget="0" phototime="2" transitiontime="2" url="" title="Highschool_DxD_v01_ch01_02" width="701" height="1000"/>
+        <slide jpegURL="thumbs/t_0154.jpg" d_URL="slides/p_0154.jpg" transition="0" panzoom="1" URLTarget="0" phototime="2" transitiontime="2" url="" title="Highschool_DxD_v01_ch01_02" width="701" height="1000"/>
+        <slide jpegURL="thumbs/t_0155.jpg" d_URL="slides/p_0155.jpg" transition="0" panzoom="1" URLTarget="0" phototime="2" transitiontime="2" url="" title="Highschool_DxD_v01_ch01_02" width="700" height="1000"/>
+        <slide jpegURL="thumbs/t_0156.jpg" d_URL="slides/p_0156.jpg" transition="0" panzoom="1" URLTarget="0" phototime="2" transitiontime="2" url="" title="Highschool_DxD_v01_ch01_02" width="701" height="1000"/>
+        <slide jpegURL="thumbs/t_0157.jpg" d_URL="slides/p_0157.jpg" transition="0" panzoom="1" URLTarget="0" phototime="2" transitiontime="2" url="" title="Highschool_DxD_v01_ch01_02" width="699" height="1000"/>
+        <slide jpegURL="thumbs/t_0158.jpg" d_URL="slides/p_0158.jpg" transition="0" panzoom="1" URLTarget="0" phototime="2" transitiontime="2" url="" title="Highschool_DxD_v01_ch01_02" width="700" height="1000"/>
+        <slide jpegURL="thumbs/t_0159.jpg" d_URL="slides/p_0159.jpg" transition="0" panzoom="1" URLTarget="0" phototime="2" transitiontime="2" url="" title="Highschool_DxD_v01_ch01_02" width="697" height="1000"/>
+        <slide jpegURL="thumbs/t_0160.jpg" d_URL="slides/p_0160.jpg" transition="0" panzoom="1" URLTarget="0" phototime="2" transitiontime="2" url="" title="Highschool_DxD_v01_ch01_02" width="699" height="1000"/>
+        <slide jpegURL="thumbs/t_0161.jpg" d_URL="slides/p_0161.jpg" transition="0" panzoom="1" URLTarget="0" phototime="2" transitiontime="2" url="" title="Highschool_DxD_v01_ch01_02" width="705" height="1000"/>
+    </album>
+</flash_parameters>
