@@ -5,6 +5,8 @@
  * Date: 14.04.2016
  * Time: 10:59
  */
+namespace yii\models;
+
 class ImageGrid {
 
     protected $_grid;
@@ -72,7 +74,7 @@ class ImageGrid {
 
     protected function _loadImage($fileName) {
         if (substr($fileName, -3)!='jpg') {
-            throw new Exception('Unknown file format:'.$fileName);
+            throw new \Exception('Unknown file format:'.$fileName);
         }
         return imagecreatefromjpeg($fileName);
     }

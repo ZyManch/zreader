@@ -5,6 +5,10 @@
  * Date: 14.04.2016
  * Time: 10:52
  */
+
+namespace yii\models;
+
+
 class Point {
 
     public $x;

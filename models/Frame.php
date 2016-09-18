@@ -5,6 +5,8 @@
  * Date: 14.04.2016
  * Time: 10:56
  */
+namespace yii\models;
+
 class Frame {
 
     /** @var Point[] */
