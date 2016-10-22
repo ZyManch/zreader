@@ -5,19 +5,24 @@ use yii\helpers\Url;
 use yii\helpers\ArrayHelper;
 use yii\bootstrap\NavBar;
 use app\models\ar\Chapter;
+use app\models\ar\Image;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\ar\Chapter */
 
 $season = $model->season;
 $manga = $season->manga;
+$this->registerJsFile('/js/manga-reader.js');
+$this->registerCssFile('/css/manga-reader.css');
+$this->registerJs('new MangaReader();');
+$nextChapter = $model->getNextChapter();
 ?>
 
 
 
 <?php
 NavBar::begin([
-    'brandLabel' => $season->title,
+    'brandLabel' => '',
     'brandUrl' => $season->getUrl(),
     'options' => [
         'class' => 'navbar-inverse navbar-fixed-top',
@@ -26,7 +31,7 @@ NavBar::begin([
 ?>
 <div class="navbar-form navbar-left">
     <div class="form-group">
-        <?php echo Html::dropDownList(
+        <?=Html::dropDownList(
             'chapter',
             $model->chapter_id,
             ArrayHelper::map($season->getChapters()->orderBy('number')->all(),'chapter_id',function(Chapter $data) {
@@ -42,4 +47,17 @@ NavBar::begin([
 <?php
 NavBar::end();
 ?>
-
+<div class="manga-chapter">
+    <?php foreach ($model->getGroupedImages() as $page => $images):?>
+        <?php foreach ($images as $position => $image):?>
+            <div class="manga-image image-<?=$image->type;?>"  data-width="<?=$image->width;?>" data-height="<?=$image->height;?>">
+                <img src="<?=$image->getViewPath();?>"/>
+            </div>
+        <?php endforeach;?>
+    <?php endforeach;?>
+    <?php if ($nextChapter):?>
+    <a class="manga-image" data-width="128" data-height="128" href="<?=Url::to($nextChapter->getUrl());?>">
+        <img src="/manga/button/next.png"/>
+    </a>
+    <?php endif;?>
+</div>

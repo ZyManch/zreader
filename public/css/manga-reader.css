@@ -1,0 +1,29 @@
+.manga-chapter {
+    white-space: nowrap;
+    position: fixed;
+    top: 60px;
+    left: 10px;
+    bottom: 10px;
+    cursor: move;
+    display: flex;
+    justify-content: flex-end;
+    flex-direction: row-reverse;
+}
+
+.manga-page {
+    display: inline-block;
+    white-space: nowrap;
+    vertical-align: middle;
+    max-height: 100%;
+}
+
+.manga-image {
+    margin-right: 10px;
+    margin-bottom: 10px;
+    vertical-align: middle;
+    height: 100%;
+    position: relative;
+}
+.manga-image img{
+    border:none;
+}

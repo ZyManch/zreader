@@ -4,6 +4,7 @@ namespace app\controllers;
 
 use Yii;
 use app\models\ar\Manga;
+use app\models\ar\Season;
 use yii\data\ActiveDataProvider;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -34,20 +35,36 @@ class MangaController extends Controller
      * @param string $manga
      * @return mixed
      */
-    public function actionView($manga)
+    public function actionView($manga, $season_id = null)
     {
         $model = $this->findModelByUrl($manga);
+        $season = $this->findSeason($model, $season_id);
         return $this->render('view', [
             'model' => $model,
+            'season' => $season
         ]);
+    }
+
+    protected function findSeason(Manga $manga, $seasonId) {
+        if ($seasonId) {
+            $model = Season::find()->
+                where(['manga_id' => $manga->manga_id, 'season_id' => $seasonId])->
+                one();
+        } else {
+            $model = $manga->getSeasons()->orderBy('position')->one();
+        }
+        if (!$model) {
+            throw new NotFoundHttpException('The requested page does not exist.');
+        }
+        return $model;
     }
 
     protected function findModelByUrl($url)
     {
-        if (($model = Manga::find()->where(['url'=>$url])->one()) !== null) {
-            return $model;
-        } else {
+        $model = Manga::find()->where(['url'=>$url])->one();
+        if (!$model) {
             throw new NotFoundHttpException('The requested page does not exist.');
         }
+        return $model;
     }
 }

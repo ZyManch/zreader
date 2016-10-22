@@ -10,7 +10,7 @@ class Season extends CSeason
 {
 
     public function getUrl() {
-        return array('season/view','manga'=>$this->manga->url,'id'=>$this->season_id);
+        return array('manga/view','manga'=>$this->manga->url,'season_id'=>$this->season_id);
     }
 
 }

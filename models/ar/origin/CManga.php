@@ -16,6 +16,7 @@ use app\models\ar;
  * @property string $views
  * @property string $reads
  *
+ * @property ar\MangaHasGenre[] $ar\MangaHasGenres
  * @property ar\Season[] $ar\Seasons
  */
 class CManga extends \yii\db\ActiveRecord
@@ -57,6 +58,13 @@ class CManga extends \yii\db\ActiveRecord
             'views' => 'Views',
             'reads' => 'Reads',
         ];
+    }
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getMangaHasGenres()
+    {
+        return $this->hasMany(ar\MangaHasGenre::className(), ['manga_id' => 'manga_id']);
     }
     /**
      * @return \yii\db\ActiveQuery

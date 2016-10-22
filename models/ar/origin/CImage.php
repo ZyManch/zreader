@@ -13,6 +13,7 @@ use app\models\ar;
  * @property integer $page
  * @property integer $position
  * @property string $filename
+ * @property string $type
  * @property integer $width
  * @property integer $height
  * @property integer $left
@@ -38,6 +39,7 @@ class CImage extends \yii\db\ActiveRecord
         return [
             [['chapter_id', 'page', 'position', 'filename', 'width', 'height', 'left', 'top'], 'required'],
             [['chapter_id', 'page', 'position', 'width', 'height', 'left', 'top'], 'integer'],
+            [['type'], 'string'],
             [['filename'], 'string', 'max' => 64],
             [['chapter_id', 'page', 'position'], 'unique', 'targetAttribute' => ['chapter_id', 'page', 'position'], 'message' => 'The combination of Chapter ID, Page and Position has already been taken.'],
             [['chapter_id'], 'exist', 'skipOnError' => true, 'targetClass' => ar\Chapter::className(), 'targetAttribute' => ['chapter_id' => 'chapter_id']],
@@ -55,6 +57,7 @@ class CImage extends \yii\db\ActiveRecord
             'page' => 'Page',
             'position' => 'Position',
             'filename' => 'Filename',
+            'type' => 'Type',
             'width' => 'Width',
             'height' => 'Height',
             'left' => 'Left',

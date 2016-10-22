@@ -14,17 +14,7 @@ class SeasonController extends Controller
 {
 
 
-    /**
-     * Displays a single Season model.
-     * @param string $id
-     * @return mixed
-     */
-    public function actionView($id, $manga)
-    {
-        return $this->render('view', [
-            'model' => $this->findModel($id, $manga),
-        ]);
-    }
+
 
     /**
      * Finds the Season model based on its primary key value.

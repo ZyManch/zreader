@@ -5,9 +5,23 @@
  * Date: 14.04.2016
  * Time: 10:59
  */
-namespace yii\models;
+namespace app\models;
 
 class ImageGrid {
+
+    // 6 7 8
+    // 5 X 1
+    // 4 3 2
+
+    const RIGHT = 0;
+    const BOTTOM = 1;
+    const LEFT = 2;
+    const TOP = 3;
+
+    const BOTTOM_LEFT = 4;
+    const TOP_LEFT = 6;
+    const BOTTOM_RIGHT = 2;
+    const TOP_RIGHT = 8;
 
     protected $_grid;
 
@@ -26,50 +40,61 @@ class ImageGrid {
 
     /**
      * @param Point $point
+     * @param $normal
      * @return Frame
      */
-    public function extractFrame(Point $point) {
+    public function extractFrame(Point $point, $normal = self::BOTTOM) {
         $step = 0;
         $start = $point;
         $frame = new Frame();
         do {
-            $point = $this->_getNextPoint($point);
+            $pointAndNormal = $this->_getNextPoint($point, $normal);
+            $point = $pointAndNormal[0];
+            $normal = $pointAndNormal[1];
             $frame->addPoint($point);
             $step++;
         } while (!$point->isEqual($start) && $step < 10000);
         return $frame;
     }
 
+    public function markAsWhite(Frame $frame) {
+        $minX = $frame->getMinX();
+        $maxX = $frame->getMaxX();
+        $minY = $frame->getMinY();
+        $maxY = $frame->getMaxY();
+        $points = $frame->getPoints();
+        for ($x=$minX;$x<=$maxX;$x++) {
+            for ($y=$minY;$y<=$maxY;$y++) {
+                $a = new Point($x, $y);
+                if (!$this->_grid[$x][$y] && $a->inPolygon($points)) {
+                    $this->_grid[$x][$y] = true;
+                }
+            }
+        }
+    }
 
     /**
      * @param Point $start
-     * @return Point
+     * @return Point[]
      */
-    protected function _getNextPoint(Point $start) {
+    protected function _getNextPoint(Point $start, $direction) {
         // 6 7 8
         // 5 X 1
         // 4 3 2
-
         $circle = array(
-            45 => $start->getNeighbor(1, -1),
-            90 => $start->getNeighbor(1, 0),
-            135 => $start->getNeighbor(1, 1),
-            180 => $start->getNeighbor(0, 1),
-            225 => $start->getNeighbor(-1, 1),
-            270 => $start->getNeighbor(-1, 0),
-            315 => $start->getNeighbor(-1, -1),
-            360 => $start->getNeighbor(0, -1),
+            self::RIGHT        => $start->getNeighbor(1, 0),
+            self::BOTTOM       => $start->getNeighbor(0, 1),
+            self::LEFT         => $start->getNeighbor(-1, 0),
+            self::TOP          => $start->getNeighbor(0, -1),
         );
-        $lastWait = null;
-        foreach ($circle as $point) {
+        for ($i=1;$i>=-2;$i--) {
+            $currentDirection = ($direction+$i+4)%4;
+            $point = $circle[$currentDirection];
             $isWhite = $this->isWhite($point);
             if ($isWhite) {
-                $lastWait = $point;
-            } else if (!is_null($lastWait)) {
-                return $lastWait;
+                return array($point, $currentDirection);
             }
         }
-        return $lastWait;
     }
 
     protected function _loadImage($fileName) {
@@ -84,17 +109,17 @@ class ImageGrid {
         $pointsFileName = substr($fileName,0,strlen($fileName)-3).'php';
         if (!file_exists($pointsFileName)) {
             $points = $this->_generateGrid($image);
-            file_put_contents($pointsFileName,json_encode($points));
+            file_put_contents($pointsFileName,serialize($points));
         }
-        $this->_grid = json_decode(file_get_contents($pointsFileName), 1);
+        $this->_grid = unserialize(file_get_contents($pointsFileName));
     }
 
     protected function _generateGrid($image) {
         $width = imagesx($image);
         $height = imagesy($image);
         $result = array_fill(-1,$width+2,array_fill(-1,$height+2,true));
-        for ($y=0;$y<=$height;$y++) {
-            for ($x=$width;$x>=0;$x--) {
+        for ($y=0;$y<$height;$y++) {
+            for ($x=$width-1;$x>=0;$x--) {
                 $result[$x][$y] = $this->_isWhite($image, $x, $y);
             }
         }
@@ -110,6 +135,6 @@ class ImageGrid {
     }
 
     public function isWhite(Point $point) {
-        return $this->_grid[$point->x][$point->y];
+        return isset($this->_grid[$point->x][$point->y]) ? $this->_grid[$point->x][$point->y] : true;
     }
 }

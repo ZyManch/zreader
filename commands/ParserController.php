@@ -8,7 +8,10 @@
 namespace app\commands;
 
 use yii\console\Controller;
-use yii\models;
+use app\models;
+use app\models\ar;
+use yii\helpers\Url;
+use yii\web\UrlManager;
 
 /**
  * This command echoes the first argument that you have entered.
@@ -20,48 +23,142 @@ use yii\models;
  */
 class ParserController extends Controller
 {
-    /**
-     * This command echoes what you have entered as the message.
-     * @param string $message the message to be echoed.
-     */
-    public function actionIndex($dir = '/schooldxd/01/slides/')
+
+    public $chapter_id;
+
+    public function options()
     {
+        return ['chapter_id'];
+    }
+
+    public function optionAliases()
+    {
+        return ['c' => 'chapter_id'];
+    }
+
+    public function actionIndex($dir = '/schooldxd/01/slides/01/')
+    {
+        ini_set('memory_limit','512M');
         $dir = dirname(__FILE__).'/../'.ltrim($dir,'/');
         $files = scandir($dir);
-        $files = array('.','..','p_0012.jpg');
+        $chapter = $this->_getChapter($this->chapter_id);
+        $page = 1;
         foreach (array_slice($files, 2) as $file) {
+            if (!in_array(pathinfo($file,PATHINFO_EXTENSION),array('jpg','png'))) {
+                continue;
+            }
             $fullName = $dir.$file;
-            $grid = new models\ImageGrid($fullName);
+            $frames = $this->_extractFrames($fullName);
+            $this->stdout("Writing result\n");
+            $gd = imagecreatefromjpeg($fullName);
+            /** @var models\Frame $frame */
+            foreach ($frames as $position => $frame) {
+                $this->stdout("Save frame ".$position."\n");
+                $this->_saveFrame($chapter, $frame, $gd, $position, $page);
+            }
+            $page++;
+        }
+    }
 
-            $width = $grid->getWidth();
-            $height = $grid->getHeight();
+    protected function _saveFrame(ar\Chapter $chapter, models\Frame $frame, $gd, $position, $page) {
+        $image = new ar\Image();
+        $image->position = $position;
+        $image->page = $page;
+        $image->chapter_id = $chapter->chapter_id;
+        $image->left = $frame->getMinX();
+        $image->top = $frame->getMinY();
+        $image->width = $frame->getMaxX()-$frame->getMinX();
+        $image->height = $frame->getMaxY()-$frame->getMinY();
+        $image->filename = $chapter->chapter_id.'_'.$page.'_'.$position.'.png';
+        if (!$image->save()) {
+            throw new \Exception('Error create image:'.json_encode($image->getFirstErrors()));
+        }
+        $lastPoint = null;
+        $frameGd = imagecreatetruecolor($image->width,$image->height);
+        imagealphablending($frameGd, false);
+        $transparency = imagecolorallocatealpha($frameGd, 255, 255, 255, 127);
+        imagecolortransparent($frameGd, $transparency);
+        imagefill($frameGd, 0, 0, $transparency);
+        imagesavealpha($frameGd, true);
+        $colors = array();
+        $points = $frame->getPoints();
+        $width = imagesx($gd);
+        $height = imagesy($gd);
+        for ($x=$frame->getMinX();$x<=$frame->getMaxX();$x++) {
+            for ($y=$frame->getMinY();$y<=$frame->getMaxY();$y++) {
+                $point = new models\Point($x, $y);
+                if ($point->inPolygon($points)) {
+                    if ($x<0 || $y<0 || $x>$width || $y > $height) {
+                        $color = 0xffffff;
+                    } else {
+                        $color = imagecolorat($gd,$x,$y);
+                    }
+
+                    if (!isset($colors[$color])) {
+                        $r = ($color >> 16) & 0xFF;
+                        $g = ($color >> 8) & 0xFF;
+                        $b = $color & 0xFF;
+                        $colors[$color] = imagecolorallocate($frameGd,$r, $g, $b);
+                    }
+                    imagesetpixel($frameGd,$x-$frame->getMinX(),$y-$frame->getMinY(),$colors[$color]);
+                }
+            }
+        }
+        $this->stdout("Saved with pallet: ".sizeof($colors)."\n");
+        imagepng($frameGd,$image->getFullPath(),65);
+    }
+
+    protected function _extractFrames($fullName) {
+
+        $grid = new models\ImageGrid($fullName);
+
+        $width = $grid->getWidth();
+        $height = $grid->getHeight();
+        $dumpFileName = $fullName.'.php';
+        if (file_exists($dumpFileName) && false) {
+            $frames = unserialize(file_get_contents($dumpFileName));
+        } else {
             $frames = array();
-            for ($y=0;$y<=$height;$y++) {
-                for ($x=$width;$x>=0;$x--) {
+            for ($y = 0; $y <= $height; $y++) {
+                for ($x = $width; $x >= 0; $x--) {
                     $point = new models\Point($x, $y);
                     if (!$grid->isWhite($point)) {
-                        $frame = $grid->extractFrame($point);
-                        //$frame->optimize();
-                        //cloneImageAndDeleteFrame($gd, null, $frame, 0);
-                        $frames[] = $frame;
-                        break(2);
+                        $point = new models\Point($x+1, $y);
+                        $frame = $grid->extractFrame($point, models\ImageGrid::BOTTOM);
+                        $this->stdout('Found frame ' . $frame->getTitle() . '['.sizeof($frame->getPoints()).']. ');
+                        $this->stdout('Optimizing: ');
+                        $frame->optimize();
+                        $this->stdout('done['.sizeof($frame->getPoints()).']. Cuting: ');
+                        $grid->markAsWhite($frame);
+                        $this->stdout("done. Adding to list: ");
+                        if ($frame->isSmall()) {
+                            $this->stdout("skipped.\n");
+                        } else {
+                            $frames[] = $frame;
+                            $this->stdout("done.\n");
+                        }
                     }
                 }
             }
-            $gd = imagecreatefromjpeg($fullName);
-            $red = imagecolorallocate($gd, 250,0,0);
-            foreach ($frames as $frame) {
-                $lastPoint = null;
-                foreach ($frame->getPoints() as $point) {
-                    if ($lastPoint) {
-                        imageline($gd, $point->x, $point->y, $lastPoint->x,$lastPoint->y, $red);
-                    }
-                    $lastPoint = $point;
-                }
-            }
-            imagejpeg($gd,dirname(__FILE__).'/blank.jpg');
-            break;
-
+            file_put_contents($dumpFileName, serialize($frames));
         }
+        return $frames;
+    }
+
+    /**
+     * @param $chapterId
+     * @return ar\Chapter
+     * @throws \Exception
+     */
+    protected function _getChapter($chapterId) {
+        /** @var ar\Chapter $chapter */
+        $chapter = ar\Chapter::findOne($chapterId);
+        if (!$chapter) {
+            throw new \Exception('Chapter not found');
+        }
+        foreach ($chapter->getImages()->all() as $image) {
+            $image->delete();
+        }
+        return $chapter;
     }
 }

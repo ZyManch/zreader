@@ -8,7 +8,7 @@ use yii\widgets\ListView;
 
 $this->title = 'Каталог манги';
 ?>
-<div class="manga-index">
+<div class="manga-list">
 
     <h1><?= Html::encode($this->title) ?></h1>
 
