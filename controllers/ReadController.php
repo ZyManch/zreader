@@ -25,6 +25,7 @@ class ReadController extends Controller
     public function actionView($id, $manga)
     {
         $chapter = $this->findModel($id, $manga);
+        $chapter->season->manga->incrementReads();
         return $this->render('view', [
             'model' => $chapter,
         ]);

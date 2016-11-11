@@ -11,6 +11,8 @@ class Chapter extends CChapter
 
     const CHAPTER_GROUP_COUNT = 50;
 
+    const LAST_CHAPTER_COUNT = 50;
+
     public function getTitle() {
         return $this->number.($this->title ? ' - ' : '').$this->title;
     }
@@ -44,5 +46,57 @@ class Chapter extends CChapter
         }
         return $result;
     }
+
+    /**
+     * @return Chapter[][]
+     */
+    public static function getGroupedLastChapters() {
+        $chapters = self::find()->
+            orderBy('created desc')->
+            limit(self::LAST_CHAPTER_COUNT)->
+            all();
+        $result = array();
+        foreach ($chapters as $chapter) {
+            $date = new \DateTime($chapter->created);
+            $day = $date->format('j F Y');
+            $seasonId = $chapter->season_id;
+            if (!isset($result[$day])) {
+                $result[$day] = [];
+            }
+            if (!isset($result[$day][$seasonId])) {
+                $result[$day][$seasonId] = [
+                    'season' => $chapter->season,
+                    'chapters' => [],
+                ];
+            }
+            $result[$day][$seasonId]['chapters'][] = $chapter->number;
+        }
+        foreach ($result as $day => $seasons) {
+            foreach ($seasons as $seasonId => $season) {
+                $chapters = $season['chapters'];
+                sort($chapters);
+                $newChapters = [];
+                $lastChapter = null;
+                foreach ($chapters as $chapter) {
+                    if (is_null($lastChapter) || ($lastChapter+1 < $chapter)) {
+                        $newChapters[] = ['from'=>$chapter,'to'=>$chapter];
+                    } else {
+                        $newChapters[sizeof($newChapters)-1]['to'] = $chapter;
+                    }
+                    $lastChapter = $chapter;
+                }
+                foreach ($newChapters as $index => $range) {
+                    if ($range['from']==$range['to']) {
+                        $newChapters[$index] = $range['from'];
+                    } else {
+                        $newChapters[$index] = $range['from'].'-'.$range['to'];
+                    }
+                }
+                $result[$day][$seasonId]['chapters'] = $newChapters;
+            }
+        }
+        return $result;
+    }
+
 
 }

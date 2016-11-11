@@ -38,6 +38,7 @@ class MangaController extends Controller
     public function actionView($manga, $season_id = null)
     {
         $model = $this->findModelByUrl($manga);
+        $model->incrementViews();
         $season = $this->findSeason($model, $season_id);
         return $this->render('view', [
             'model' => $model,
@@ -59,6 +60,11 @@ class MangaController extends Controller
         return $model;
     }
 
+    /**
+     * @param $url
+     * @return Manga
+     * @throws NotFoundHttpException
+     */
     protected function findModelByUrl($url)
     {
         $model = Manga::find()->where(['url'=>$url])->one();

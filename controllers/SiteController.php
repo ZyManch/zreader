@@ -2,6 +2,10 @@
 
 namespace app\controllers;
 
+use app\models\ar\Chapter;
+use app\models\ar\Genre;
+use app\models\ar\Manga;
+use yii\helpers\Url;
 use Yii;
 use yii\filters\AccessControl;
 use yii\web\Controller;
@@ -60,7 +64,44 @@ class SiteController extends Controller
      */
     public function actionIndex()
     {
-        return $this->render('index');
+        $lastChapters = Chapter::getGroupedLastChapters();
+        $bestMangas = Manga::getBestMangas();
+        $genres = Genre::getAll();
+        return $this->render('index',array(
+            'lastChapters' => $lastChapters,
+            'bestMangas' => $bestMangas,
+            'genres' => $genres
+
+        ));
+    }
+
+    public function actionAjaxSearch($term) {
+        if (strlen($term) > 100) {
+            $term = substr($term,0,100);
+        }
+        $mangas = Manga::getMangaByWord($term);
+        $result = [];
+        foreach ($mangas as $manga) {
+            $result[] = [
+                'label' => $manga->title,
+                'name'=>$manga->title,
+                'url' => Url::to($manga->getUrl())
+            ];
+        }
+        header('Content-type: application/json');
+        return json_encode($result);
+    }
+
+
+    public function actionSearch($search) {
+        if (strlen($search) > 100) {
+            $search = substr($search,0,100);
+        }
+        $mangas = Manga::getMangaByWord($search);
+        return $this->render('search',array(
+            'search' => $search,
+            'mangas' => $mangas,
+        ));
     }
 
     /**

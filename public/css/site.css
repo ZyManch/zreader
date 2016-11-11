@@ -20,20 +20,8 @@ body {
     border-top: 1px solid #ddd;
     padding-top: 20px;
 }
-
-.jumbotron {
-    text-align: center;
-    background-color: transparent;
-}
-
-.jumbotron .btn {
-    font-size: 21px;
-    padding: 14px 24px;
-}
-
-.not-set {
-    color: #c55;
-    font-style: italic;
+.ui-front.ui-autocomplete {
+    z-index: 1060;
 }
 
 /* add sorting icons to gridview sort links */
