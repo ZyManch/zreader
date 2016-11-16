@@ -10,6 +10,10 @@ class Manga extends CManga{
     const BEST_MANGA_COUNT = 20;
     const SEASRCH_MANGA_COUNT = 50;
 
+    const IS_FINISHED_YES = 'yes';
+    const IS_FINISHED_NO = 'no';
+    const IS_FINISHED_UNKNOWN = 'unknown';
+
     public function getImageUrl() {
         return '/manga/avatar/'.$this->url.'.jpg';
     }

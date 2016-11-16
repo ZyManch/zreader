@@ -2,6 +2,7 @@
 
 namespace app\controllers;
 
+use app\form\FilterForm;
 use app\models\ar\Chapter;
 use app\models\ar\Genre;
 use app\models\ar\Manga;

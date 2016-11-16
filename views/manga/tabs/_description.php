@@ -1,13 +1,38 @@
 <?php
 use yii\bootstrap\Button;
+use app\models\ar\Manga;
 /**
  * Created by PhpStorm.
  * User: ZyManch
  * Date: 22.10.2016
  * Time: 10:52
- * @var $model \app\models\ar\Manga
+ * @var $model Manga
  */
+?>
 
+<?php if ($model->author):?>
+<strong>Автор:</strong>
+<?php echo $model->author->name;?><br>
+<?php endif;?>
+
+<?php if ($model->created):?>
+    <strong>Выпуск:</strong>
+    <?php echo $model->created;?>
+    <?php if ($model->finished && $model->finished != $model->created):?>
+        - <?php echo $model->finished;?>
+    <?php endif;?>
+    <?php if ($model->is_finished == Manga::IS_FINISHED_YES):?>
+        (продолжается)
+    <?php elseif ($model->is_finished == Manga::IS_FINISHED_NO):?>
+        (окончен)
+    <?php endif;?>
+
+    <br>
+<?php endif;?>
+
+    <br>
+    <strong>Описание:</strong><br>
+<?php
 $parts = explode('<!-- separator -->', $model->description, 2);
 echo $parts[0].' ';
 if (sizeof($parts)>1):?>

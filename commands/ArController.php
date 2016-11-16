@@ -31,6 +31,7 @@ class ArController extends Controller
         'season'=>'Season',
         'genre'=>'Genre',
         'manga_has_genre'=>'MangaHasGenre',
+        'author'=>'Author',
     );
     /**
      * This command echoes what you have entered as the message.

@@ -2,10 +2,10 @@
 
 namespace app\controllers;
 
+use app\form\FilterForm;
 use Yii;
 use app\models\ar\Manga;
 use app\models\ar\Season;
-use yii\data\ActiveDataProvider;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 
@@ -21,13 +21,13 @@ class MangaController extends Controller
      */
     public function actionIndex()
     {
-        $dataProvider = new ActiveDataProvider([
-            'query' => Manga::find(),
-        ]);
 
-        return $this->render('index', [
-            'dataProvider' => $dataProvider,
-        ]);
+
+        $form = new FilterForm();
+        $form->attributes = Yii::$app->request->getQueryParams();
+        return $this->render('index',array(
+            'model' => $form
+        ));
     }
 
     /**
