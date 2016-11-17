@@ -56,6 +56,7 @@ class ParserController extends Controller
                 $this->stdout("Save frame ".$position."\n");
                 $this->_saveFrame($chapter, $frame, $gd, $position, $page);
             }
+            imagedestroy($gd);
             $page++;
         }
     }
@@ -69,7 +70,7 @@ class ParserController extends Controller
         $image->top = $frame->getMinY();
         $image->width = $frame->getMaxX()-$frame->getMinX();
         $image->height = $frame->getMaxY()-$frame->getMinY();
-        $image->filename = $chapter->chapter_id.'_'.$page.'_'.$position.'.png';
+        $image->filename = $chapter->chapter_id.'_'.$page.'_'.$position.'.jpg';
         if (!$image->save()) {
             throw new \Exception('Error create image:'.json_encode($image->getFirstErrors()));
         }
@@ -81,13 +82,12 @@ class ParserController extends Controller
         imagefill($frameGd, 0, 0, $transparency);
         imagesavealpha($frameGd, true);
         $colors = array();
-        $points = $frame->getPoints();
         $width = imagesx($gd);
         $height = imagesy($gd);
         for ($x=$frame->getMinX();$x<=$frame->getMaxX();$x++) {
             for ($y=$frame->getMinY();$y<=$frame->getMaxY();$y++) {
                 $point = new models\Point($x, $y);
-                if ($point->inPolygon($points)) {
+                if ($frame->inFrame($point)) {
                     if ($x<0 || $y<0 || $x>$width || $y > $height) {
                         $color = 0xffffff;
                     } else {
@@ -105,7 +105,9 @@ class ParserController extends Controller
             }
         }
         $this->stdout("Saved with pallet: ".sizeof($colors)."\n");
-        imagepng($frameGd,$image->getFullPath(),65);
+        imagejpeg($frameGd,$image->getFullPath(),80);
+        imagedestroy($frameGd);
+
     }
 
     protected function _extractFrames($fullName) {
@@ -123,12 +125,10 @@ class ParserController extends Controller
                 for ($x = $width; $x >= 0; $x--) {
                     $point = new models\Point($x, $y);
                     if (!$grid->isWhite($point)) {
-                        $point = new models\Point($x+1, $y);
-                        $frame = $grid->extractFrame($point, models\ImageGrid::BOTTOM);
+                        $point = new models\Point($x+1, $y, models\ImageGrid::BOTTOM);
+                        $frame = $grid->extractFrame($point);
                         $this->stdout('Found frame ' . $frame->getTitle() . '['.sizeof($frame->getPoints()).']. ');
-                        $this->stdout('Optimizing: ');
-                        $frame->optimize();
-                        $this->stdout('done['.sizeof($frame->getPoints()).']. Cuting: ');
+                        $this->stdout('Cuting: ');
                         $grid->markAsWhite($frame);
                         $this->stdout("done. Adding to list: ");
                         if ($frame->isSmall()) {

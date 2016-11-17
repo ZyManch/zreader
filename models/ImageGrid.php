@@ -18,11 +18,6 @@ class ImageGrid {
     const LEFT = 2;
     const TOP = 3;
 
-    const BOTTOM_LEFT = 4;
-    const TOP_LEFT = 6;
-    const BOTTOM_RIGHT = 2;
-    const TOP_RIGHT = 8;
-
     protected $_grid;
 
     public function __construct($fileName) {
@@ -43,14 +38,12 @@ class ImageGrid {
      * @param $normal
      * @return Frame
      */
-    public function extractFrame(Point $point, $normal = self::BOTTOM) {
+    public function extractFrame(Point $point) {
         $step = 0;
         $start = $point;
         $frame = new Frame();
         do {
-            $pointAndNormal = $this->_getNextPoint($point, $normal);
-            $point = $pointAndNormal[0];
-            $normal = $pointAndNormal[1];
+            $point = $this->_getNextPoint($point);
             $frame->addPoint($point);
             $step++;
         } while (!$point->isEqual($start) && $step < 10000);
@@ -62,11 +55,10 @@ class ImageGrid {
         $maxX = $frame->getMaxX();
         $minY = $frame->getMinY();
         $maxY = $frame->getMaxY();
-        $points = $frame->getPoints();
         for ($x=$minX;$x<=$maxX;$x++) {
             for ($y=$minY;$y<=$maxY;$y++) {
                 $a = new Point($x, $y);
-                if (!$this->_grid[$x][$y] && $a->inPolygon($points)) {
+                if (!$this->_grid[$x][$y] && $frame->inFrame($a)) {
                     $this->_grid[$x][$y] = true;
                 }
             }
@@ -75,24 +67,23 @@ class ImageGrid {
 
     /**
      * @param Point $start
-     * @return Point[]
+     * @return Point
      */
-    protected function _getNextPoint(Point $start, $direction) {
-        // 6 7 8
-        // 5 X 1
-        // 4 3 2
+    protected function _getNextPoint(Point $start) {
         $circle = array(
             self::RIGHT        => $start->getNeighbor(1, 0),
             self::BOTTOM       => $start->getNeighbor(0, 1),
             self::LEFT         => $start->getNeighbor(-1, 0),
             self::TOP          => $start->getNeighbor(0, -1),
         );
+        /** @var Point $point */
         for ($i=1;$i>=-2;$i--) {
-            $currentDirection = ($direction+$i+4)%4;
+            $currentDirection = ($start->direction+$i+4)%4;
             $point = $circle[$currentDirection];
             $isWhite = $this->isWhite($point);
             if ($isWhite) {
-                return array($point, $currentDirection);
+                $point->direction = $currentDirection;
+                return $point;
             }
         }
     }

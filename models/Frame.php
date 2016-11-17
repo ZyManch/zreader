@@ -16,13 +16,19 @@ class Frame {
     const MIN_Y = 'minY';
     const MAX_Y = 'maxY';
 
-    /** @var Point[] */
+    /** @var Point[][] */
     protected $_points = array();
 
     protected $_stat;
 
+    protected $_first;
+
     public function addPoint(Point $point) {
-        $this->_points[] = $point;
+        if (is_null($this->_first)) {
+            $this->_first = $point;
+        }
+        $this->_points[$point->x][$point->y] = $point;
+        ksort($this->_points[$point->x]);
     }
 
     /**
@@ -36,7 +42,25 @@ class Frame {
      * @return Point
      */
     public function getFirst() {
-        return reset($this->_points);
+        return $this->_first;
+    }
+
+    public function inFrame(Point $point) {
+        if (!isset($this->_points[$point->x])) {
+            return false;
+        }
+        $inFrame = false;
+        foreach ($this->_points[$point->x] as $y => $border) {
+            if ($point->y == $y) {
+                return true;
+            }
+            if ($border->direction === ImageGrid::RIGHT) {
+                $inFrame = false;
+            } else {
+                $inFrame = true;
+            }
+        }
+        return $inFrame;
     }
 
     public function _loadStat() {
@@ -56,18 +80,21 @@ class Frame {
             $maxX = $first->x;
             $minY = $first->y;
             $maxY = $first->y;
-            foreach ($this->getPoints() as $point) {
-                if ($point->x < $minX) {
-                    $minX = $point->x;
+            foreach ($this->_points as $x => $points) {
+                if ($x < $minX) {
+                    $minX = $x;
                 }
-                if ($point->y < $minY) {
-                    $minY = $point->y;
+                if ($x > $maxX) {
+                    $maxX = $x;
                 }
-                if ($point->x > $maxX) {
-                    $maxX = $point->x;
-                }
-                if ($point->y > $maxY) {
-                    $maxY = $point->y;
+
+                foreach ($points as $y=>$point) {
+                    if ($y < $minY) {
+                        $minY = $y;
+                    }
+                    if ($y > $maxY) {
+                        $maxY = $y;
+                    }
                 }
             }
             $this->_stat = array(
@@ -80,8 +107,8 @@ class Frame {
     }
 
     public function isSmall() {
-        return ($this->getMaxX()-$this->getMinX() <= 10) ||
-               ($this->getMaxY()-$this->getMinY() <= 10);
+        return ($this->getMaxX()-$this->getMinX() <= 30) ||
+               ($this->getMaxY()-$this->getMinY() <= 30);
     }
 
     public function getTitle() {
@@ -113,40 +140,5 @@ class Frame {
         $this->_loadStat();
         return $this->_stat[self::MAX_Y];
     }
-
-    public function optimize() {
-        $point = end($this->_points);
-        //var_dump(array_slice($frame,0,4));die();
-        $result = array($point);
-        $fixed = $point;
-        $last = null;
-        foreach ($this->_points as $point) {
-            if (is_null($last)) {
-                $last = $point;
-                continue;
-            }
-
-            if (!$point->isOnLine($last, $fixed)) {
-                $fixed = $last;
-                $result[] = $last;
-            }
-            $last = $point;
-
-        }
-        $this->_points = $result;
-        if (sizeof($this->_points) > self::MIN_POINTS_TO_SKIP) {
-            $minX = $this->getMinX();
-            $maxX = $this->getMaxX();
-            $minY = $this->getMinY();
-            $maxY = $this->getMaxY();
-            $this->_points = array(
-                new Point($minX,$minY),
-                new Point($minX,$maxY),
-                new Point($maxX,$maxY),
-                new Point($maxX,$minY),
-            );
-        }
-    }
-
 
 }
