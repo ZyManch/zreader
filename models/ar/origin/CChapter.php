@@ -16,6 +16,7 @@ use app\models\ar;
  *
  * @property ar\Season $season
  * @property ar\Image[] $ar\Images
+ * @property ar\Task[] $ar\Tasks
  */
 class CChapter extends \yii\db\ActiveRecord
 {
@@ -67,6 +68,13 @@ class CChapter extends \yii\db\ActiveRecord
     public function getImages()
     {
         return $this->hasMany(ar\Image::className(), ['chapter_id' => 'chapter_id']);
+    }
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getTasks()
+    {
+        return $this->hasMany(ar\Task::className(), ['chapter_id' => 'chapter_id']);
     }
 
     /**

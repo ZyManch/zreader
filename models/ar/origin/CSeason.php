@@ -15,6 +15,7 @@ use app\models\ar;
  *
  * @property ar\Chapter[] $ar\Chapters
  * @property ar\Manga $manga
+ * @property ar\Task[] $ar\Tasks
  */
 class CSeason extends \yii\db\ActiveRecord
 {
@@ -64,6 +65,13 @@ class CSeason extends \yii\db\ActiveRecord
     public function getManga()
     {
         return $this->hasOne(ar\Manga::className(), ['manga_id' => 'manga_id']);
+    }
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getTasks()
+    {
+        return $this->hasMany(ar\Task::className(), ['season_id' => 'season_id']);
     }
 
     /**

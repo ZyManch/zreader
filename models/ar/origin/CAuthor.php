@@ -12,7 +12,7 @@ use app\models\ar;
  * @property string $name
  * @property string $avatar
  *
- * @property ar\Manga[] $ar\Mangas
+ * @property ar\MangaHasAuthor[] $ar\MangaHasAuthors
  */
 class CAuthor extends \yii\db\ActiveRecord
 {
@@ -49,9 +49,9 @@ class CAuthor extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getMangas()
+    public function getMangaHasAuthors()
     {
-        return $this->hasMany(ar\Manga::className(), ['author_id' => 'author_id']);
+        return $this->hasMany(ar\MangaHasAuthor::className(), ['author_id' => 'author_id']);
     }
 
     /**

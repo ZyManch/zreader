@@ -69,7 +69,9 @@ class ArController extends Controller
         $tables = \Yii::$app->db->createCommand('show tables')->queryColumn();
         $result = [];
         foreach ($tables as $table) {
-            $result[$table] = implode('',array_map('ucfirst',explode('_',$table)));
+            if (!in_array($table,['migration'])) {
+                $result[$table] = implode('', array_map('ucfirst', explode('_', $table)));
+            }
         }
         return $result;
     }
