@@ -8,11 +8,14 @@ use app\models\ar\Manga;
  * Time: 10:52
  * @var $model Manga
  */
+$authors = $model->getMangaHasAuthors()->all();
 ?>
 
-<?php if ($model->author):?>
+<?php if ($authors):?>
 <strong>Автор:</strong>
-<?php echo $model->author->name;?><br>
+<?php echo implode(', ', array_map(function(\app\models\ar\MangaHasAuthor $author) {
+        return $author->author->name;
+    }, $authors));?><br>
 <?php endif;?>
 
 <?php if ($model->created):?>

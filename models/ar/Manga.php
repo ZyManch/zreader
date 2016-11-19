@@ -34,6 +34,13 @@ class Manga extends CManga{
         $this->updateCounters(['views'=>1]);
     }
 
+    public function behaviors()
+    {
+        return [
+            \app\behaviors\Manga::className(),
+        ];
+    }
+
     /**
      * @return Manga[]
      */
@@ -65,4 +72,25 @@ class Manga extends CManga{
             all();
     }
 
+
+    public function getSeasonByTitle($title) {
+        $season = Season::find()->
+            where('manga_id='.$this->manga_id)->
+            andWhere('title=:title',array(':title'=>$title))->
+            one();
+        if (!$season) {
+            /** @var Season $lastSeason */
+            $lastSeason = $this->getSeasons()->
+                orderBy('position desc')->
+                one();
+            $season = new Season();
+            $season->manga_id = $this->manga_id;
+            $season->title = $title;
+            $season->position = ($lastSeason ? $lastSeason->position + 1 : 1);
+            if (!$season->save()) {
+                throw new \Exception('Cant create season: '.implode(',',$season->getFirstErrors()));
+            }
+        }
+        return $season;
+    }
 }

@@ -97,12 +97,8 @@ class ImageGrid {
 
     protected function _loadGrid($fileName) {
         $image = $this->_loadImage($fileName);
-        $pointsFileName = substr($fileName,0,strlen($fileName)-3).'php';
-        if (!file_exists($pointsFileName)) {
-            $points = $this->_generateGrid($image);
-            file_put_contents($pointsFileName,serialize($points));
-        }
-        $this->_grid = unserialize(file_get_contents($pointsFileName));
+        $points = $this->_generateGrid($image);
+        $this->_grid = $points;
     }
 
     protected function _generateGrid($image) {

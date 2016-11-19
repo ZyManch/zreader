@@ -23,24 +23,14 @@ use app\models\Generator;
 class ArController extends Controller
 {
 
-    protected $_tables = array(
-        'user'=>'User',
-        'manga'=>'Manga',
-        'chapter'=>'Chapter',
-        'image'=>'Image',
-        'season'=>'Season',
-        'genre'=>'Genre',
-        'manga_has_genre'=>'MangaHasGenre',
-        'author'=>'Author',
-    );
     /**
      * This command echoes what you have entered as the message.
      * @param string $message the message to be echoed.
      */
     public function actionIndex() {
         $files = [];
-
-        foreach ($this->_tables as $table => $class) {
+        $tables = $this->_getTables();
+        foreach ($tables as $table => $class) {
             $generator = new Generator();
             $generator->tableName = $table;
             $generator->ns = 'app\models\ar\origin';
@@ -49,16 +39,43 @@ class ArController extends Controller
             $generator->queryNs = 'app\models\ar\origin';
             $generator->queryClass = 'C'.$class.'Query';
             $generator->templates['default'] = \Yii::getAlias('@app/commands/default');
-            foreach ($this->_tables as $relationTableName => $relationClass) {
+            foreach ($tables as $relationTableName => $relationClass) {
                 $generator->classNames[$relationTableName] = 'ar\\'.$relationClass;
             }
             $files = array_merge($files, $generator->generate());
+            $originPath = \Yii::getAlias('@app/models/ar').'/'.$class.'.php';
+            if (!file_exists($originPath)) {
+                $file = new CodeFile($originPath, $this->_getOriginFile($class));
+                $files[] = $file;
+            }
         }
         $this->module = new \stdClass(['newDirMode'=>'0777','newFileMode'=>'0777']);
         /** @var CodeFile $file */
         foreach ($files as $file) {
-            $this->stdout(sprintf("File %s: ok\n",$file->path));
-            $file->save();
+            $success = $file->save();
+            if ($success !== true) {
+                $this->stdout(sprintf("File %s: %s\n",$file->path, $success));
+            } else {
+                $this->stdout(sprintf("File %s: ok\n",$file->path));
+            }
         }
+        exec(sprintf(
+            'git add %s',
+            \Yii::getAlias('@app/models/ar')
+        ));
+    }
+
+    protected function _getTables() {
+        $tables = \Yii::$app->db->createCommand('show tables')->queryColumn();
+        $result = [];
+        foreach ($tables as $table) {
+            $result[$table] = implode('',array_map('ucfirst',explode('_',$table)));
+        }
+        return $result;
+    }
+
+    protected function _getOriginFile($class) {
+        return '<?'."php\n\nnamespace app\\models\\ar;\n\nuse app\\models\\ar;\n\n".
+            "class $class extends origin\\C$class {\n\n}";
     }
 }
