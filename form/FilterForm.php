@@ -18,8 +18,8 @@ class FilterForm extends Model
     const SORT_CREATED = 'created';
     const SORT_CHAPTERS = 'chapters';
 
-    public $genres = array();
-    public $declined_genres = array();
+    public $genres = [];
+    public $declined_genres = [];
     public $author_id;
     public $is_finished = Manga::IS_FINISHED_UNKNOWN;
     public $year_from;
@@ -62,10 +62,12 @@ class FilterForm extends Model
             //joinWith('seasons.chapters')->
             joinWith('mangaHasGenres')->
             groupBy('manga.manga_id');
-        foreach ($this->genres as $genreId) {
+        $genres = (is_array($this->genres) ? $this->genres : []);
+        foreach ($genres as $genreId) {
             $query->andHaving('find_in_set('.intval($genreId).',group_concat(manga_has_genre.genre_id))>0');
         }
-        foreach ($this->declined_genres as $genreId) {
+        $declinedGenres = (is_array($this->declined_genres) ? $this->declined_genres : []);
+        foreach ($declinedGenres as $genreId) {
             $query->andHaving('find_in_set('.intval($genreId).',group_concat(manga_has_genre.genre_id))=0');
         }
         if ($this->author_id) {

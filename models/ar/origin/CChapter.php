@@ -35,9 +35,10 @@ class CChapter extends \yii\db\ActiveRecord
     {
         return [
             [['season_id', 'number'], 'required'],
-            [['season_id', 'number'], 'integer'],
+            [['season_id'], 'integer'],
+            [['number'], 'number'],
             [['created'], 'safe'],
-            [['title'], 'string', 'max' => 128],
+            [['title'], 'string', 'max' => 250],
             [['season_id'], 'exist', 'skipOnError' => true, 'targetClass' => ar\Season::className(), 'targetAttribute' => ['season_id' => 'season_id']],
         ];
     }

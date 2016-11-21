@@ -53,18 +53,17 @@ class UploadManga extends Task
                 $chapter = new Chapter();
                 $chapter->season_id = $season->season_id;
                 $chapter->number = $number;
-                $chapter->title = (trim($chapterDetail['title'])? trim($chapterDetail['title']) : null);
+                $chapter->title = (trim($chapterDetail['title'])? substr(trim($chapterDetail['title']),0,250) : null);
                 if (!$chapter->save()) {
                     throw new \Exception('Can`t create chapter: '.implode(',',$chapter->getFirstErrors()));
                 }
-                $task = new UploadChapter();
-                $task->manga_id = $season->manga_id;
-                $task->season_id = $season->season_id;
-                $task->chapter_id = $chapter->chapter_id;
-                $task->filename = 'http://'.$domain.$chapterDetail['url'];
-                if (!$task->save()) {
-                    throw new \Exception('Can`t create chapter: '.implode(',',$chapter->getFirstErrors()));
-                }
+                $this->_createOrUpdateTask(
+                    $season->manga_id,
+                    $season->season_id,
+                    $chapter->chapter_id,
+                    self::TASK_UPLOAD_CHAPTER,
+                    'http://'.$domain.$chapterDetail['url']
+                );
             }
         }
 
@@ -158,21 +157,51 @@ class UploadManga extends Task
         if (!preg_match_all('#<option value="([^"]+)"[^>]+>([^<]+)<\/option>#',$matches[1], $matches)) {
             return [];
         }
-        $result = [];
-        foreach ($matches[1] as $index => $url) {
-            $title = explode(' - ',$matches[2][$index],2);
-            if (sizeof($title)==2) {
-                $title = $title[1];
-            } else {
-                $title = $title[0];
-            }
-            $parts = explode(' ',$title,2);
-            $result[$parts[0]] = [
-                'title' => $parts[1],
-                'url' => $url
-            ];
+        $titles = $matches[2];
+        $urls = $matches[1];
+        krsort($titles);
+        krsort($urls);
+        try {
+            return $this->_titlesToChapters($titles, $urls, true);
+        } catch (\Exception $e) {
+            return $this->_titlesToChapters($titles, $urls, false);
         }
-        ksort($result);
+    }
+
+    protected function _titlesToChapters($titles, $urls, $isWithNumber) {
+        $result = [];
+        $countWithoutErrors = 0;
+        $lastNumber = 0;
+        foreach ($urls as $index => $url) {
+            if ($isWithNumber) {
+                $title = explode(' - ', $titles[$index], 2);
+                if (sizeof($title) == 2) {
+                    $title = $title[1];
+                } else {
+                    $title = $title[0];
+                }
+                $parts = explode(' ', $title, 2);
+                if (!is_numeric($parts[0])) {
+                    $parts[0] = $lastNumber + 0.1;
+                    $countWithoutErrors++;
+                } else {
+                    $lastNumber = $parts[0];
+                }
+
+                $result[sprintf('%.1f',$parts[0])] = [
+                    'title' => $parts[1],
+                    'url'   => $url
+                ];
+            } else {
+                $result[sprintf('%.1f',$index+1)] = [
+                    'title' => $titles[$index],
+                    'url'   => $url
+                ];
+            }
+        }
+        if ($countWithoutErrors > sizeof($result)*0.5) {
+            throw new \Exception('Detected non numeric manga');
+        }
         return $result;
     }
 
@@ -203,9 +232,9 @@ class UploadManga extends Task
         if ($originalTitle) {
             $manga = Manga::find()->where('original_title=:title',array(':title' => $originalTitle))->one();
         } else if ($englishTitle) {
-            $manga = Manga::find()->where('english_title=:title',array(':title' => $originalTitle))->one();
+            $manga = Manga::find()->where('english_title=:title',array(':title' => $englishTitle))->one();
         } else if ($title) {
-            $manga = Manga::find()->where('title=:title',array(':title' => $originalTitle))->one();
+            $manga = Manga::find()->where('title=:title',array(':title' => $title))->one();
         }
         return $manga;
     }
@@ -216,6 +245,7 @@ class UploadManga extends Task
         $manga->english_title = ($englishTitle ? $englishTitle : null);
         $manga->original_title = ($originalTitle ? $originalTitle : null);
         $manga->is_finished = $this->_extractIsFinished($html);
+        $manga->is_reverted = ($this->_isReverted($html) ? Manga::IS_REVERTED_YES : Manga::IS_REVERTED_NO);
         $manga->description = $this->_extractDescription($html);
         $manga->created = $this->_extractYear($html);
         if (!$manga->save()) {
@@ -227,13 +257,29 @@ class UploadManga extends Task
         return $manga;
     }
 
+    protected function _isReverted($html) {
+        $texts = [
+            '<a href="/list/tag/manhua" class="element-link"',
+            '<a href="/list/tag/manhwa" class="element-link"'
+        ];
+        foreach ($texts as $text) {
+            if (strpos($html, $text) !== false) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     protected function _assignAuthors(Manga $manga, $html) {
-        $titleAuthors = $this->_getGenres();
+        $titleAuthors = $this->_getAuthors();
         $authorsIds = array_flip($titleAuthors);
         $newAuthors = [];
         if (preg_match_all('#<span class="elem_author ">(.*)<\/span>#',$html, $matches)) {
-             foreach ($matches[1] as $author) {
-                 $newAuthors[] = trim(strip_tags($author));
+             foreach ($matches[1] as $authors) {
+                 $authors = explode(',', $authors);
+                 foreach ($authors as $author) {
+                     $newAuthors[] = trim(strip_tags($author));
+                 }
              }
         }
         /** @var MangaHasAuthor[] $oldAuthors */

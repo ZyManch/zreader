@@ -14,7 +14,16 @@ class Chapter extends CChapter
     const LAST_CHAPTER_COUNT = 50;
 
     public function getTitle() {
-        return $this->number.($this->title ? ' - ' : '').$this->title;
+        return $this->getRoundedNumber().($this->title ? ' - ' : '').$this->title;
+    }
+
+
+    protected function getRoundedNumber() {
+        if ($this->number%1 > 0.01) {
+            return $this->number;
+        }
+        return  round($this->number);
+
     }
 
     public function getUrl() {
@@ -51,6 +60,7 @@ class Chapter extends CChapter
      * @return Chapter[][]
      */
     public static function getGroupedLastChapters() {
+        /** @var Chapter[] $chapters */
         $chapters = self::find()->
             orderBy('created desc')->
             limit(self::LAST_CHAPTER_COUNT)->
@@ -69,7 +79,7 @@ class Chapter extends CChapter
                     'chapters' => [],
                 ];
             }
-            $result[$day][$seasonId]['chapters'][] = $chapter->number;
+            $result[$day][$seasonId]['chapters'][] = $chapter->getRoundedNumber();
         }
         foreach ($result as $day => $seasons) {
             foreach ($seasons as $seasonId => $season) {

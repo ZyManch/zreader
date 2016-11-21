@@ -41,7 +41,7 @@ class Manga extends Behavior {
             'с' => 's',   'т' => 't',   'у' => 'u',
             'ф' => 'f',   'х' => 'h',   'ц' => 'c',
             'ч' => 'ch',  'ш' => 'sh',  'щ' => 'sch',
-            'ь' => '\'',  'ы' => 'y',   'ъ' => '\'',
+            'ь' => '',  'ы' => 'y',   'ъ' => '',
             'э' => 'e',   'ю' => 'yu',  'я' => 'ya',
 
             'А' => 'A',   'Б' => 'B',   'В' => 'V',
@@ -53,15 +53,18 @@ class Manga extends Behavior {
             'С' => 'S',   'Т' => 'T',   'У' => 'U',
             'Ф' => 'F',   'Х' => 'H',   'Ц' => 'C',
             'Ч' => 'Ch',  'Ш' => 'Sh',  'Щ' => 'Sch',
-            'Ь' => '\'',  'Ы' => 'Y',   'Ъ' => '\'',
+            'Ь' => '',  'Ы' => 'Y',   'Ъ' => '',
             'Э' => 'E',   'Ю' => 'Yu',  'Я' => 'Ya',
         );
 
+        $engChars = 'qwertyuiopasdfghjklzxcvbnm';
+        $engChars.=strtoupper($engChars);
+        $engChars = str_split($engChars);
         $result = [];
         $oldCharIsSkeep = true;
         for ($i=0;$i<strlen($title);$i++) {
             $char = mb_substr($title,$i,1);
-            if (is_numeric($char)) {
+            if (is_numeric($char) || in_array($char, $engChars)) {
                 $result[] = $char;
                 $oldCharIsSkeep = false;
             } else if (isset($converter[$char])) {

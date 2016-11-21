@@ -22,7 +22,7 @@ class UploadMangaList extends Task
         do {
             $newManga = $this->_collectManga($offset, $page);
             foreach ($newManga as $url) {
-                $this->_createGenerateMangaTask($url);
+                $this->_createOrUpdateTask(null,null,null,self::TASK_UPLOAD_MANGA, $url);
             }
             $offset+=self::MANGA_PER_PAGE;
         } while (sizeof($newManga) > 0);
@@ -52,15 +52,6 @@ class UploadMangaList extends Task
         return $result;
     }
 
-
-
-    protected function _createGenerateMangaTask($url) {
-        $task = new UploadManga();
-        $task->filename = $url;
-        if (!$task->save()) {
-            throw new \Exception('Error create task: '.implode(',',$task->getFirstErrors()));
-        }
-    }
 
 
 }

@@ -77,13 +77,16 @@ a.desc:after {
     padding: 10px 20px;
     margin: 0 0 15px 0;
 }
-
+.manga-list {
+    clear: left;
+}
 .manga-list .manga {
     width: 200px;
     margin: 5px;
     border-radius: 5px;
     border: 1px solid #c6c6c6;
     position: relative;
+    float:left;
 }
 .manga-list .manga .info .genres {
     position: absolute;

@@ -8,6 +8,7 @@ use app\models\ar\Manga;
  * @var $bestMangas Manga[]
  */
 ?>
+<div class="clearfix"></div>
 <h2>Топовые манги</h2>
 <div class="manga-list">
     <?php foreach ($bestMangas as $manga):?>

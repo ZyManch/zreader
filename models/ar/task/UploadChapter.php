@@ -22,9 +22,9 @@ class UploadChapter extends Task
         /** @var Chapter $chapter */
         $chapter = $this->getChapter()->one();
         $storingFolder = Url::to('@app').'/public/manga/page/'.
-                           $chapter->season->manga->manga_id.'/'.
+                           $chapter->season->manga->url.'/'.
                            $chapter->season->season_id.'/'.
-                           $chapter->chapter_id.'/';
+                           $chapter->number.'/';
         if (!file_exists($storingFolder)) {
             mkdir($storingFolder,0777,true);
         }
@@ -35,14 +35,13 @@ class UploadChapter extends Task
                 $file
             );
         }
-        $task = new ProcessChapter();
-        $task->manga_id = $this->manga_id;
-        $task->season_id = $this->season_id;
-        $task->chapter_id = $this->chapter_id;
-        $task->filename = $storingFolder;
-        if (!$task->save()) {
-            throw new \Exception('Error create task: '.implode(',',$task->getFirstErrors()));
-        }
+        $this->_createOrUpdateTask(
+            $this->manga_id,
+            $this->season_id,
+            $this->chapter_id,
+            self::TASK_PROCESS_CHAPTER,
+            $storingFolder
+        );
     }
 
 

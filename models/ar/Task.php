@@ -2,6 +2,7 @@
 
 namespace app\models\ar;
 
+use app\commands\TaskController;
 use app\models\ar\origin\CTask;
 use app\models\ar\task\ProcessChapter;
 use app\models\ar\task\UploadChapter;
@@ -42,11 +43,14 @@ abstract class Task extends CTask
     public function process() {
         $this->status = self::STATUS_PROGRESS;
         $this->save();
+        $transaction = \Yii::$app->db->beginTransaction();
         try {
             $this->_process();
             $this->status = self::STATUS_SUCCESS;
             $this->save();
+            $transaction->commit();
         } catch (\Exception $e) {
+            $transaction->rollBack();
             $this->status = self::STATUS_ERROR;
             $this->save();
             throw $e;
@@ -89,6 +93,45 @@ abstract class Task extends CTask
             return $html;
         } else {
             return file_get_contents($filename);
+        }
+    }
+
+    protected function _createOrUpdateTask($mangaId, $seasonId, $chapterId, $taskType, $fileName) {
+        $query = Task::find()->
+            where('task=:task',array(':task'=>$taskType));
+        if ($chapterId) {
+            $query->andWhere('chapter_id=:chapter',array(':chapter'=>$chapterId));
+        } else {
+            $query->andWhere('chapter_id is null');
+        }
+        if ($seasonId) {
+            $query->andWhere('season_id=:season',array(':season'=>$seasonId));
+        } else {
+            $query->andWhere('season_id is null');
+        }
+        if ($mangaId) {
+            $query->andWhere('manga_id=:manga',array(':manga'=>$mangaId));
+        } else {
+            $query->andWhere('manga_id is null');
+        }
+        $task = $query->one();
+        if (!$task) {
+            $task = self::instantiate(['task'=>$taskType]);
+            $task->task = $taskType;
+            if ($mangaId) {
+                $task->manga_id = $mangaId;
+            }
+            if ($seasonId) {
+                $task->season_id = $seasonId;
+            }
+            if ($chapterId) {
+                $task->chapter_id = $chapterId;
+            }
+        }
+        $task->filename = $fileName;
+        $task->status = self::STATUS_WAIT;
+        if (!$task->save()) {
+            throw new \Exception('Error create task: '.implode(',',$task->getFirstErrors()));
         }
     }
 }

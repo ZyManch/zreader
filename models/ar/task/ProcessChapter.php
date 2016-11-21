@@ -4,6 +4,7 @@ namespace app\models\ar\task;
 
 use app\models\ar\Chapter;
 use app\models\ar\Image;
+use app\models\ar\Manga;
 use app\models\ar\Task;
 use app\models\Frame;
 use app\models\ImageGrid;
@@ -100,20 +101,40 @@ class ProcessChapter extends Task
         $width = $grid->getWidth();
         $height = $grid->getHeight();
         $frames = [];
+        $isReverted = ($this->manga->is_reverted == Manga::IS_REVERTED_YES);
         for ($y = 0; $y <= $height; $y++) {
-            for ($x = $width; $x >= 0; $x--) {
-                $point = new Point($x, $y);
-                if (!$grid->isWhite($point)) {
-                    $point = new Point($x+1, $y, ImageGrid::BOTTOM);
-                    $frame = $grid->extractFrame($point);
-                    $grid->markAsWhite($frame);
-                    if (!$frame->isSmall()) {
+            if ($isReverted) {
+                for ($x = 0; $x <= $width; $x++) {
+                    $frame = $this->_getFrameByXY($grid, $x, $y);
+                    if ($frame) {
+                        $frames[] = $frame;
+                    }
+                }
+            } else {
+                for ($x = $width; $x >= 0; $x--) {
+                    $frame = $this->_getFrameByXY($grid, $x, $y);
+                    if ($frame) {
                         $frames[] = $frame;
                     }
                 }
             }
         }
         return $frames;
+    }
+
+    protected function _getFrameByXY(ImageGrid $grid, $x, $y) {
+        $point = new Point($x, $y);
+        if ($grid->isWhite($point)) {
+            return null;
+        }
+        $isReverted = ($this->manga->is_reverted == Manga::IS_REVERTED_YES);
+        $point = new Point($x+($isReverted?-1:1), $y, ImageGrid::BOTTOM);
+        $frame = $grid->extractFrame($point);
+        $grid->markAsWhite($frame);
+        if ($frame->isSmall()) {
+            return null;
+        }
+        return $frame;
     }
 
     protected function _getFiles() {

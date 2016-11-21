@@ -30,6 +30,7 @@ class ArController extends Controller
     public function actionIndex() {
         $files = [];
         $tables = $this->_getTables();
+        exec('rm -fR '.\Yii::getAlias('@app/models/ar/origin'));
         foreach ($tables as $table => $class) {
             $generator = new Generator();
             $generator->tableName = $table;

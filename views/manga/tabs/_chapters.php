@@ -31,13 +31,13 @@ foreach ($chapters as $chapter) {
     $groupId = floor($chapter->number/Chapter::CHAPTER_GROUP_COUNT)*Chapter::CHAPTER_GROUP_COUNT;
     if (!isset($groupedChapters[$groupId])) {
         $groupedChapters[$groupId] = [
-            'min' => $chapter->number,
-            'max' => $chapter->number,
+            'min' => floor($chapter->number),
+            'max' => floor($chapter->number),
             'chapters'=>[]
         ];
     }
     $groupedChapters[$groupId]['chapters'][] = $chapter;
-    $groupedChapters[$groupId]['max'] = $chapter->number;
+    $groupedChapters[$groupId]['max'] = floor($chapter->number);
 }
 $min = reset($chapters)->number;
 $max = end($chapters)->number;

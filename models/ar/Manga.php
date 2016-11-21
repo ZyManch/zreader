@@ -14,6 +14,9 @@ class Manga extends CManga{
     const IS_FINISHED_NO = 'no';
     const IS_FINISHED_UNKNOWN = 'unknown';
 
+    const IS_REVERTED_YES = 'yes';
+    const IS_REVERTED_NO = 'no';
+
     public function getImageUrl() {
         return '/manga/avatar/'.$this->url.'.jpg';
     }
