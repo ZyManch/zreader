@@ -7,6 +7,8 @@
  */
 namespace app\models;
 
+use app\models\ar\Image;
+
 class ImageGrid {
 
     // 6 7 8
@@ -18,18 +20,22 @@ class ImageGrid {
     const LEFT = 2;
     const TOP = 3;
 
-    protected $_grid;
+    protected $_grid = [];
+
+    protected $_gd;
+    protected $_width;
+    protected $_height;
 
     public function __construct($fileName) {
-        $this->_loadGrid($fileName);
+        $this->_gd = $this->_loadImage($fileName);
     }
 
     public function getWidth() {
-        return sizeof($this->_grid)-2;
+        return $this->_width;
     }
 
     public function getHeight() {
-        return sizeof($this->_grid[0])-2;
+        return $this->_height;
     }
 
 
@@ -58,7 +64,7 @@ class ImageGrid {
         for ($x=$minX;$x<=$maxX;$x++) {
             for ($y=$minY;$y<=$maxY;$y++) {
                 $a = new Point($x, $y);
-                if (!$this->_grid[$x][$y] && $frame->inFrame($a)) {
+                if ($frame->inFrame($a)) {
                     $this->_grid[$x][$y] = true;
                 }
             }
@@ -92,29 +98,15 @@ class ImageGrid {
         if (substr($fileName, -3)!='jpg') {
             throw new \Exception('Unknown file format:'.$fileName);
         }
-        return imagecreatefromjpeg($fileName);
+        $gd = imagecreatefromjpeg($fileName);
+        $this->_width = imagesx($gd);
+        $this->_height = imagesy($gd);
+        return $gd;
     }
 
-    protected function _loadGrid($fileName) {
-        $image = $this->_loadImage($fileName);
-        $points = $this->_generateGrid($image);
-        $this->_grid = $points;
-    }
 
-    protected function _generateGrid($image) {
-        $width = imagesx($image);
-        $height = imagesy($image);
-        $result = array_fill(-1,$width+2,array_fill(-1,$height+2,true));
-        for ($y=0;$y<$height;$y++) {
-            for ($x=$width-1;$x>=0;$x--) {
-                $result[$x][$y] = $this->_isWhite($image, $x, $y);
-            }
-        }
-        return $result;
-    }
-
-    protected function _isWhite($image, $x, $y) {
-        $rgb = imagecolorat($image, $x, $y);
+    protected function _isWhite($x, $y) {
+        $rgb = imagecolorat($this->_gd, $x, $y);
         $r = ($rgb >> 16) & 0xFF;
         $g = ($rgb >> 8) & 0xFF;
         $b = $rgb & 0xFF;
@@ -122,6 +114,16 @@ class ImageGrid {
     }
 
     public function isWhite(Point $point) {
-        return isset($this->_grid[$point->x][$point->y]) ? $this->_grid[$point->x][$point->y] : true;
+        if ($point->x < 0 || $point->x > $this->_width) {
+            return true;
+        }
+        if ($point->y < 0 || $point->y > $this->_height) {
+            return true;
+        }
+        if (!isset($this->_grid[$point->x][$point->y])) {
+            $this->_grid[$point->x][$point->y] = $this->_isWhite($point->x, $point->y);
+        }
+        return $this->_grid[$point->x][$point->y];
+
     }
 }

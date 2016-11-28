@@ -42,7 +42,7 @@ class TaskController extends Controller
 
     public function actionIndex() {
         set_time_limit(0);
-        ini_set('memory_limit','512M');
+        ini_set('memory_limit','1024M');
         if ($this->_isAlreadyExecuted()) {
             $this->_output('Another script is already in process');
             return;
@@ -60,16 +60,18 @@ class TaskController extends Controller
     }
 
     protected function _processTask() {
+        $query = ar\Task::find()->orderBy('task_id');
         if ($this->task_id) {
-            $task = ar\Task::find()->
-                where('task_id='.intval($this->task_id))->
-                one();
+            $query->
+                where('task_id='.intval($this->task_id));
         } else {
-            $task = ar\Task::find()->
-                where('status="'.ar\Task::STATUS_WAIT.'"')->
-                orderBy('task_id')->
-                one();
+            $query->
+                where('status="'.ar\Task::STATUS_WAIT.'"');
+            if ($this->task) {
+                $query->andWhere('task="'.$this->task.'"');
+            }
         }
+        $task = $query->one();
         /** @var $task ar\Task */
         if ($task) {
             $this->_output('Start task '.$task->task_id.':');

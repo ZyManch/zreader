@@ -41,7 +41,7 @@ if (isset($season)) {
         <div class="bg"></div>
         <div class="title">
             <?=Html::a(
-                (isset($season) ? $season->getFullTitle() : $model->title).($chapters?': серии ':'').implode(',',$chapters),
+                (isset($season) ? $season->getFullTitle() : $model->title).($chapters?'<br>Серии ':'').implode(',',$chapters),
                 $url
             );?>
         </div>
