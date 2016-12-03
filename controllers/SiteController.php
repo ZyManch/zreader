@@ -3,9 +3,7 @@
 namespace app\controllers;
 
 use app\form\FilterForm;
-use app\models\ar\Chapter;
-use app\models\ar\Genre;
-use app\models\ar\Manga;
+use app\models\ar;
 use yii\helpers\Url;
 use Yii;
 use yii\filters\AccessControl;
@@ -65,9 +63,12 @@ class SiteController extends Controller
      */
     public function actionIndex()
     {
-        $lastChapters = Chapter::getGroupedLastChapters();
-        $bestMangas = Manga::getBestMangas();
-        $genres = Genre::getAll();
+        $lastChapters = ar\Chapter\Model::getGroupedLastChapters();
+        $bestMangas = ar\Manga\Model::find()->
+            excludeHidden()->
+            best()->
+            all();
+        $genres = ar\Genre\Model::getAll();
         return $this->render('index',array(
             'lastChapters' => $lastChapters,
             'bestMangas' => $bestMangas,
@@ -80,7 +81,7 @@ class SiteController extends Controller
         if (strlen($term) > 100) {
             $term = substr($term,0,100);
         }
-        $mangas = Manga::getMangaByWord($term);
+        $mangas = ar\Manga\Model::getMangaByWord($term);
         $result = [];
         foreach ($mangas as $manga) {
             $result[] = [
@@ -98,7 +99,7 @@ class SiteController extends Controller
         if (strlen($search) > 100) {
             $search = substr($search,0,100);
         }
-        $mangas = Manga::getMangaByWord($search);
+        $mangas = ar\Manga\Model::getMangaByWord($search);
         return $this->render('search',array(
             'search' => $search,
             'mangas' => $mangas,

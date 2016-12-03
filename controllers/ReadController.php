@@ -2,7 +2,7 @@
 
 namespace app\controllers;
 
-use app\models\ar\Chapter;
+use app\models\ar;
 use Yii;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -35,13 +35,13 @@ class ReadController extends Controller
      * Finds the Season model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
      * @param string $id
-     * @return Chapter the loaded model
+     * @return ar\Chapter\Model the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id, $manga)
     {
-        /** @var $model Chapter */
-        if (($model = Chapter::findOne($id)) !== null) {
+        /** @var $model ar\Chapter\Model */
+        if (($model = ar\Chapter\Model::findOne($id)) !== null) {
             if ($model->season->manga->url != $manga) {
                 throw new NotFoundHttpException('The requested page does not exist.');
             }

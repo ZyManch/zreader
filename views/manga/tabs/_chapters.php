@@ -7,8 +7,8 @@ use \app\models\ar\Chapter;
  * User: ZyManch
  * Date: 22.10.2016
  * Time: 11:10
- * @var $model Season
- * @var $chapter Chapter
+ * @var $model Season\Model
+ * @var $chapter Chapter\Model
  * @var $this \yii\web\View
  */
 $chapters = $model->getChapters()->orderBy('number')->all();
@@ -28,7 +28,7 @@ $this->registerJs(
 );
 $groupedChapters = [];
 foreach ($chapters as $chapter) {
-    $groupId = floor($chapter->number/Chapter::CHAPTER_GROUP_COUNT)*Chapter::CHAPTER_GROUP_COUNT;
+    $groupId = floor($chapter->number/Chapter\Model::CHAPTER_GROUP_COUNT)*Chapter\Model::CHAPTER_GROUP_COUNT;
     if (!isset($groupedChapters[$groupId])) {
         $groupedChapters[$groupId] = [
             'min' => floor($chapter->number),
@@ -41,7 +41,7 @@ foreach ($chapters as $chapter) {
 }
 $min = reset($chapters)->number;
 $max = end($chapters)->number;
-$start = floor($min/Chapter::CHAPTER_GROUP_COUNT)*Chapter::CHAPTER_GROUP_COUNT;
+$start = floor($min/Chapter\Model::CHAPTER_GROUP_COUNT)*Chapter\Model::CHAPTER_GROUP_COUNT;
 $isFirst = true;
 ?>
 

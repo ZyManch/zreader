@@ -3,9 +3,9 @@
 namespace app\controllers;
 
 use app\form\FilterForm;
+use app\models\Session;
 use Yii;
-use app\models\ar\Manga;
-use app\models\ar\Season;
+use app\models\ar;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 
@@ -30,6 +30,14 @@ class MangaController extends Controller
         ));
     }
 
+    public function actionExclude($manga, $redirect) {
+        $model = $this->findModelByUrl($manga);
+        /** @var Session $session */
+        $session = Yii::$app->user->getSession();
+        $session->changeMangaStatus($model,ar\SessionHasManga\Model::STATUS_HIDE);
+        $this->redirect($redirect);
+    }
+
     /**
      * Displays a single Manga model.
      * @param string $manga
@@ -46,9 +54,9 @@ class MangaController extends Controller
         ]);
     }
 
-    protected function findSeason(Manga $manga, $seasonId) {
+    protected function findSeason(ar\Manga\Model $manga, $seasonId) {
         if ($seasonId) {
-            $model = Season::find()->
+            $model = ar\Season\Model::find()->
                 where(['manga_id' => $manga->manga_id, 'season_id' => $seasonId])->
                 one();
         } else {
@@ -62,12 +70,12 @@ class MangaController extends Controller
 
     /**
      * @param $url
-     * @return Manga
+     * @return ar\Manga\Model
      * @throws NotFoundHttpException
      */
     protected function findModelByUrl($url)
     {
-        $model = Manga::find()->where(['url'=>$url])->one();
+        $model = ar\Manga\Model::find()->where(['url'=>$url])->one();
         if (!$model) {
             throw new NotFoundHttpException('The requested page does not exist.');
         }

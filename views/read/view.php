@@ -8,7 +8,7 @@ use app\models\ar\Chapter;
 use app\models\ar\Image;
 
 /* @var $this yii\web\View */
-/* @var $model app\models\ar\Chapter */
+/* @var $model app\models\ar\Chapter\Model */
 
 $season = $model->season;
 $manga = $season->manga;
@@ -34,7 +34,7 @@ NavBar::begin([
         <?=Html::dropDownList(
             'chapter',
             $model->chapter_id,
-            ArrayHelper::map($season->getChapters()->orderBy('number')->all(),'chapter_id',function(Chapter $data) {
+            ArrayHelper::map($season->getChapters()->orderBy('number')->all(),'chapter_id',function(Chapter\Model $data) {
                 return $data->getTitle();
             }),
             array(

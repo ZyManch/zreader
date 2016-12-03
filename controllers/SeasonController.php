@@ -3,7 +3,7 @@
 namespace app\controllers;
 
 use Yii;
-use app\models\ar\Season;
+use app\models\ar;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 
@@ -20,13 +20,13 @@ class SeasonController extends Controller
      * Finds the Season model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
      * @param string $id
-     * @return Season the loaded model
+     * @return ar\Season\Model the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id, $manga)
     {
-        /** @var $model Season */
-        if (($model = Season::findOne($id)) !== null) {
+        /** @var $model ar\Season\Model */
+        if (($model = ar\Season\Model::findOne($id)) !== null) {
             if ($model->manga->url != $manga) {
                 throw new NotFoundHttpException('The requested page does not exist.');
             }

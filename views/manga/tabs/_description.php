@@ -6,14 +6,14 @@ use app\models\ar\Manga;
  * User: ZyManch
  * Date: 22.10.2016
  * Time: 10:52
- * @var $model Manga
+ * @var $model Manga\Model
  */
 $authors = $model->getMangaHasAuthors()->all();
 ?>
 
 <?php if ($authors):?>
 <strong>Автор:</strong>
-<?php echo implode(', ', array_map(function(\app\models\ar\MangaHasAuthor $author) {
+<?php echo implode(', ', array_map(function(\app\models\ar\MangaHasAuthor\Model $author) {
         return $author->author->name;
     }, $authors));?><br>
 <?php endif;?>
@@ -24,9 +24,9 @@ $authors = $model->getMangaHasAuthors()->all();
     <?php if ($model->finished && $model->finished != $model->created):?>
         - <?php echo $model->finished;?>
     <?php endif;?>
-    <?php if ($model->is_finished == Manga::IS_FINISHED_YES):?>
+    <?php if ($model->is_finished == Manga\Model::IS_FINISHED_YES):?>
         (продолжается)
-    <?php elseif ($model->is_finished == Manga::IS_FINISHED_NO):?>
+    <?php elseif ($model->is_finished == Manga\Model::IS_FINISHED_NO):?>
         (окончен)
     <?php endif;?>
 

@@ -3,7 +3,7 @@
 namespace app\controllers;
 
 use Yii;
-use app\models\ar\Genre;
+use app\models\ar;
 use yii\data\ActiveDataProvider;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -36,7 +36,7 @@ class GenreController extends Controller
     public function actionIndex()
     {
         $dataProvider = new ActiveDataProvider([
-            'query' => Genre::find(),
+            'query' => ar\Genre\Model::find(),
             'pagination'=>false
         ]);
 
@@ -59,12 +59,12 @@ class GenreController extends Controller
 
     /**
      * @param string $genreUrl
-     * @return Genre the loaded model
+     * @return ar\Genre\Model the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($genreUrl)
     {
-        $model = Genre::find()->where(['url' => $genreUrl])->one();
+        $model = ar\Genre\Model::find()->where(['url' => $genreUrl])->one();
         if ($model) {
             return $model;
         } else {

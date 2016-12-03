@@ -24,20 +24,20 @@ krsort($years);
             <div class="row">
                 <div class="col-md-4">
                     <?= $form->field($model, 'genres')->listBox(
-                        ArrayHelper::map(Genre::getAll(),'genre_id','title'),
+                        ArrayHelper::map(Genre\Model::getAll(),'genre_id','title'),
                         ['multiple'=>true,'size'=>12,'name'=>'genres']
                     ) ?>
                 </div>
                 <div class="col-md-4">
                     <?= $form->field($model, 'declined_genres')->listBox(
-                        ArrayHelper::map(Genre::getAll(),'genre_id','title'),
+                        ArrayHelper::map(Genre\Model::getAll(),'genre_id','title'),
                         ['multiple'=>true,'size'=>12,'name'=>'declined_genres']
                     ) ?>
                 </div>
                 <div class="col-md-4">
                     <div>
                         <?= $form->field($model, 'author_id')->dropDownList(
-                            ArrayHelper::map(Author::find()->all(),'author_id','name'),
+                            ArrayHelper::map(Author\Model::find()->all(),'author_id','name'),
                             ['prompt'=>'Любой','name'=>'author_id']
                         ) ?>
                     </div>
@@ -57,9 +57,9 @@ krsort($years);
                     </div>
                     <div>
                         <?= $form->field($model, 'is_finished',['inline'=>true])->radioList([
-                            Manga::IS_FINISHED_UNKNOWN => 'Любой',
-                            Manga::IS_FINISHED_YES => 'Завершен',
-                            Manga::IS_FINISHED_NO => 'Не завершен'
+                            Manga\Model::IS_FINISHED_UNKNOWN => 'Любой',
+                            Manga\Model::IS_FINISHED_YES => 'Завершен',
+                            Manga\Model::IS_FINISHED_NO => 'Не завершен'
                         ]) ?>
                     </div>
                     <div class="form-group text-center">

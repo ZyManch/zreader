@@ -6,7 +6,7 @@ use app\models\ar\Genre;
  * User: ZyManch
  * Date: 23.10.2016
  * Time: 12:03
- * @var $model Genre
+ * @var $model Genre\Model
  */
 ?>
 <?=Html::a(

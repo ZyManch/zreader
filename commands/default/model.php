@@ -78,10 +78,17 @@ class <?= $className ?> extends <?= '\\' . ltrim($generator->baseClass, '\\') . 
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function get<?= $parts[sizeof($parts)-1] ?>()
+    <?php if (sizeof($parts) > 1):?>
+    public function get<?= $parts[sizeof($parts)-2] ?>s()
     {
         <?= $relation[0] . "\n" ?>
     }
+    <?php else:?>
+    public function get<?= $parts[sizeof($parts)-1] ?>()
+    {
+    <?= $relation[0] . "\n" ?>
+    }
+    <?php endif;?>
 <?php endforeach; ?>
 <?php if ($queryClassName): ?>
 <?php

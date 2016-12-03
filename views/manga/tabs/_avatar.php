@@ -6,7 +6,7 @@ use yii\helpers\Html;
  * User: ZyManch
  * Date: 22.10.2016
  * Time: 15:54
- * @var $model Manga
+ * @var $model Manga\Model
  */
 ?>
 <?= Html::img(

@@ -4,9 +4,9 @@ use yii\helpers\Html;
 use yii\bootstrap\Tabs;
 
 /* @var $this yii\web\View */
-/* @var $model app\models\ar\Manga */
-/* @var $season app\models\ar\Season */
-/* @var $currentSeason app\models\ar\Season */
+/* @var $model app\models\ar\Manga\Model */
+/* @var $season app\models\ar\Season\Model */
+/* @var $currentSeason app\models\ar\Season\Model */
 
 $this->title = $model->title;
 $seasons = $model->getSeasons()->orderBy('position')->all();

@@ -9,16 +9,16 @@ use \app\models\ar\Season;
  * User: ZyManch
  * Date: 12.09.2016
  * Time: 18:59
- * @var $model Manga
- * @var $season Season
+ * @var $model Manga\Model
+ * @var $season Season\Model
  * @var $chapters
  */
-$genres = array_map(function(MangaHasGenre $genre) {
+$genres = array_map(function(MangaHasGenre\Model $genre) {
     return Html::a(
         $genre->genre->title,
         $genre->genre->getUrl()
     );
-}, $model->getMangaHasGenres()->all());
+}, $model->getMangaHasGenres()->with('genre')->all());
 if (!isset($chapters)) {
     $chapters = [];
 }
@@ -39,6 +39,13 @@ if (isset($season)) {
         </div>
         <?php endif;?>
         <div class="bg"></div>
+        <div class="menu">
+            <?=Html::a(
+                '<span class="glyphicon glyphicon-cog"></span>',
+                ['manga/exclude','manga'=>$model->url,'redirect' => Yii::$app->request->url]
+            );?>
+
+        </div>
         <div class="title">
             <?=Html::a(
                 (isset($season) ? $season->getFullTitle() : $model->title).($chapters?'<br>Серии ':'').implode(',',$chapters),

@@ -6,8 +6,8 @@ use app\models\ar\Season;
  * User: ZyManch
  * Date: 22.10.2016
  * Time: 15:49
- * @var Season[] $seasons
- * @var Season $season
+ * @var Season\Model[] $seasons
+ * @var Season\Model $season
  */
 ?>
 <h3>Сезоны</h3>

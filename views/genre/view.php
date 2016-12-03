@@ -4,7 +4,7 @@ use yii\helpers\Html;
 use yii\widgets\ListView;
 
 /* @var $this yii\web\View */
-/* @var $model app\models\ar\Genre */
+/* @var $model app\models\ar\Genre\Model */
 
 $this->title = 'Манга жанра '.$model->title;
 ?>

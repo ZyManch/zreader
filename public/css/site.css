@@ -127,7 +127,14 @@ a.desc:after {
     z-index: 3;
     white-space: nowrap;
     text-overflow: ellipsis;
-    overflow: hidden
+    overflow: hidden;
+    margin-right: 20px;
+}
+.manga-list .manga .info .menu {
+    float: right;
+    position: relative;
+    z-index: 3;
+    padding: 2px;
 }
 .manga-list .manga .info .title a,.manga-list .manga .info .title a:hover{
     font-weight: bold;
