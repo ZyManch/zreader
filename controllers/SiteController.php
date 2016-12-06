@@ -63,15 +63,22 @@ class SiteController extends Controller
      */
     public function actionIndex()
     {
-        $lastChapters = ar\Chapter\Model::getGroupedLastChapters();
+        $favorites = ar\Manga\Model::find()->
+            favorite()->
+            all();
+        $lastManga = ar\Manga\Model::find()->
+            excludeHidden()->
+            last()->
+            all();
         $bestMangas = ar\Manga\Model::find()->
             excludeHidden()->
             best()->
             all();
         $genres = ar\Genre\Model::getAll();
         return $this->render('index',array(
-            'lastChapters' => $lastChapters,
+            'lastManga' => $lastManga,
             'bestMangas' => $bestMangas,
+            'favorites' => $favorites,
             'genres' => $genres
 
         ));
@@ -81,7 +88,9 @@ class SiteController extends Controller
         if (strlen($term) > 100) {
             $term = substr($term,0,100);
         }
-        $mangas = ar\Manga\Model::getMangaByWord($term);
+        $mangas = ar\Manga\Model::find()->
+            search($term)->
+            all();
         $result = [];
         foreach ($mangas as $manga) {
             $result[] = [
@@ -99,7 +108,9 @@ class SiteController extends Controller
         if (strlen($search) > 100) {
             $search = substr($search,0,100);
         }
-        $mangas = ar\Manga\Model::getMangaByWord($search);
+        $mangas = ar\Manga\Model::find()->
+            search($search)->
+            all();
         return $this->render('search',array(
             'search' => $search,
             'mangas' => $mangas,

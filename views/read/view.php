@@ -10,8 +10,7 @@ use app\models\ar\Image;
 /* @var $this yii\web\View */
 /* @var $model app\models\ar\Chapter\Model */
 
-$season = $model->season;
-$manga = $season->manga;
+$manga = $model->manga;
 $this->registerJsFile('/js/manga-reader.js');
 $this->registerCssFile('/css/manga-reader.css');
 $this->registerJs('new MangaReader();');
@@ -23,7 +22,7 @@ $nextChapter = $model->getNextChapter();
 <?php
 NavBar::begin([
     'brandLabel' => '',
-    'brandUrl' => $season->getUrl(),
+    'brandUrl' => $manga->getUrl(),
     'options' => [
         'class' => 'navbar-inverse navbar-fixed-top',
     ],
@@ -34,7 +33,7 @@ NavBar::begin([
         <?=Html::dropDownList(
             'chapter',
             $model->chapter_id,
-            ArrayHelper::map($season->getChapters()->orderBy('number')->all(),'chapter_id',function(Chapter\Model $data) {
+            ArrayHelper::map($manga->getChapters()->orderBy('number')->all(),'chapter_id',function(Chapter\Model $data) {
                 return $data->getTitle();
             }),
             array(

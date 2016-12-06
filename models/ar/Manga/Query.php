@@ -34,4 +34,48 @@ class Query extends ar\_origin\CMangaQuery {
         return $this;
     }
 
+    /**
+     * @return $this
+     */
+    public function favorite() {
+        /** @var Session $session */
+        $session = \Yii::$app->user->getSession();
+        $favoritsIds = $session->getMangaIdsByStatus(ar\SessionHasManga\Model::STATUS_FAVORITE);
+        if ($favoritsIds) {
+            $this->andWhere('manga.manga_id in ('.implode(',',$favoritsIds).')');
+        } else {
+            $this->where('false');
+        }
+        $this->andWhere('true');
+        $this->
+            limit(self::BEST_MANGA_COUNT);
+        return $this;
+    }
+
+    /**
+     * @param $search
+     * @return $this
+     */
+    public function search($search) {
+        $where = ['and'];
+        foreach (explode(' ',$search) as $word) {
+            $word = trim($word);
+            if ($word) {
+                $where[] = ['like','title',$word];
+            }
+        }
+        if (sizeof($where)==1) {
+            $this->where('false');
+        } else {
+            $this->andWhere($where);
+        }
+        return $this->limit(self::SEASRCH_MANGA_COUNT);
+    }
+
+    public function last() {
+        return $this->
+            limit(self::BEST_MANGA_COUNT)->
+            orderBy('changed DESC');
+    }
+
 }

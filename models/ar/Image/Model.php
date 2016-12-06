@@ -13,7 +13,7 @@ class Model extends ar\_origin\CImage {
     }
 
     public function getViewPath() {
-        return '/manga/image/'.$this->chapter->season_id.'/'.$this->chapter_id.'/'.$this->filename;
+        return '/manga/image/'.$this->chapter->manga->url.'/'.$this->chapter->number.'/'.$this->filename;
     }
 
 }

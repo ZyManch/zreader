@@ -21,8 +21,7 @@ class UploadChapter extends Model
         /** @var ar\Chapter\Model $chapter */
         $chapter = $this->getChapter()->one();
         $storingFolder = Url::to('@app').'/public/manga/page/'.
-                           $chapter->season->manga->url.'/'.
-                           $chapter->season->season_id.'/'.
+                           $chapter->manga->url.'/'.
                            $chapter->number.'/';
         if (!file_exists($storingFolder)) {
             mkdir($storingFolder,0777,true);
@@ -36,7 +35,6 @@ class UploadChapter extends Model
         }
         $this->_createOrUpdateTask(
             $this->manga_id,
-            $this->season_id,
             $this->chapter_id,
             self::TASK_PROCESS_CHAPTER,
             $storingFolder

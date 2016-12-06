@@ -18,12 +18,15 @@ use app\models\ar;
  * @property string $is_finished
  * @property integer $created
  * @property integer $finished
+ * @property string $changed
+ * @property string $chapters
  * @property string $views
  * @property string $reads
  *
+ * @property ar\Chapter\Model[] $ar\Chapter\Models
  * @property ar\MangaHasAuthor\Model[] $ar\MangaHasAuthor\Models
  * @property ar\MangaHasGenre\Model[] $ar\MangaHasGenre\Models
- * @property ar\Season\Model[] $ar\Season\Models
+ * @property ar\SessionHasChapter\Model[] $ar\SessionHasChapter\Models
  * @property ar\SessionHasManga\Model[] $ar\SessionHasManga\Models
  * @property ar\Task\Model[] $ar\Task\Models
  */
@@ -43,9 +46,10 @@ class CManga extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['url'], 'required'],
+            [['url', 'changed'], 'required'],
             [['description', 'is_reverted', 'is_finished'], 'string'],
-            [['created', 'finished', 'views', 'reads'], 'integer'],
+            [['created', 'finished', 'chapters', 'views', 'reads'], 'integer'],
+            [['changed'], 'safe'],
             [['title'], 'string', 'max' => 200],
             [['url'], 'string', 'max' => 128],
             [['english_title', 'original_title'], 'string', 'max' => 256],
@@ -70,11 +74,20 @@ class CManga extends \yii\db\ActiveRecord
             'is_finished' => 'Is Finished',
             'created' => 'Created',
             'finished' => 'Finished',
+            'changed' => 'Changed',
+            'chapters' => 'Chapters',
             'views' => 'Views',
             'reads' => 'Reads',
         ];
     }
     /**
+     * @return \yii\db\ActiveQuery
+     */
+        public function getChapters()
+    {
+        return $this->hasMany(ar\Chapter\Model::className(), ['manga_id' => 'manga_id']);
+    }
+        /**
      * @return \yii\db\ActiveQuery
      */
         public function getMangaHasAuthors()
@@ -91,9 +104,9 @@ class CManga extends \yii\db\ActiveRecord
         /**
      * @return \yii\db\ActiveQuery
      */
-        public function getSeasons()
+        public function getSessionHasChapters()
     {
-        return $this->hasMany(ar\Season\Model::className(), ['manga_id' => 'manga_id']);
+        return $this->hasMany(ar\SessionHasChapter\Model::className(), ['manga_id' => 'manga_id']);
     }
         /**
      * @return \yii\db\ActiveQuery

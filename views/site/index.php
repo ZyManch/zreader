@@ -5,9 +5,10 @@ use app\models\ar\Genre;
 use yii\helpers\Html;
 /**
  * @var $this yii\web\View
- * @var $lastChapters Chapter[]
- * @var $bestMangas Manga[]
- * @var $genres Genre[]
+ * @var $lastManga Manga\Model[]
+ * @var $bestMangas Manga\Model[]
+ * @var $genres Genre\Model[]
+ * @var $favorites Manga\Model[]
  */
 $this->title = 'Manga';
 ?>
@@ -15,7 +16,8 @@ $this->title = 'Manga';
 
     <div class="col-md-10">
 
-        <?=$this->render('tabs/_lastChanges',['lastChapters'=>$lastChapters]);?>
+        <?=$this->render('tabs/_favorites',['favorites'=>$favorites]);?>
+        <?=$this->render('tabs/_lastChanges',['lastManga'=>$lastManga]);?>
         <?=$this->render('tabs/_bestManga',['bestMangas'=>$bestMangas]);?>
 
 

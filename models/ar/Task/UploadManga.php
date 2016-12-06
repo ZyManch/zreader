@@ -31,27 +31,25 @@ class UploadManga extends Model
         if (!$manga) {
             $manga = $this->_createManga($originTitle, $englishTitle, $title, $page);
         }
-        $season = $manga->getSeasonByTitle('Season 1');
 
-        $this->_assignChapters($season, $page);
+        $this->_assignChapters($manga, $page);
     }
 
-    protected function _assignChapters(ar\Season\Model $season, $html) {
+    protected function _assignChapters(ar\Manga\Model $manga, $html) {
         $newChapters = $this->_getChapters($html);
-        $oldChapters = ArrayHelper::map($season->getChapters()->all(),'number','chapter_id');
+        $oldChapters = ArrayHelper::map($manga->getChapters()->all(),'number','chapter_id');
         $domain = parse_url($this->filename, PHP_URL_HOST);
         foreach ($newChapters as $number => $chapterDetail) {
             if (!isset($oldChapters[$number])) {
                 $chapter = new ar\Chapter\Model();
-                $chapter->season_id = $season->season_id;
+                $chapter->manga_id = $manga->manga_id;
                 $chapter->number = $number;
                 $chapter->title = (trim($chapterDetail['title'])? substr(trim($chapterDetail['title']),0,250) : null);
                 if (!$chapter->save()) {
                     throw new \Exception('Can`t create chapter: '.implode(',',$chapter->getFirstErrors()));
                 }
                 $this->_createOrUpdateTask(
-                    $season->manga_id,
-                    $season->season_id,
+                    $manga->manga_id,
                     $chapter->chapter_id,
                     self::TASK_UPLOAD_CHAPTER,
                     'http://'.$domain.$chapterDetail['url']
@@ -165,6 +163,9 @@ class UploadManga extends Model
         $countWithoutErrors = 0;
         $lastNumber = 0;
         foreach ($urls as $index => $url) {
+            if (substr($url,-8)=='?mature=') {
+                $url.=1;
+            }
             if ($isWithNumber) {
                 $title = explode(' - ', $titles[$index], 2);
                 if (sizeof($title) == 2) {

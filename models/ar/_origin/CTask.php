@@ -10,7 +10,6 @@ use app\models\ar;
  *
  * @property string $task_id
  * @property string $manga_id
- * @property string $season_id
  * @property string $chapter_id
  * @property string $task
  * @property string $filename
@@ -18,7 +17,6 @@ use app\models\ar;
  *
  * @property ar\Chapter\Model $chapter
  * @property ar\Manga\Model $manga
- * @property ar\Season\Model $season
  */
 class CTask extends \yii\db\ActiveRecord
 {
@@ -36,14 +34,13 @@ class CTask extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['manga_id', 'season_id', 'chapter_id'], 'integer'],
+            [['manga_id', 'chapter_id'], 'integer'],
             [['task', 'filename'], 'required'],
             [['status'], 'string'],
             [['task'], 'string', 'max' => 16],
             [['filename'], 'string', 'max' => 256],
             [['chapter_id'], 'exist', 'skipOnError' => true, 'targetClass' => ar\Chapter\Model::className(), 'targetAttribute' => ['chapter_id' => 'chapter_id']],
             [['manga_id'], 'exist', 'skipOnError' => true, 'targetClass' => ar\Manga\Model::className(), 'targetAttribute' => ['manga_id' => 'manga_id']],
-            [['season_id'], 'exist', 'skipOnError' => true, 'targetClass' => ar\Season\Model::className(), 'targetAttribute' => ['season_id' => 'season_id']],
         ];
     }
 
@@ -55,7 +52,6 @@ class CTask extends \yii\db\ActiveRecord
         return [
             'task_id' => 'Task ID',
             'manga_id' => 'Manga ID',
-            'season_id' => 'Season ID',
             'chapter_id' => 'Chapter ID',
             'task' => 'Task',
             'filename' => 'Filename',
@@ -75,13 +71,6 @@ class CTask extends \yii\db\ActiveRecord
         public function getManga()
     {
     return $this->hasOne(ar\Manga\Model::className(), ['manga_id' => 'manga_id']);
-    }
-        /**
-     * @return \yii\db\ActiveQuery
-     */
-        public function getSeason()
-    {
-    return $this->hasOne(ar\Season\Model::className(), ['season_id' => 'season_id']);
     }
     
     /**

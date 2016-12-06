@@ -9,12 +9,12 @@ use app\models\ar;
  * This is the model class for table "chapter".
  *
  * @property string $chapter_id
- * @property string $season_id
+ * @property string $manga_id
  * @property string $number
  * @property string $title
  * @property string $created
  *
- * @property ar\Season\Model $season
+ * @property ar\Manga\Model $manga
  * @property ar\Image\Model[] $ar\Image\Models
  * @property ar\Task\Model[] $ar\Task\Models
  */
@@ -34,12 +34,12 @@ class CChapter extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['season_id', 'number'], 'required'],
-            [['season_id'], 'integer'],
+            [['manga_id', 'number'], 'required'],
+            [['manga_id'], 'integer'],
             [['number'], 'number'],
             [['created'], 'safe'],
             [['title'], 'string', 'max' => 250],
-            [['season_id'], 'exist', 'skipOnError' => true, 'targetClass' => ar\Season\Model::className(), 'targetAttribute' => ['season_id' => 'season_id']],
+            [['manga_id'], 'exist', 'skipOnError' => true, 'targetClass' => ar\Manga\Model::className(), 'targetAttribute' => ['manga_id' => 'manga_id']],
         ];
     }
 
@@ -50,7 +50,7 @@ class CChapter extends \yii\db\ActiveRecord
     {
         return [
             'chapter_id' => 'Chapter ID',
-            'season_id' => 'Season ID',
+            'manga_id' => 'Manga ID',
             'number' => 'Number',
             'title' => 'Title',
             'created' => 'Created',
@@ -59,9 +59,9 @@ class CChapter extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-        public function getSeason()
+        public function getManga()
     {
-    return $this->hasOne(ar\Season\Model::className(), ['season_id' => 'season_id']);
+    return $this->hasOne(ar\Manga\Model::className(), ['manga_id' => 'manga_id']);
     }
         /**
      * @return \yii\db\ActiveQuery

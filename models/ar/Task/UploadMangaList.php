@@ -22,7 +22,7 @@ class UploadMangaList extends Model
         do {
             $newManga = $this->_collectManga($offset, $page);
             foreach ($newManga as $url) {
-                $this->_createOrUpdateTask(null,null,null,self::TASK_UPLOAD_MANGA, $url);
+                $this->_createOrUpdateTask(null,null,self::TASK_UPLOAD_MANGA, $url);
             }
             $offset+=self::MANGA_PER_PAGE;
         } while (sizeof($newManga) > 0);

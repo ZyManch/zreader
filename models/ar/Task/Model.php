@@ -11,7 +11,6 @@ use Yii;
  *
  * @property string $task_id
  * @property string $manga_id
- * @property string $season_id
  * @property string $chapter_id
  * @property string $task
  * @property string $filename
@@ -19,7 +18,6 @@ use Yii;
  *
  * @property ar\Chapter\Model $chapter
  * @property ar\Manga\Model $manga
- * @property ar\Season\Model $season
  */
 abstract class Model extends ar\_origin\CTask
 {
@@ -92,18 +90,13 @@ abstract class Model extends ar\_origin\CTask
         }
     }
 
-    protected function _createOrUpdateTask($mangaId, $seasonId, $chapterId, $taskType, $fileName) {
+    protected function _createOrUpdateTask($mangaId, $chapterId, $taskType, $fileName) {
         $query = self::find()->
             where('task=:task',array(':task'=>$taskType));
         if ($chapterId) {
             $query->andWhere('chapter_id=:chapter',array(':chapter'=>$chapterId));
         } else {
             $query->andWhere('chapter_id is null');
-        }
-        if ($seasonId) {
-            $query->andWhere('season_id=:season',array(':season'=>$seasonId));
-        } else {
-            $query->andWhere('season_id is null');
         }
         if ($mangaId) {
             $query->andWhere('manga_id=:manga',array(':manga'=>$mangaId));
@@ -116,9 +109,6 @@ abstract class Model extends ar\_origin\CTask
             $task->task = $taskType;
             if ($mangaId) {
                 $task->manga_id = $mangaId;
-            }
-            if ($seasonId) {
-                $task->season_id = $seasonId;
             }
             if ($chapterId) {
                 $task->chapter_id = $chapterId;

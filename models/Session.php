@@ -22,7 +22,7 @@ class Session {
 
     protected $_mangas = [];
 
-    protected $_hiddenIds;
+    protected $_idsByStatus = [];
 
     public function __construct() {
         if (\Yii::$app->user->getIsGuest()) {
@@ -133,7 +133,7 @@ class Session {
     }
 
     /**
-     * @param ar\Manga $manga
+     * @param ar\Manga\Model $manga
      * @return string
      */
     public function getMangaStatus(ar\Manga\Model $manga) {
@@ -144,19 +144,27 @@ class Session {
      * @return int[]
      */
     public function getHiddenMangaIds() {
-        if (is_null($this->_hiddenIds)) {
+        return $this->getMangaIdsByStatus(ar\SessionHasManga\Model::STATUS_HIDE);
+    }
+
+    /**
+     * @param $status
+     * @return int[]
+     */
+    public function getMangaIdsByStatus($status) {
+        if (!isset($this->_idsByStatus[$status])) {
             $session = $this->_getSession(false);
             if (!$session) {
                 return [];
             }
-            $this->_hiddenIds = ar\SessionHasManga\Model::find()->
+            $this->_idsByStatus[$status] = ar\SessionHasManga\Model::find()->
                 where([
-                    'status' => ar\SessionHasManga\Model::STATUS_HIDE,
+                    'status' => $status,
                     'session_id' => $session->session_id
                 ])->
                 select(['manga_id'])->
                 column();
         }
-        return $this->_hiddenIds;
+        return $this->_idsByStatus[$status];
     }
 }

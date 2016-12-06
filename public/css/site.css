@@ -88,6 +88,15 @@ a.desc:after {
     position: relative;
     float:left;
 }
+.manga-list .manga.manga-favorite .info .bg {
+    background-color: #ffe590;
+}
+.manga-list .manga.manga-hide .info .bg {
+    background-color: #ffb0a4;
+}
+.manga-list .manga.manga-started .info .bg {
+    background-color: #d4ffec;
+}
 .manga-list .manga .info .genres {
     position: absolute;
     left: 0;
@@ -133,8 +142,39 @@ a.desc:after {
 .manga-list .manga .info .menu {
     float: right;
     position: relative;
+    z-index: 4;
+    border-bottom-width: 0;
+}
+.manga-list .manga .info .menu .glyphicon{
+    padding: 4px;
+    border-radius: 3px 3px 0 0;
+    margin: 2px 2px 0 0;
+    position: relative;
+    z-index: 4;
+}
+.manga-list .manga .info .menu:hover .glyphicon{
+    padding: 3px 3px 4px 3px;
+    border: 1px solid #c6c6c6;
+    border-bottom-width: 0;
+    background-color: white;
+}
+.manga-list .manga .info .menu .menu-items {
+    display: none;
+    position: absolute;
+    top:24px;
+    right: -5px;
     z-index: 3;
-    padding: 2px;
+    border: 1px solid #c6c6c6;
+    border-radius: 3px;
+    background-color: white;
+    padding: 5px 5px 5px 25px;
+    width: 128px;
+    margin: 0;
+}
+.manga-list .manga .info .menu .menu-items li {
+}
+.manga-list .manga .info .menu:hover .menu-items{
+    display: block;
 }
 .manga-list .manga .info .title a,.manga-list .manga .info .title a:hover{
     font-weight: bold;

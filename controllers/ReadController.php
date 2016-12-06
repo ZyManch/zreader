@@ -25,7 +25,7 @@ class ReadController extends Controller
     public function actionView($id, $manga)
     {
         $chapter = $this->findModel($id, $manga);
-        $chapter->season->manga->incrementReads();
+        $chapter->manga->incrementReads();
         return $this->render('view', [
             'model' => $chapter,
         ]);
@@ -42,7 +42,7 @@ class ReadController extends Controller
     {
         /** @var $model ar\Chapter\Model */
         if (($model = ar\Chapter\Model::findOne($id)) !== null) {
-            if ($model->season->manga->url != $manga) {
+            if ($model->manga->url != $manga) {
                 throw new NotFoundHttpException('The requested page does not exist.');
             }
             return $model;

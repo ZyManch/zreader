@@ -10,11 +10,11 @@ use app\models\ar;
  *
  * @property string $session_has_chapter_id
  * @property string $session_id
- * @property string $season_id
+ * @property string $manga_id
  * @property string $chapter_from
  * @property string $chapter_to
  *
- * @property ar\Season\Model $season
+ * @property ar\Manga\Model $manga
  * @property ar\Session\Model $session
  */
 class CSessionHasChapter extends \yii\db\ActiveRecord
@@ -33,10 +33,10 @@ class CSessionHasChapter extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['session_id', 'season_id', 'chapter_from', 'chapter_to'], 'required'],
-            [['session_id', 'season_id'], 'integer'],
+            [['session_id', 'manga_id', 'chapter_from', 'chapter_to'], 'required'],
+            [['session_id', 'manga_id'], 'integer'],
             [['chapter_from', 'chapter_to'], 'number'],
-            [['season_id'], 'exist', 'skipOnError' => true, 'targetClass' => ar\Season\Model::className(), 'targetAttribute' => ['season_id' => 'season_id']],
+            [['manga_id'], 'exist', 'skipOnError' => true, 'targetClass' => ar\Manga\Model::className(), 'targetAttribute' => ['manga_id' => 'manga_id']],
             [['session_id'], 'exist', 'skipOnError' => true, 'targetClass' => ar\Session\Model::className(), 'targetAttribute' => ['session_id' => 'session_id']],
         ];
     }
@@ -49,7 +49,7 @@ class CSessionHasChapter extends \yii\db\ActiveRecord
         return [
             'session_has_chapter_id' => 'Session Has Chapter ID',
             'session_id' => 'Session ID',
-            'season_id' => 'Season ID',
+            'manga_id' => 'Manga ID',
             'chapter_from' => 'Chapter From',
             'chapter_to' => 'Chapter To',
         ];
@@ -57,9 +57,9 @@ class CSessionHasChapter extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-        public function getSeason()
+        public function getManga()
     {
-    return $this->hasOne(ar\Season\Model::className(), ['season_id' => 'season_id']);
+    return $this->hasOne(ar\Manga\Model::className(), ['manga_id' => 'manga_id']);
     }
         /**
      * @return \yii\db\ActiveQuery

@@ -18,7 +18,7 @@ class Model extends ar\_origin\CChapter
     }
 
 
-    protected function getRoundedNumber() {
+    public function getRoundedNumber() {
         if ($this->number%1 > 0.01) {
             return $this->number;
         }
@@ -27,7 +27,7 @@ class Model extends ar\_origin\CChapter
     }
 
     public function getUrl() {
-        return array('read/view','manga'=>$this->season->manga->url,'id'=>$this->chapter_id);
+        return array('read/view','manga'=>$this->manga->url,'id'=>$this->chapter_id);
     }
 
     /**
@@ -35,7 +35,7 @@ class Model extends ar\_origin\CChapter
      */
     public function getNextChapter() {
         return ar\Chapter\Model::find()->
-            where(['and','season_id='.$this->season_id,'number>'.$this->number])->
+            where(['and','manga_id='.$this->manga_id,'number>'.$this->number])->
             orderBy('number')->
             one();
     }
@@ -64,7 +64,7 @@ class Model extends ar\_origin\CChapter
         $chapters = self::find()->
             orderBy('created desc')->
             joinWith([
-                'season.manga' => function (ar\Manga\Query $query) {
+                'manga' => function (ar\Manga\Query $query) {
                     $query->excludeHidden();
                 }
             ])->
@@ -74,21 +74,21 @@ class Model extends ar\_origin\CChapter
         foreach ($chapters as $chapter) {
             $date = new \DateTime($chapter->created);
             $day = $date->format('j F Y');
-            $seasonId = $chapter->season_id;
+            $mangaId = $chapter->manga_id;
             if (!isset($result[$day])) {
                 $result[$day] = [];
             }
-            if (!isset($result[$day][$seasonId])) {
-                $result[$day][$seasonId] = [
-                    'season' => $chapter->season,
+            if (!isset($result[$day][$mangaId])) {
+                $result[$day][$mangaId] = [
+                    'manga' => $chapter->manga,
                     'chapters' => [],
                 ];
             }
-            $result[$day][$seasonId]['chapters'][] = $chapter->getRoundedNumber();
+            $result[$day][$mangaId]['chapters'][] = $chapter->getRoundedNumber();
         }
-        foreach ($result as $day => $seasons) {
-            foreach ($seasons as $seasonId => $season) {
-                $chapters = $season['chapters'];
+        foreach ($result as $day => $mangas) {
+            foreach ($mangas as $mangaId => $manga) {
+                $chapters = $manga['chapters'];
                 sort($chapters);
                 $newChapters = [];
                 $lastChapter = null;
@@ -107,7 +107,7 @@ class Model extends ar\_origin\CChapter
                         $newChapters[$index] = $range['from'].'-'.$range['to'];
                     }
                 }
-                $result[$day][$seasonId]['chapters'] = $newChapters;
+                $result[$day][$mangaId]['chapters'] = $newChapters;
             }
         }
         return $result;

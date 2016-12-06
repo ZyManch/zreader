@@ -80,5 +80,4 @@ class Manga extends Behavior {
         return rtrim(implode('',$result),'-');
     }
 
-
 }

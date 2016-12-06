@@ -1,13 +1,13 @@
 <?php
 use yii\helpers\Html;
-use \app\models\ar\Season;
+use \app\models\ar;
 use \app\models\ar\Chapter;
 /**
  * Created by PhpStorm.
  * User: ZyManch
  * Date: 22.10.2016
  * Time: 11:10
- * @var $model Season\Model
+ * @var $model ar\Manga\Model
  * @var $chapter Chapter\Model
  * @var $this \yii\web\View
  */

@@ -43,56 +43,36 @@ class Model extends ar\_origin\CManga{
         ];
     }
 
-    /**
-     * @return ar\Manga\Model[]
-     */
-    public static function getBestMangas() {
-        return self::find()->
-            orderBy('reads desc')->
-            limit(self::BEST_MANGA_COUNT)->
-            all();
-    }
 
-    /**
-     * @param $search
-     * @return ar\Manga\Model[]
-     */
-    public static function getMangaByWord($search) {
-        $where = ['and'];
-        foreach (explode(' ',$search) as $word) {
-            $word = trim($word);
-            if ($word) {
-                $where[] = ['like','title',$word];
+    public function getLastChapters() {
+        /** @var ar\Chapter\Model[] $chapters */
+        $chapters = $this->getChapters()->
+            where('created>=adddate("'.$this->changed.'",interval -1 day)')->
+            orderBy('number asc')->
+            all();
+        $result = [];
+        foreach ($chapters as $chapter) {
+            $result[] = $chapter->getRoundedNumber();
+        }
+        sort($result);
+        $newChapters = [];
+        $lastChapter = null;
+        foreach ($result as $chapter) {
+            if (is_null($lastChapter) || ($lastChapter+1 < $chapter)) {
+                $newChapters[] = ['from'=>$chapter,'to'=>$chapter];
+            } else {
+                $newChapters[sizeof($newChapters)-1]['to'] = $chapter;
+            }
+            $lastChapter = $chapter;
+        }
+        foreach ($newChapters as $index => $range) {
+            if ($range['from']==$range['to']) {
+                $newChapters[$index] = $range['from'];
+            } else {
+                $newChapters[$index] = $range['from'].'-'.$range['to'];
             }
         }
-        if (sizeof($where)==1) {
-            return [];
-        }
-        return ar\Manga\Model::find()->
-            where($where)->
-            limit(self::SEASRCH_MANGA_COUNT)->
-            all();
+        return $newChapters;
     }
 
-
-    public function getSeasonByTitle($title) {
-        $season = ar\Season\Model::find()->
-            where('manga_id='.$this->manga_id)->
-            andWhere('title=:title',array(':title'=>$title))->
-            one();
-        if (!$season) {
-            /** @var ar\Season\Model $lastSeason */
-            $lastSeason = $this->getSeasons()->
-                orderBy('position desc')->
-                one();
-            $season = new ar\Season\Model();
-            $season->manga_id = $this->manga_id;
-            $season->title = $title;
-            $season->position = ($lastSeason ? $lastSeason->position + 1 : 1);
-            if (!$season->save()) {
-                throw new \Exception('Cant create season: '.implode(',',$season->getFirstErrors()));
-            }
-        }
-        return $season;
-    }
 }
