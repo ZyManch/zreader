@@ -13,6 +13,9 @@ class Query extends ar\_origin\CMangaQuery {
 
     public function init() {
         parent::init();
+        if (\Yii::$app->request->isConsoleRequest) {
+            return;
+        }
         /** @var Session $session */
         $session = \Yii::$app->user->getSession();
         $sessionId = $session->getSessionId();

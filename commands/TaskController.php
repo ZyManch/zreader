@@ -8,10 +8,8 @@
 namespace app\commands;
 
 use yii\console\Controller;
-use app\models;
 use app\models\ar;
 use yii\helpers\FileHelper;
-use yii\helpers\Url;
 
 /**
  * This command echoes the first argument that you have entered.
@@ -29,20 +27,32 @@ class TaskController extends Controller
     public $task_id;
     public $count = 1;
     public $silent = false;
+    public $force = false;
 
-    public function options()
+    public function init() {
+        parent::init();
+        set_time_limit(0);
+        ini_set('memory_limit','1024M');
+    }
+
+    public function options($actionID)
     {
-        return ['task','count','task_id','silent'];
+        return ['task','count','task_id','silent','force'];
     }
 
     public function optionAliases()
     {
-        return ['c' => 'count','t'=> 'task','id' => 'task_id','s'=>'silent'];
+        return [
+            'c' => 'count',
+            't' => 'task',
+            'id'=> 'task_id',
+            's' => 'silent',
+            'f' => 'force'
+        ];
     }
 
     public function actionIndex() {
-        set_time_limit(0);
-        ini_set('memory_limit','1024M');
+
         if ($this->_isAlreadyExecuted()) {
             $this->_output('Another script is already in process');
             return;
@@ -60,19 +70,19 @@ class TaskController extends Controller
     }
 
     protected function _processTask() {
-        $query = ar\Task::find()->orderBy('task_id');
+        $query = ar\Task\Model::find()->orderBy('task_id');
         if ($this->task_id) {
             $query->
                 where('task_id='.intval($this->task_id));
         } else {
             $query->
-                where('status="'.ar\Task::STATUS_WAIT.'"');
+                where('status="'.ar\Task\Model::STATUS_WAIT.'"');
             if ($this->task) {
                 $query->andWhere('task="'.$this->task.'"');
             }
         }
         $task = $query->one();
-        /** @var $task ar\Task */
+        /** @var $task ar\Task\Model */
         if ($task) {
             $this->_output('Start task '.$task->task_id.':');
 
@@ -80,6 +90,7 @@ class TaskController extends Controller
                 $task->process();
                 $this->_output('success');
             }   catch (\Exception $e) {
+                print $e->getTraceAsString();
                 $this->_output($e->getFile().':'.$e->getLine().' - '.$e->getMessage());
             }
         } else {
@@ -91,16 +102,23 @@ class TaskController extends Controller
     }
 
     protected function _isAlreadyExecuted() {
+        if ($this->force) {
+            return false;
+        }
         return file_exists($this->_getLockFileName());
 
     }
 
     protected function _lockExecution() {
-        file_put_contents($this->_getLockFileName(),date('Y-m-d H:i:s'));
+        if (!$this->force) {
+            file_put_contents($this->_getLockFileName(), date('Y-m-d H:i:s'));
+        }
     }
 
     protected function _unlockExecution() {
-        unlink($this->_getLockFileName());
+        if (!$this->force) {
+            unlink($this->_getLockFileName());
+        }
     }
 
     protected function _getLockFileName() {
