@@ -21,7 +21,7 @@ class FilterForm extends Model
     public $genres = [];
     public $declined_genres = [];
     public $author_id;
-    public $is_finished = Manga::IS_FINISHED_UNKNOWN;
+    public $is_finished = Manga\Model::IS_FINISHED_UNKNOWN;
     public $year_from;
     public $year_to;
 
@@ -36,7 +36,7 @@ class FilterForm extends Model
         return [
             [['genres','declined_genres'], 'each','rule'=>['integer']],
             ['author_id', 'integer'],
-            ['is_finished', 'in','range'=>[Manga::IS_FINISHED_UNKNOWN,Manga::IS_FINISHED_YES,Manga::IS_FINISHED_NO]],
+            ['is_finished', 'in','range'=>[Manga\Model::IS_FINISHED_UNKNOWN,Manga\Model::IS_FINISHED_YES,Manga\Model::IS_FINISHED_NO]],
             [['year_from','year_to'], 'integer','min'=>self::YEAR_FROM,'max'=>date('Y')],
         ];
     }
@@ -57,9 +57,8 @@ class FilterForm extends Model
     }
 
     public function getProvider() {
-        $query = Manga::find()->
-            //joinWith('seasons')->
-            //joinWith('seasons.chapters')->
+        $query = Manga\Model::find()->
+            excludeHidden()->
             joinWith('mangaHasGenres')->
             groupBy('manga.manga_id');
         $genres = (is_array($this->genres) ? $this->genres : []);
@@ -73,10 +72,10 @@ class FilterForm extends Model
         if ($this->author_id) {
             $query->andWhere('manga.author_id='.intval($this->author_id));
         }
-        if ($this->is_finished == Manga::IS_FINISHED_YES) {
-            $query->andWhere('manga.is_finished="'.Manga::IS_FINISHED_YES.'"');
-        } else if ($this->is_finished == Manga::IS_FINISHED_NO) {
-            $query->andWhere('manga.is_finished="'.Manga::IS_FINISHED_NO.'"');
+        if ($this->is_finished == Manga\Model::IS_FINISHED_YES) {
+            $query->andWhere('manga.is_finished="'.Manga\Model::IS_FINISHED_YES.'"');
+        } else if ($this->is_finished == Manga\Model::IS_FINISHED_NO) {
+            $query->andWhere('manga.is_finished="'.Manga\Model::IS_FINISHED_NO.'"');
         }
         if ($this->year_from) {
             $query->andWhere('manga.created>='.intval($this->year_from));

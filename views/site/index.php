@@ -14,16 +14,12 @@ $this->title = 'Manga';
 ?>
 <div class="row">
 
-    <div class="col-md-10">
+    <div class="col-md-12">
 
         <?=$this->render('tabs/_favorites',['favorites'=>$favorites]);?>
         <?=$this->render('tabs/_lastChanges',['lastManga'=>$lastManga]);?>
         <?=$this->render('tabs/_bestManga',['bestMangas'=>$bestMangas]);?>
 
-
-    </div>
-    <div class="col-md-2">
-        <?=$this->render('tabs/_genres',['genres'=>$genres]);?>
 
     </div>
 

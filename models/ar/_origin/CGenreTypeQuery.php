@@ -5,11 +5,11 @@ namespace app\models\ar\_origin;
 use app\models\ar;
 
 /**
- * This is the ActiveQuery class for [[CSessionHasChapter]].
+ * This is the ActiveQuery class for [[CGenreType]].
  *
- * @see CSessionHasChapter
+ * @see CGenreType
  */
-class CSessionHasChapterQuery extends \yii\db\ActiveQuery
+class CGenreTypeQuery extends \yii\db\ActiveQuery
 {
     /*public function active()
     {
@@ -18,7 +18,7 @@ class CSessionHasChapterQuery extends \yii\db\ActiveQuery
 
     /**
      * @inheritdoc
-     * @return CSessionHasChapter[]|array
+     * @return CGenreType[]|array
      */
     public function all($db = null)
     {
@@ -27,7 +27,7 @@ class CSessionHasChapterQuery extends \yii\db\ActiveQuery
 
     /**
      * @inheritdoc
-     * @return CSessionHasChapter|array|null
+     * @return CGenreType|array|null
      */
     public function one($db = null)
     {

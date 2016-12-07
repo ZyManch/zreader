@@ -11,73 +11,60 @@ use \app\models\ar\Chapter;
  * @var $chapter Chapter\Model
  * @var $this \yii\web\View
  */
-$chapters = $model->getChapters()->orderBy('number')->all();
-if (!$chapters) {
+/** @var Chapter\Model $firstChapter */
+$firstChapter = $model->getChapters()->orderBy('number')->one();
+if (!$firstChapter) {
     return;
 }
-$this->registerJs(
-    'var $groupedBlock = $(".manga-grouped-chapters"),
-        $chaptersBlock = $(".manga-chapters");
-    $groupedBlock.find("button").click(function() {
-        var $this = $(this);
-        $groupedBlock.find(".active").removeClass("active");
-        $chaptersBlock.removeClass("manga-chapters-visible");
-        $this.addClass("active");
-        $("#chapters-"+$this.data("group")).addClass("manga-chapters-visible");
-    });'
-);
-$groupedChapters = [];
-foreach ($chapters as $chapter) {
-    $groupId = floor($chapter->number/Chapter\Model::CHAPTER_GROUP_COUNT)*Chapter\Model::CHAPTER_GROUP_COUNT;
-    if (!isset($groupedChapters[$groupId])) {
-        $groupedChapters[$groupId] = [
-            'min' => floor($chapter->number),
-            'max' => floor($chapter->number),
-            'chapters'=>[]
-        ];
-    }
-    $groupedChapters[$groupId]['chapters'][] = $chapter;
-    $groupedChapters[$groupId]['max'] = floor($chapter->number);
+/** @var \app\models\Session $session */
+$session = Yii::$app->user->getSession();
+$lastChapterNumber = $session->getMangaLastChapterNumber($model);
+$nextChapter = null;
+if (!is_null($lastChapterNumber)) {
+    $nextChapter = $model->
+        getChapters()->
+        orderBy('number')->
+        where('number>'.floatval($lastChapterNumber))->
+        one();
 }
-$min = reset($chapters)->number;
-$max = end($chapters)->number;
-$start = floor($min/Chapter\Model::CHAPTER_GROUP_COUNT)*Chapter\Model::CHAPTER_GROUP_COUNT;
-$isFirst = true;
 ?>
-
-<?php if (sizeof($groupedChapters) > 1):?>
-    <h3>Серии по группам</h3>
-
-    <div class="btn-group manga-grouped-chapters">
-    <?php foreach ($groupedChapters as $groupId => $groupedChapter):?>
-        <?=Html::button(
-            'С '.$groupedChapter['min'].' по '.$groupedChapter['max'],
-            [
-                'class'=>'btn btn-default'.($isFirst?' active':''),
-                'data-group'=>$groupId
-            ]
-        );?>
-        <?php $isFirst=false;?>
-    <?php endforeach;?>
-    </div>
-<?php endif;?>
-
-
-<h3>Серий</h3>
-<?php $isFirst=true;?>
-<?php foreach ($groupedChapters as $groupId => $groupedChapter):?>
-<div class="manga-chapters <?php if ($isFirst):?>manga-chapters-visible<?php endif;?>" id="chapters-<?=$groupId;?>">
-    <?php foreach ($groupedChapter['chapters'] as $chapter):?>
-        <?=Html::a(
-            $chapter->getTitle(),
-            $chapter->getUrl(),
-            array(
-                'class'=>'btn btn-default'
-            )
-        );?>
-    <?php endforeach;?>
-    <?php $isFirst=false;?>
+<br>
+<br>
+<div class="btn-group">
+    <?=Html::a(
+        'Начать читать',
+        $firstChapter->getUrl(),
+        array(
+            'class'=>'btn btn-default'.($lastChapterNumber?'':' btn-warning')
+        )
+    );?>
+    <?php if($lastChapterNumber):?>
+        <?php if ($nextChapter):?>
+            <?=Html::a(
+                'Продолжить чтение',
+                $nextChapter->getUrl(),
+                array(
+                    'class'=>'btn btn-default btn-success'
+                )
+            );?>
+        <?php elseif ($model->is_finished == ar\Manga\Model::IS_FINISHED_YES) :?>
+            <?=Html::a(
+                'Чтение завершено',
+                '#',
+                array(
+                    'class'=>'btn btn-default btn-warning',
+                    'disabled' => 'disabled'
+                )
+            );?>
+        <?php else:?>
+            <?=Html::a(
+                'Нет новых глав',
+                '#',
+                array(
+                    'class'=>'btn btn-default btn-warning',
+                    'disabled' => 'disabled'
+                )
+            );?>
+        <?php endif;?>
+    <?php endif;?>
 </div>
-<?php endforeach;?>
-
-

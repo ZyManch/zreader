@@ -26,7 +26,6 @@ use app\models\ar;
  * @property ar\Chapter\Model[] $ar\Chapter\Models
  * @property ar\MangaHasAuthor\Model[] $ar\MangaHasAuthor\Models
  * @property ar\MangaHasGenre\Model[] $ar\MangaHasGenre\Models
- * @property ar\SessionHasChapter\Model[] $ar\SessionHasChapter\Models
  * @property ar\SessionHasManga\Model[] $ar\SessionHasManga\Models
  * @property ar\Task\Model[] $ar\Task\Models
  */
@@ -100,13 +99,6 @@ class CManga extends \yii\db\ActiveRecord
         public function getMangaHasGenres()
     {
         return $this->hasMany(ar\MangaHasGenre\Model::className(), ['manga_id' => 'manga_id']);
-    }
-        /**
-     * @return \yii\db\ActiveQuery
-     */
-        public function getSessionHasChapters()
-    {
-        return $this->hasMany(ar\SessionHasChapter\Model::className(), ['manga_id' => 'manga_id']);
     }
         /**
      * @return \yii\db\ActiveQuery

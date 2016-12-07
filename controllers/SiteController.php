@@ -74,13 +74,10 @@ class SiteController extends Controller
             excludeHidden()->
             best()->
             all();
-        $genres = ar\Genre\Model::getAll();
         return $this->render('index',array(
             'lastManga' => $lastManga,
             'bestMangas' => $bestMangas,
             'favorites' => $favorites,
-            'genres' => $genres
-
         ));
     }
 

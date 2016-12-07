@@ -11,6 +11,20 @@ class Query extends ar\_origin\CMangaQuery {
 
     const SEASRCH_MANGA_COUNT = 50;
 
+    public function init() {
+        parent::init();
+        /** @var Session $session */
+        $session = \Yii::$app->user->getSession();
+        $sessionId = $session->getSessionId();
+        if ($sessionId) {
+            $this->with([
+                'sessionHasMangas' => function(ar\SessionHasManga\Query $query) use($sessionId) {
+                    $query->onCondition('session_has_manga.session_id='.$sessionId);
+                }
+            ]);
+        }
+    }
+
     /**
      * @return $this
      */

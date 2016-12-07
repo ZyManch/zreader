@@ -26,6 +26,9 @@ class ReadController extends Controller
     {
         $chapter = $this->findModel($id, $manga);
         $chapter->manga->incrementReads();
+        /** @var \app\models\Session $session */
+        $session = Yii::$app->user->getSession();
+        $session->changeMangaLastChapterNumber($chapter->manga,$chapter->number);
         return $this->render('view', [
             'model' => $chapter,
         ]);

@@ -19,14 +19,6 @@ $this->title = $model->title;
 
         <?=$this->render('tabs/_avatar',['model'=>$model]);?>
         <?=$this->render('tabs/_description',['model'=>$model]);?>
-    </div>
-</div>
-
-<div class="row manga-view">
-    <div class="col-xs-12">
         <?=$this->render('tabs/_chapters',['model'=>$model]);?>
     </div>
-
-
-
 </div>

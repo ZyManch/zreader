@@ -71,8 +71,12 @@ class Session {
         return $this->_hash;
     }
 
-    public function getSessionId() {
-        return $this->_getSession(true)->session_id;
+    public function getSessionId($createNewOnEmpty = true) {
+        $session = $this->_getSession($createNewOnEmpty);
+        if (!$session) {
+            return null;
+        }
+        return $session->session_id;
     }
 
     protected function _getSession($createNewOnEmpty = false) {
@@ -94,11 +98,28 @@ class Session {
 
     public function changeMangaStatus(ar\Manga\Model $manga, $status) {
         $this->_updateLastVisit();
-        $sessionHasManga = $this->_getSessionHasManga($manga);
+        $sessionHasManga = $this->_getSessionHasManga($manga, true);
         $sessionHasManga->status = $status;
         if (!$sessionHasManga->save()) {
             throw new \Exception('Ошибка изменения статуса манги для юзера:'.implode(',', $sessionHasManga->getFirstErrors()));
         }
+    }
+
+    public function changeMangaLastChapterNumber(ar\Manga\Model $manga, $lastChapterNumber) {
+        $this->_updateLastVisit();
+        $sessionHasManga = $this->_getSessionHasManga($manga, true);
+        $sessionHasManga->last_chapter_number = $lastChapterNumber;
+        if (!$sessionHasManga->save()) {
+            throw new \Exception('Ошибка изменения статуса манги для юзера:'.implode(',', $sessionHasManga->getFirstErrors()));
+        }
+    }
+
+    public function getMangaLastChapterNumber(ar\Manga\Model $manga) {
+        $sessionHasManga = $this->_getSessionHasManga($manga, false);
+        if (!$sessionHasManga) {
+            return null;
+        }
+        return $sessionHasManga->last_chapter_number;
     }
 
     protected function _updateLastVisit() {
@@ -109,12 +130,18 @@ class Session {
         }
     }
 
+    public function addSessionHasManga(ar\SessionHasManga\Model $model) {
+        $this->_mangas[$model->manga_id] = $model;
+    }
     /**
      * @param ar\Manga\Model $manga
      * @return ar\SessionHasManga\Model
      */
-    protected function _getSessionHasManga(ar\Manga\Model $manga) {
+    protected function _getSessionHasManga(ar\Manga\Model $manga, $createNewOnEmpty = false) {
         if (!isset($this->_mangas[$manga->manga_id])) {
+            if (!$createNewOnEmpty) {
+                return null;
+            }
             $sessionHasManga = null;
             $session = $this->_getSession();
             if ($session) {
@@ -127,7 +154,7 @@ class Session {
                 $sessionHasManga->manga_id = $manga->manga_id;
                 $sessionHasManga->status = ar\SessionHasManga\Model::STATUS_UNKNOWN;
             }
-            $this->_mangas[$manga->manga_id] = $sessionHasManga;
+            $this->addSessionHasManga($sessionHasManga);
         }
         return $this->_mangas[$manga->manga_id];
     }
@@ -137,7 +164,11 @@ class Session {
      * @return string
      */
     public function getMangaStatus(ar\Manga\Model $manga) {
-        return $this->_getSessionHasManga($manga)->status;
+        $sessionHasManga = $this->_getSessionHasManga($manga, false);
+        if (!$sessionHasManga) {
+            return ar\SessionHasManga\Model::STATUS_UNKNOWN;
+        }
+        return $sessionHasManga->status;
     }
 
     /**

@@ -13,6 +13,7 @@ use app\models\ar;
  * @property string $manga_id
  * @property string $status
  * @property string $is_read_finished
+ * @property string $last_chapter_number
  *
  * @property ar\Manga\Model $manga
  * @property ar\Session\Model $session
@@ -36,6 +37,7 @@ class CSessionHasManga extends \yii\db\ActiveRecord
             [['session_id', 'manga_id'], 'required'],
             [['session_id', 'manga_id'], 'integer'],
             [['status', 'is_read_finished'], 'string'],
+            [['last_chapter_number'], 'number'],
             [['manga_id'], 'exist', 'skipOnError' => true, 'targetClass' => ar\Manga\Model::className(), 'targetAttribute' => ['manga_id' => 'manga_id']],
             [['session_id'], 'exist', 'skipOnError' => true, 'targetClass' => ar\Session\Model::className(), 'targetAttribute' => ['session_id' => 'session_id']],
         ];
@@ -52,6 +54,7 @@ class CSessionHasManga extends \yii\db\ActiveRecord
             'manga_id' => 'Manga ID',
             'status' => 'Status',
             'is_read_finished' => 'Is Read Finished',
+            'last_chapter_number' => 'Last Chapter Number',
         ];
     }
     /**

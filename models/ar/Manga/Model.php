@@ -45,34 +45,39 @@ class Model extends ar\_origin\CManga{
 
 
     public function getLastChapters() {
-        /** @var ar\Chapter\Model[] $chapters */
-        $chapters = $this->getChapters()->
-            where('created>=adddate("'.$this->changed.'",interval -1 day)')->
-            orderBy('number asc')->
-            all();
-        $result = [];
-        foreach ($chapters as $chapter) {
-            $result[] = $chapter->getRoundedNumber();
-        }
-        sort($result);
-        $newChapters = [];
-        $lastChapter = null;
-        foreach ($result as $chapter) {
-            if (is_null($lastChapter) || ($lastChapter+1 < $chapter)) {
-                $newChapters[] = ['from'=>$chapter,'to'=>$chapter];
-            } else {
-                $newChapters[sizeof($newChapters)-1]['to'] = $chapter;
+        $key = 'manga-last-chapters-'.$this->manga_id;
+        $cache = \Yii::$app->cache;
+        if (!isset($cache[$key])) {
+            /** @var ar\Chapter\Model[] $chapters */
+            $chapters = $this->getChapters()->
+                where('created>=adddate("'.$this->changed.'",interval -1 day)')->
+                orderBy('number asc')->
+                all();
+            $result = [];
+            foreach ($chapters as $chapter) {
+                $result[] = $chapter->getRoundedNumber();
             }
-            $lastChapter = $chapter;
-        }
-        foreach ($newChapters as $index => $range) {
-            if ($range['from']==$range['to']) {
-                $newChapters[$index] = $range['from'];
-            } else {
-                $newChapters[$index] = $range['from'].'-'.$range['to'];
+            sort($result);
+            $newChapters = [];
+            $lastChapter = null;
+            foreach ($result as $chapter) {
+                if (is_null($lastChapter) || ($lastChapter+1 < $chapter)) {
+                    $newChapters[] = ['from'=>$chapter,'to'=>$chapter];
+                } else {
+                    $newChapters[sizeof($newChapters)-1]['to'] = $chapter;
+                }
+                $lastChapter = $chapter;
             }
+            foreach ($newChapters as $index => $range) {
+                if ($range['from']==$range['to']) {
+                    $newChapters[$index] = $range['from'];
+                } else {
+                    $newChapters[$index] = $range['from'].'-'.$range['to'];
+                }
+            }
+            $cache[$key] = $newChapters;
         }
-        return $newChapters;
+        return $cache[$key];
     }
 
 }

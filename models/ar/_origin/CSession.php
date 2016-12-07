@@ -13,7 +13,6 @@ use app\models\ar;
  * @property string $created
  * @property string $last_visit
  *
- * @property ar\SessionHasChapter\Model[] $ar\SessionHasChapter\Models
  * @property ar\SessionHasManga\Model[] $ar\SessionHasManga\Models
  * @property ar\User\Model[] $ar\User\Models
  */
@@ -52,13 +51,6 @@ class CSession extends \yii\db\ActiveRecord
         ];
     }
     /**
-     * @return \yii\db\ActiveQuery
-     */
-        public function getSessionHasChapters()
-    {
-        return $this->hasMany(ar\SessionHasChapter\Model::className(), ['session_id' => 'session_id']);
-    }
-        /**
      * @return \yii\db\ActiveQuery
      */
         public function getSessionHasMangas()

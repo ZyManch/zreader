@@ -18,8 +18,18 @@ class SessionHasManga extends Behavior {
     {
         return [
             ActiveRecord::EVENT_BEFORE_VALIDATE => 'beforeValidate',
+            ActiveRecord::EVENT_AFTER_FIND => 'afterFind',
         ];
     }
+
+    public function afterFind(\yii\base\Event $event) {
+        /** @var \app\models\ar\SessionHasManga\Model $sessionHasManga */
+        $sessionHasManga = $event->sender;
+        /** @var Session $session */
+        $session = \Yii::$app->user->getSession();
+        $session->addSessionHasManga($sessionHasManga);
+    }
+
 
     public function beforeValidate(ModelEvent $event)
     {

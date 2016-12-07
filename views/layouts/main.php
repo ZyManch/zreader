@@ -9,10 +9,13 @@ use yii\bootstrap\Nav;
 use yii\bootstrap\NavBar;
 use yii\widgets\Breadcrumbs;
 use app\assets\AppAsset;
+use app\models\ar;
 use yii\jui\AutoComplete;
 use yii\web\JsExpression;
 
 AppAsset::register($this);
+/** @var \app\models\Session $session */
+$session = Yii::$app->user->getSession();
 ?>
 <?php $this->beginPage() ?>
 <!DOCTYPE html>
@@ -29,6 +32,20 @@ AppAsset::register($this);
 
 <div class="wrap">
     <?php
+    if (!isset(Yii::$app->cache['menu-genres'])) {
+        Yii::$app->cache['menu-genres'] = array_map(function(ar\GenreType\Model $genreType) {
+            return [
+                'label' => $genreType->title,
+                'items' => array_map(function(ar\Genre\Model $genre) {
+                    return [
+                        'label' => $genre->title,
+                        'url' => $genre->getUrl()
+                    ];
+                },$genreType->getGenres()->all())
+            ];
+        },ar\GenreType\Model::find()->all());
+    }
+    $genres = Yii::$app->cache['menu-genres'];
     NavBar::begin([
         'brandLabel' => Yii::$app->params['brandName'],
         'brandUrl' => Yii::$app->homeUrl,
@@ -39,11 +56,33 @@ AppAsset::register($this);
     echo Nav::widget([
         'options' => ['class' => 'navbar-nav navbar-right'],
         'items' => [
-            ['label' => 'КАТАЛОГ', 'url' => ['manga/index']],
-            ['label' => 'ЖАНРЫ', 'url' => ['genre/index']],
-            Yii::$app->user->isGuest ? (
-                ['label' => 'ЛОГИН', 'url' => ['site/login']]
-            ) : (
+            [
+                    'label' => 'КАТАЛОГ',
+                    'items' => [
+                            [
+                                    'label' => 'Поиск',
+                                    'url' => ['manga/index']
+                            ],
+                            [
+                                'label' => 'Топовые',
+                                'url' => ['manga/best']
+                            ],
+                            [
+                                'label' => 'Избранное',
+                                'url' => ['manga/favorites'],
+                                'visible' => $session->getMangaIdsByStatus(ar\SessionHasManga\Model::STATUS_FAVORITE)
+                            ]
+                    ]
+            ],
+            [
+                    'label' => 'ЖАНРЫ',
+                    'items' => $genres
+            ],
+            Yii::$app->user->isGuest ?
+                [
+                        'label' => 'ЛОГИН',
+                        'url' => ['site/login']
+                ]:
                 '<li>'
                 . Html::beginForm(['site/logout'], 'post', ['class' => 'navbar-form'])
                 . Html::submitButton(
@@ -52,7 +91,6 @@ AppAsset::register($this);
                 )
                 . Html::endForm()
                 . '</li>'
-            )
         ],
     ]);
     ?>

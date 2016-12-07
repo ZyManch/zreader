@@ -4,6 +4,7 @@ use yii\helpers\ArrayHelper;
 use yii\bootstrap\ActiveForm;
 use \app\form\FilterForm;
 use \app\models\ar\Genre;
+use \app\models\ar\GenreType;
 use \app\models\ar\Manga;
 use \app\models\ar\Author;
 use yii\widgets\ListView;
@@ -14,6 +15,9 @@ use yii\widgets\ListView;
 $this->title = 'Каталог манги';
 $years = array_combine(range(FilterForm::YEAR_FROM,date('Y')),range(FilterForm::YEAR_FROM,date('Y')));
 krsort($years);
+$genres = ArrayHelper::map(GenreType\Model::find()->all(),'title',function(GenreType\Model $genreType) {
+    return ArrayHelper::map($genreType->getGenres()->all(),'genre_id','title');
+});
 ?>
 <div class="row">
 
@@ -24,13 +28,13 @@ krsort($years);
             <div class="row">
                 <div class="col-md-4">
                     <?= $form->field($model, 'genres')->listBox(
-                        ArrayHelper::map(Genre\Model::getAll(),'genre_id','title'),
+                        $genres,
                         ['multiple'=>true,'size'=>12,'name'=>'genres']
                     ) ?>
                 </div>
                 <div class="col-md-4">
                     <?= $form->field($model, 'declined_genres')->listBox(
-                        ArrayHelper::map(Genre\Model::getAll(),'genre_id','title'),
+                        $genres,
                         ['multiple'=>true,'size'=>12,'name'=>'declined_genres']
                     ) ?>
                 </div>

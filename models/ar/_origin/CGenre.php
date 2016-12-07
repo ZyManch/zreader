@@ -11,7 +11,10 @@ use app\models\ar;
  * @property string $genre_id
  * @property string $title
  * @property string $url
+ * @property integer $power
+ * @property string $genre_type_id
  *
+ * @property ar\GenreType\Model $genreType
  * @property ar\MangaHasGenre\Model[] $ar\MangaHasGenre\Models
  */
 class CGenre extends \yii\db\ActiveRecord
@@ -30,8 +33,10 @@ class CGenre extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['title', 'url'], 'required'],
+            [['title', 'url', 'genre_type_id'], 'required'],
+            [['power', 'genre_type_id'], 'integer'],
             [['title', 'url'], 'string', 'max' => 128],
+            [['genre_type_id'], 'exist', 'skipOnError' => true, 'targetClass' => ar\GenreType\Model::className(), 'targetAttribute' => ['genre_type_id' => 'genre_type_id']],
         ];
     }
 
@@ -44,9 +49,18 @@ class CGenre extends \yii\db\ActiveRecord
             'genre_id' => 'Genre ID',
             'title' => 'Title',
             'url' => 'Url',
+            'power' => 'Power',
+            'genre_type_id' => 'Genre Type ID',
         ];
     }
     /**
+     * @return \yii\db\ActiveQuery
+     */
+        public function getGenreType()
+    {
+    return $this->hasOne(ar\GenreType\Model::className(), ['genre_type_id' => 'genre_type_id']);
+    }
+        /**
      * @return \yii\db\ActiveQuery
      */
         public function getMangaHasGenres()
