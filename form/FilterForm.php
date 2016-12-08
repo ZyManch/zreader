@@ -24,6 +24,7 @@ class FilterForm extends Model
     public $is_finished = Manga\Model::IS_FINISHED_UNKNOWN;
     public $year_from;
     public $year_to;
+    public $name;
 
     public $sort = self::SORT_VIEWS;
 
@@ -36,6 +37,7 @@ class FilterForm extends Model
         return [
             [['genres','declined_genres'], 'each','rule'=>['integer']],
             ['author_id', 'integer'],
+            ['name', 'string', 'max' => 60,'min'=>3],
             ['is_finished', 'in','range'=>[Manga\Model::IS_FINISHED_UNKNOWN,Manga\Model::IS_FINISHED_YES,Manga\Model::IS_FINISHED_NO]],
             [['year_from','year_to'], 'integer','min'=>self::YEAR_FROM,'max'=>date('Y')],
         ];
@@ -53,6 +55,7 @@ class FilterForm extends Model
             'is_finished' => 'Выпуск',
             'year_from' => 'Выпуск с года',
             'year_to' => 'Выпуск до года',
+            'name' => 'Содержит',
         ];
     }
 
@@ -82,6 +85,17 @@ class FilterForm extends Model
         }
         if ($this->year_to) {
             $query->andWhere('manga.created<='.intval($this->year_to));
+        }
+        if ($this->name) {
+            $query->andWhere(
+                [
+                    'or',
+                    'manga.title like :name',
+                    'manga.english_title like :name',
+                    'manga.original_title like :name'
+                ],
+                [':name'=>$this->name.'%']
+            );
         }
         switch ($this->sort) {
             case self::SORT_VIEWS:

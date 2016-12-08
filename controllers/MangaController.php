@@ -3,7 +3,6 @@
 namespace app\controllers;
 
 use app\form\FilterForm;
-use app\models\Session;
 use Yii;
 use app\models\ar;
 use yii\data\ActiveDataProvider;
@@ -35,7 +34,7 @@ class MangaController extends Controller
     {
         $query = ar\Manga\Model::find()->
             excludeHidden()->
-            best();
+            orderByBest();
         return $this->render('best',array(
             'dataProvider' => new ActiveDataProvider([
                 'query' => $query
@@ -46,8 +45,49 @@ class MangaController extends Controller
     public function actionFavorites()
     {
         $query = ar\Manga\Model::find()->
-            favorite();
+            favorite()->
+            orderByLastChapter();
         return $this->render('favorites',array(
+            'dataProvider' => new ActiveDataProvider([
+                'query' => $query
+            ])
+        ));
+    }
+
+    public function actionHidden()
+    {
+        $query = ar\Manga\Model::find()->
+            hidden()->
+            orderByLastChapter();
+        return $this->render('hidden',array(
+            'dataProvider' => new ActiveDataProvider([
+                'query' => $query
+            ])
+        ));
+    }
+
+    public function actionDeferred()
+    {
+        $query = ar\Manga\Model::find()->
+            deferred()->
+            orderByDeferred()->
+            orderByLastChapter();
+        return $this->render('deferred',array(
+            'dataProvider' => new ActiveDataProvider([
+                'query' => $query
+            ])
+        ));
+    }
+
+    public function actionContinue()
+    {
+        $query = ar\Manga\Model::find()->
+            notFinished()->
+            excludeHidden()->
+            orderByFavorites()->
+            orderByDeferred()->
+            orderByLastChapter();
+        return $this->render('continue',array(
             'dataProvider' => new ActiveDataProvider([
                 'query' => $query
             ])
@@ -66,6 +106,21 @@ class MangaController extends Controller
         return $this->render('view', [
             'model' => $model
         ]);
+    }
+
+
+
+    public function actionSearch($search) {
+        if (strlen($search) > 100) {
+            $search = substr($search,0,100);
+        }
+        $mangas = ar\Manga\Model::find()->
+            search($search)->
+            all();
+        return $this->render('search',array(
+            'search' => $search,
+            'mangas' => $mangas,
+        ));
     }
 
 

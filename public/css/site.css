@@ -88,15 +88,35 @@ a.desc:after {
     position: relative;
     float:left;
 }
-.manga-list .manga.manga-favorite .info .bg {
+.manga-list .manga.manga-favorite, .manga-list .manga.manga-favorite .status {
+    border-color: #ffd038;
+}
+.manga-list .manga.manga-favorite .info .bg, .manga-list .manga.manga-favorite .status {
     background-color: #ffe590;
 }
-.manga-list .manga.manga-hide .info .bg {
+
+.manga-list .manga.manga-hide, .manga-list .manga.manga-hide .status {
+    border-color: #ff5544;
+}
+.manga-list .manga.manga-hide .info .bg, .manga-list .manga.manga-hide .status {
     background-color: #ffb0a4;
 }
-.manga-list .manga.manga-started .info .bg {
+
+.manga-list .manga.manga-started, .manga-list .manga.manga-started .status {
+    border-color: #4effbe;
+}
+.manga-list .manga.manga-started .info .bg, .manga-list .manga.manga-started .status {
     background-color: #d4ffec;
 }
+
+.manga-list .manga.manga-deferred, .manga-list .manga.manga-deferred .status {
+    border-color: #feff31;
+}
+.manga-list .manga.manga-deferred .info .bg, .manga-list .manga.manga-deferred .status {
+    background-color: #fbffc6;
+}
+
+
 .manga-list .manga .info .genres {
     position: absolute;
     left: 0;
@@ -111,9 +131,21 @@ a.desc:after {
     display: block;
 
 }
-.manga-list .manga .info{
+.manga-list .manga .status {
     position: absolute;
     z-index: 2;
+    left: 0;
+    top: 0;
+    border-radius: 5px 0 5px 0;
+    border: 1px solid transparent;
+    border-top-width: 0;
+    border-left-width: 0;
+    padding: 2px 4px;
+    opacity: 0.9;
+}
+.manga-list .manga .info{
+    position: absolute;
+    z-index: 3;
     left: 0px;
     width: 100%;
     bottom: 0px;
@@ -162,14 +194,21 @@ a.desc:after {
     display: none;
     position: absolute;
     top:24px;
+    left: auto;
     right: -5px;
     z-index: 3;
     border: 1px solid #c6c6c6;
     border-radius: 3px;
     background-color: white;
-    padding: 5px 5px 5px 25px;
     width: 128px;
     margin: 0;
+}
+.manga-list .manga .info .menu .menu-items .active a{
+    color: black;
+    background-color: #ffb624;
+    border-top: 2px solid #dc9300;
+    border-bottom: 2px solid #ffd685;
+    padding: 1px 20px;
 }
 .manga-list .manga .info .menu .menu-items li {
 }

@@ -63,21 +63,35 @@ class SiteController extends Controller
      */
     public function actionIndex()
     {
+        $continue = ar\Manga\Model::find()->
+            notFinished()->
+            excludeHidden()->
+            orderByFavorites()->
+            orderByDeferred()->
+            orderByLastChapter()->
+            limit(ar\Manga\Query::BEST_MANGA_COUNT)->
+            all();
         $favorites = ar\Manga\Model::find()->
             favorite()->
+            orderByLastChapter()->
+            limit(ar\Manga\Query::BEST_MANGA_COUNT)->
             all();
         $lastManga = ar\Manga\Model::find()->
             excludeHidden()->
-            last()->
+            orderByDeferred()->
+            orderByLastChapter()->
+            limit(ar\Manga\Query::BEST_MANGA_COUNT)->
             all();
         $bestMangas = ar\Manga\Model::find()->
             excludeHidden()->
-            best()->
+            orderByBest()->
+            limit(ar\Manga\Query::BEST_MANGA_COUNT)->
             all();
         return $this->render('index',array(
             'lastManga' => $lastManga,
             'bestMangas' => $bestMangas,
             'favorites' => $favorites,
+            'continue' => $continue
         ));
     }
 
@@ -87,6 +101,7 @@ class SiteController extends Controller
         }
         $mangas = ar\Manga\Model::find()->
             search($term)->
+            limit(ar\Manga\Query::SEARCH_MANGA_COUNT)->
             all();
         $result = [];
         foreach ($mangas as $manga) {
@@ -100,19 +115,6 @@ class SiteController extends Controller
         return json_encode($result);
     }
 
-
-    public function actionSearch($search) {
-        if (strlen($search) > 100) {
-            $search = substr($search,0,100);
-        }
-        $mangas = ar\Manga\Model::find()->
-            search($search)->
-            all();
-        return $this->render('search',array(
-            'search' => $search,
-            'mangas' => $mangas,
-        ));
-    }
 
     /**
      * Login action.

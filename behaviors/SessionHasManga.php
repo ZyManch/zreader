@@ -7,7 +7,7 @@
  */
 namespace app\behaviors;
 
-use app\models\Session;
+use app\models\session\Settings;
 use yii\base\Behavior;
 use yii\base\ModelEvent;
 use yii\db\ActiveRecord;
@@ -25,7 +25,7 @@ class SessionHasManga extends Behavior {
     public function afterFind(\yii\base\Event $event) {
         /** @var \app\models\ar\SessionHasManga\Model $sessionHasManga */
         $sessionHasManga = $event->sender;
-        /** @var Session $session */
+        /** @var Settings $session */
         $session = \Yii::$app->user->getSession();
         $session->addSessionHasManga($sessionHasManga);
     }
@@ -35,7 +35,7 @@ class SessionHasManga extends Behavior {
     {
         /** @var \app\models\ar\SessionHasManga\Model $sessionHasManga */
         $sessionHasManga = $event->sender;
-        /** @var Session $session */
+        /** @var Settings $session */
         $session = \Yii::$app->user->getSession();
         $sessionHasManga->session_id = $session->getSessionId();
         return true;

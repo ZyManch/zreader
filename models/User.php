@@ -9,7 +9,7 @@ namespace app\models;
 
 use yii\web;
 use \app\models\ar;
-use \app\models\Session;
+use \app\models\session\Settings;
 
 class User extends  web\User {
 
@@ -31,11 +31,11 @@ class User extends  web\User {
     }
 
     /**
-     * @return \app\models\Session
+     * @return Settings
      */
     public function getSession() {
         if (!$this->_session) {
-            $this->_session = new Session();
+            $this->_session = new Settings();
         }
         return $this->_session;
     }

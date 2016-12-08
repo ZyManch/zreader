@@ -16,7 +16,7 @@ $firstChapter = $model->getChapters()->orderBy('number')->one();
 if (!$firstChapter) {
     return;
 }
-/** @var \app\models\Session $session */
+/** @var \app\models\session\ $session */
 $session = Yii::$app->user->getSession();
 $lastChapterNumber = $session->getMangaLastChapterNumber($model);
 $nextChapter = null;

@@ -60,6 +60,11 @@ $genres = ArrayHelper::map(GenreType\Model::find()->all(),'title',function(Genre
                         </div>
                     </div>
                     <div>
+                        <?= $form->field($model, 'name')->textInput(
+                            ['name'=>'name']
+                        ) ?>
+                    </div>
+                    <div>
                         <?= $form->field($model, 'is_finished',['inline'=>true])->radioList([
                             Manga\Model::IS_FINISHED_UNKNOWN => 'Любой',
                             Manga\Model::IS_FINISHED_YES => 'Завершен',

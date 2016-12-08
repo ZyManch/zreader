@@ -2,7 +2,7 @@
 
 namespace app\controllers;
 
-use app\models\Session;
+use app\models\session\Settings;
 use Yii;
 use app\models\ar;
 use yii\web\Controller;
@@ -15,27 +15,43 @@ class SessionController extends Controller
 {
 
 
-    public function actionExclude($manga, $redirect) {
+    public function actionMarkHidden($manga, $redirect) {
         $model = $this->findModelByUrl($manga);
-        /** @var Session $session */
+        /** @var Settings $session */
         $session = Yii::$app->user->getSession();
         $session->changeMangaStatus($model,ar\SessionHasManga\Model::STATUS_HIDE);
         $this->redirect($redirect);
     }
 
-    public function actionFavorite($manga, $redirect) {
+    public function actionMarkFavorite($manga, $redirect) {
         $model = $this->findModelByUrl($manga);
-        /** @var Session $session */
+        /** @var Settings $session */
         $session = Yii::$app->user->getSession();
         $session->changeMangaStatus($model,ar\SessionHasManga\Model::STATUS_FAVORITE);
         $this->redirect($redirect);
     }
 
-    public function actionShow($manga, $redirect) {
+    public function actionMarkDefault($manga, $redirect) {
         $model = $this->findModelByUrl($manga);
-        /** @var Session $session */
+        /** @var Settings $session */
+        $session = Yii::$app->user->getSession();
+        $session->changeMangaStatus($model,ar\SessionHasManga\Model::STATUS_UNKNOWN);
+        $this->redirect($redirect);
+    }
+
+    public function actionMarkStarted($manga, $redirect) {
+        $model = $this->findModelByUrl($manga);
+        /** @var Settings $session */
         $session = Yii::$app->user->getSession();
         $session->changeMangaStatus($model,ar\SessionHasManga\Model::STATUS_STARTED);
+        $this->redirect($redirect);
+    }
+
+    public function actionMarkDeferred($manga, $redirect) {
+        $model = $this->findModelByUrl($manga);
+        /** @var Settings $session */
+        $session = Yii::$app->user->getSession();
+        $session->changeMangaStatus($model,ar\SessionHasManga\Model::STATUS_DEFERRED);
         $this->redirect($redirect);
     }
 

@@ -16,7 +16,7 @@ use \app\models\ar\Manga;
 if (!isset($chapters)) {
     $chapters = [];
 }
-/** @var \app\models\Session $session */
+/** @var \app\models\session\Settings $session */
 $session = Yii::$app->user->getSession();
 $status = $session->getMangaStatus($model);
 ?>
@@ -38,6 +38,22 @@ $status = $session->getMangaStatus($model);
     $url = Url::to($model->getUrl($chapters));
     ?>
     <div class="manga manga-<?=$status;?>">
+        <div class="status">
+            <?php switch($status):
+                case SessionHasManga\Model::STATUS_FAVORITE:?>
+                Избранное
+                <?php break;
+            case SessionHasManga\Model::STATUS_STARTED:?>
+                Начатое
+                <?php break;
+            case SessionHasManga\Model::STATUS_DEFERRED:?>
+                Отложенное
+                <?php break;
+            case SessionHasManga\Model::STATUS_HIDE:?>
+                Скрытое
+                <?php break;
+            endswitch;?>
+        </div>
         <a class="avatar" style="background-image: url('<?=$model->getImageUrl();?>')" href="<?=$url;?>">
 
         </a>
@@ -50,33 +66,46 @@ $status = $session->getMangaStatus($model);
             <div class="bg"></div>
             <div class="menu">
                 <div class="glyphicon glyphicon-cog"></div>
-                <ul class="menu-items">
-
-                    <li>
-                        <?php if ($status == SessionHasManga\Model::STATUS_FAVORITE):?>
-                            <?=Html::a(
-                                'Скрыть',
-                                ['session/exclude','manga'=>$model->url,'redirect' => Yii::$app->request->url]
-                            );?>
-                        <?php else:?>
-                            <?=Html::a(
-                                'Показать',
-                                ['session/show','manga'=>$model->url,'redirect' => Yii::$app->request->url]
-                            );?>
-                        <?php endif;?>
+                <ul class="menu-items dropdown-menu">
+                    <li <?php if ($status == SessionHasManga\Model::STATUS_FAVORITE):?>class="active"<?php endif;?>>
+                        <?=Html::a(
+                            'Избранное',
+                            [
+                                    $status == SessionHasManga\Model::STATUS_FAVORITE ? 'session/mark-default' : 'session/mark-favorite',
+                                    'manga'=>$model->url,
+                                    'redirect' => Yii::$app->request->url
+                            ]
+                        );?>
                     </li>
-                    <li>
-                        <?php if ($status == SessionHasManga\Model::STATUS_FAVORITE):?>
-                            <?=Html::a(
-                                'Из избранного',
-                                ['session/show','manga'=>$model->url,'redirect' => Yii::$app->request->url]
-                            );?>
-                        <?php else:?>
-                            <?=Html::a(
-                                'В избранное',
-                                ['session/favorite','manga'=>$model->url,'redirect' => Yii::$app->request->url]
-                            );?>
-                        <?php endif;?>
+                    <li <?php if ($status == SessionHasManga\Model::STATUS_STARTED):?>class="active"<?php endif;?>>
+                        <?=Html::a(
+                            'Начатое',
+                            [
+                                $status == SessionHasManga\Model::STATUS_STARTED ? 'session/mark-default' : 'session/mark-started',
+                                'manga'=>$model->url,
+                                'redirect' => Yii::$app->request->url
+                            ]
+                        );?>
+                    </li>
+                    <li <?php if ($status == SessionHasManga\Model::STATUS_DEFERRED):?>class="active"<?php endif;?>>
+                        <?=Html::a(
+                            'Отложенное',
+                            [
+                                $status == SessionHasManga\Model::STATUS_DEFERRED ? 'session/mark-default' : 'session/mark-deferred',
+                                'manga'=>$model->url,
+                                'redirect' => Yii::$app->request->url
+                            ]
+                        );?>
+                    </li>
+                    <li <?php if ($status == SessionHasManga\Model::STATUS_HIDE):?>class="active"<?php endif;?>>
+                        <?=Html::a(
+                            'Скрытое',
+                            [
+                                    $status == SessionHasManga\Model::STATUS_HIDE ? 'session/mark-default' : 'session/mark-hidden',
+                                    'manga'=>$model->url,
+                                    'redirect' => Yii::$app->request->url
+                            ]
+                        );?>
                     </li>
                 </ul>
             </div>

@@ -14,7 +14,7 @@ use yii\jui\AutoComplete;
 use yii\web\JsExpression;
 
 AppAsset::register($this);
-/** @var \app\models\Session $session */
+/** @var \app\models\session\Settings $session */
 $session = Yii::$app->user->getSession();
 ?>
 <?php $this->beginPage() ?>
@@ -71,6 +71,21 @@ $session = Yii::$app->user->getSession();
                                 'label' => 'Избранное',
                                 'url' => ['manga/favorites'],
                                 'visible' => $session->getMangaIdsByStatus(ar\SessionHasManga\Model::STATUS_FAVORITE)
+                            ],
+                            [
+                                'label' => 'Недочитанное',
+                                'url' => ['manga/continue'],
+                                'visible' => $session->isHasSettings()
+                            ],
+                            [
+                                'label' => 'Отложенное',
+                                'url' => ['manga/deferred'],
+                                'visible' => $session->getMangaIdsByStatus(ar\SessionHasManga\Model::STATUS_DEFERRED)
+                            ],
+                            [
+                                'label' => 'Скрытое',
+                                'url' => ['manga/hidden'],
+                                'visible' => $session->getMangaIdsByStatus(ar\SessionHasManga\Model::STATUS_HIDE)
                             ]
                     ]
             ],
@@ -94,7 +109,7 @@ $session = Yii::$app->user->getSession();
         ],
     ]);
     ?>
-    <?=Html::beginForm(['site/search'], 'get', ['class' => 'navbar-form','role'=>'search']);?>
+    <?=Html::beginForm(['manga/search'], 'get', ['class' => 'navbar-form','role'=>'search']);?>
         <div class="form-group">
         <?=AutoComplete::widget([
             'name'=>'search',

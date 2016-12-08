@@ -9,6 +9,7 @@ use yii\helpers\Html;
  * @var $bestMangas Manga\Model[]
  * @var $genres Genre\Model[]
  * @var $favorites Manga\Model[]
+ * @var $continue Manga\Model[]
  */
 $this->title = 'Manga';
 ?>
@@ -16,6 +17,7 @@ $this->title = 'Manga';
 
     <div class="col-md-12">
 
+        <?=$this->render('tabs/_continue',['continue'=>$continue]);?>
         <?=$this->render('tabs/_favorites',['favorites'=>$favorites]);?>
         <?=$this->render('tabs/_lastChanges',['lastManga'=>$lastManga]);?>
         <?=$this->render('tabs/_bestManga',['bestMangas'=>$bestMangas]);?>

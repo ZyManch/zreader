@@ -3,6 +3,7 @@
 namespace app\controllers;
 
 use app\models\ar;
+use app\models\session\Settings;
 use Yii;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -26,7 +27,7 @@ class ReadController extends Controller
     {
         $chapter = $this->findModel($id, $manga);
         $chapter->manga->incrementReads();
-        /** @var \app\models\Session $session */
+        /** @var Settings $session */
         $session = Yii::$app->user->getSession();
         $session->changeMangaLastChapterNumber($chapter->manga,$chapter->number);
         return $this->render('view', [

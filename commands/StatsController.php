@@ -22,7 +22,13 @@ class StatsController extends Controller
 {
 
     public function actionIndex() {
-        \Yii::$app->db->createCommand('
+        $this->_mangaStat();
+        $this->_sessionManga();
+
+    }
+
+    protected function _mangaStat() {
+        $affectedRows = \Yii::$app->db->createCommand('
             update manga m
             left join (
               select c.manga_id, 
@@ -34,7 +40,21 @@ class StatsController extends Controller
             set m.chapters=ifnull(stat.chapters,0),
                  m.changed =ifnull(stat.changed,"0000-00-00 00:00:00")
         ')->execute();
+        $this->stdout("Updated $affectedRows mangas\n");
+    }
 
+    protected function _sessionManga() {
+        $affectedRows = \Yii::$app->db->createCommand('
+            update session_has_manga s
+            join (
+                select c.manga_id,max(c.number) as number
+                from chapter c
+                where c.created > adddate(now(),interval -1 day)
+                group by c.manga_id
+            ) t
+            set s.is_read_finished = if(s.last_chapter_number < t.number,"no","yes")
+        ')->execute();
+        $this->stdout("Updated $affectedRows users\n");
     }
 
 }

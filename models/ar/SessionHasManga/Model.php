@@ -9,7 +9,11 @@ class Model extends ar\_origin\CSessionHasManga {
     const STATUS_HIDE = 'hide';
     const STATUS_FAVORITE = 'favorite';
     const STATUS_STARTED = 'started';
+    const STATUS_DEFERRED = 'deferred';
     const STATUS_UNKNOWN = 'unknown';
+
+    const READ_FINISHED_YES = 'yes';
+    const READ_FINISHED_NO = 'no';
 
     protected static $_cache = [];
 
