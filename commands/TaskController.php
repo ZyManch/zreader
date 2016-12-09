@@ -5,6 +5,10 @@
  * @license http://www.yiiframework.com/license/
  */
 
+
+//yii task --trace=1 -f --task_id=124286
+
+
 namespace app\commands;
 
 use yii\console\Controller;
@@ -28,6 +32,7 @@ class TaskController extends Controller
     public $count = 1;
     public $silent = false;
     public $force = false;
+    public $trace = false;
 
     public function init() {
         parent::init();
@@ -37,7 +42,7 @@ class TaskController extends Controller
 
     public function options($actionID)
     {
-        return ['task','count','task_id','silent','force'];
+        return ['task','count','task_id','silent','force','trace'];
     }
 
     public function optionAliases()
@@ -84,11 +89,22 @@ class TaskController extends Controller
         $task = $query->one();
         /** @var $task ar\Task\Model */
         if ($task) {
-            $this->_output('Start task '.$task->task_id.':');
-
+            $this->_output('Start task '.$task->task_id);
+            if ($this->trace) {
+                $this->_output("\n");
+            } else {
+                $this->_output(':');
+            }
             try {
-                $task->process();
-                $this->_output('success');
+                $start = microtime(true);
+                $task->process($this->trace ? $this : null);
+                $duration = microtime(true) - $start;
+                if ($this->trace) {
+                    $this->_output('Task finished success');
+                } else {
+                    $this->_output('success');
+                }
+                $this->_output(' ['.round($duration,1).' sec]');
             }   catch (\Exception $e) {
                 print $e->getTraceAsString();
                 $this->_output($e->getFile().':'.$e->getLine().' - '.$e->getMessage());

@@ -2,9 +2,9 @@
 
 namespace app\models\ar\Task;
 
-use app\commands\TaskController;
 use app\models\ar;
 use Yii;
+use yii\console\Controller;
 
 /**
  * This is the model class for table "task".
@@ -33,8 +33,14 @@ abstract class Model extends ar\_origin\CTask
     const STATUS_PROGRESS = 'progress';
     const STATUS_ERROR = 'error';
 
+    /** @var  Controller */
+    protected $controller;
 
-    public function process() {
+    protected $_lastTime;
+
+    public function process(Controller $controller = null) {
+        $this->controller = $controller;
+        $this->_lastTime = microtime(true);
         $this->status = self::STATUS_PROGRESS;
         $this->save();
         $transaction = \Yii::$app->db->beginTransaction();
@@ -48,6 +54,26 @@ abstract class Model extends ar\_origin\CTask
             $this->status = self::STATUS_ERROR;
             $this->save();
             throw $e;
+        }
+    }
+
+    protected function stdout($text, $extend = true) {
+        if ($this->controller) {
+            $time = microtime(true);
+            $duration = $time - $this->_lastTime;
+            $this->_lastTime = $time;
+            if ($extend) {
+
+                $text = ' > '.$text;
+                if (strlen($text)<60) {
+                    $text .= str_repeat(' ', 60-strlen($text));
+                }
+                $text.= ' ['.implode(', ',[
+                    number_format(memory_get_usage(true)/1024/1024,1).' mb',
+                    number_format($duration,1).' sec',
+                ])."]\n";
+            }
+            $this->controller->stdout($text);
         }
     }
 

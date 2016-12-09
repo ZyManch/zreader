@@ -8,6 +8,8 @@
 namespace app\models\parser;
 
 use app\models\ar\Image;
+use app\models\image\Jpeg;
+use app\models\image\Png;
 
 class ImageGrid {
 
@@ -21,10 +23,11 @@ class ImageGrid {
     const TOP = 3;
 
     protected $_grid = [];
-
+    /** @var \app\models\image\Image  */
     protected $_gd;
     protected $_width;
     protected $_height;
+
 
     public function __construct($fileName) {
         $this->_gd = $this->_loadImage($fileName);
@@ -49,8 +52,7 @@ class ImageGrid {
         $start = $point;
         $frame = new Frame();
         do {
-            $point = $this->_getNextPoint($point);
-            $frame->addPoint($point);
+            $point = $this->_getNextPoint($frame, $point);
             $step++;
         } while (!$point->isEqual($start) && $step < 10000);
         return $frame;
@@ -72,24 +74,41 @@ class ImageGrid {
     }
 
     /**
+     * @param Frame $frame
      * @param Point $start
      * @return Point
      */
-    protected function _getNextPoint(Point $start) {
-        $circle = array(
+    protected function _getNextPoint(Frame $frame, Point $start) {
+        /** @var Point[] $circle */
+        $circle = [
             self::RIGHT        => $start->getNeighbor(1, 0),
             self::BOTTOM       => $start->getNeighbor(0, 1),
             self::LEFT         => $start->getNeighbor(-1, 0),
             self::TOP          => $start->getNeighbor(0, -1),
-        );
+        ];
+        $directionToSide = [
+            self::RIGHT        => ['side' => self::LEFT,  'x'=>1, 'y'=>0],
+            self::BOTTOM       => ['side' => self::TOP,   'x'=>0, 'y'=>1],
+            self::LEFT         => ['side' => self::RIGHT, 'x'=>-1,'y'=>0],
+            self::TOP          => ['side' => self::BOTTOM,'x'=>0, 'y'=>-1],
+        ];
         /** @var Point $point */
         for ($i=1;$i>=-2;$i--) {
             $currentDirection = ($start->direction+$i+4)%4;
             $point = $circle[$currentDirection];
-            $isWhite = $this->isWhite($point);
+            $isWhite = $this->isBackground($point);
             if ($isWhite) {
                 $point->direction = $currentDirection;
                 return $point;
+            } else {
+                $config = $directionToSide[$currentDirection];
+                $side = new Point(
+                    $point->x,
+                    $point->y,
+                    null,
+                    $config['side']
+                );
+                $frame->addPoint($side);
             }
         }
     }
@@ -98,30 +117,31 @@ class ImageGrid {
         if (substr($fileName, -3)!='jpg') {
             throw new \Exception('Unknown file format:'.$fileName);
         }
-        $gd = imagecreatefromjpeg($fileName);
-        $this->_width = imagesx($gd);
-        $this->_height = imagesy($gd);
+        try {
+            $gd = Jpeg::loadFile($fileName);
+        } catch (\Exception $e) {
+            $gd = Png::loadFile($fileName);
+        }
+        $this->_width = $gd->getWidth();
+        $this->_height = $gd->getHeight();
         return $gd;
     }
 
 
-    protected function _isWhite($x, $y) {
-        $rgb = imagecolorat($this->_gd, $x, $y);
-        $r = ($rgb >> 16) & 0xFF;
-        $g = ($rgb >> 8) & 0xFF;
-        $b = $rgb & 0xFF;
-        return $r > 220 && $g > 220 && $b > 220;
+    protected function _isBackground($x, $y) {
+        $rgb = $this->_gd->getRGB($x, $y);
+        return ($rgb['r'] > 220) && ($rgb['g'] > 220) && ($rgb['b'] > 220);
     }
 
-    public function isWhite(Point $point) {
-        if ($point->x < 0 || $point->x > $this->_width) {
+    public function isBackground(Point $point) {
+        if ($point->x < 0 || $point->x >= $this->_width) {
             return true;
         }
-        if ($point->y < 0 || $point->y > $this->_height) {
+        if ($point->y < 0 || $point->y >= $this->_height) {
             return true;
         }
         if (!isset($this->_grid[$point->x][$point->y])) {
-            $this->_grid[$point->x][$point->y] = $this->_isWhite($point->x, $point->y);
+            $this->_grid[$point->x][$point->y] = $this->_isBackground($point->x, $point->y);
         }
         return $this->_grid[$point->x][$point->y];
 

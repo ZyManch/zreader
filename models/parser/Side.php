@@ -9,7 +9,7 @@
 namespace app\models\parser;
 
 
-class Point {
+class Side {
 
     const LEFT = 'left';
     const RIGHT = 'right';
@@ -21,10 +21,9 @@ class Point {
     public $direction;
     public $side = [];
 
-    public function __construct($x, $y, $direction = null, $side = []) {
+    public function __construct($x, $y, $side = []) {
         $this->x = $x;
         $this->y = $y;
-        $this->direction = $direction;
         if (!is_array($side)) {
             $side = [$side];
         }

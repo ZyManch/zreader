@@ -27,12 +27,19 @@ class Frame {
         if (is_null($this->_first)) {
             $this->_first = $point;
         }
-        $this->_points[$point->x][$point->y] = $point;
-        ksort($this->_points[$point->x]);
+        if (isset($this->_points[$point->x][$point->y])) {
+            $this->_points[$point->x][$point->y]->side = array_merge(
+                $this->_points[$point->x][$point->y]->side,
+                $point->side
+            );
+        } else {
+            $this->_points[$point->x][$point->y] = $point;
+            ksort($this->_points[$point->x]);
+        }
     }
 
     /**
-     * @return Point[]
+     * @return Point[][]
      */
     public function getPoints() {
         return $this->_points;
@@ -51,10 +58,13 @@ class Frame {
         }
         $inFrame = false;
         foreach ($this->_points[$point->x] as $y => $border) {
+            if ($point->y < $y) {
+                return $inFrame;
+            }
             if ($point->y == $y) {
                 return true;
             }
-            if ($border->direction === ImageGrid::RIGHT) {
+            if (in_array(ImageGrid::BOTTOM,$border->side)) {
                 $inFrame = false;
             } else {
                 $inFrame = true;

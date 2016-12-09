@@ -3,6 +3,9 @@
 namespace app\models\ar\Task;
 
 use app\models\ar;
+use app\models\image\Image;
+use app\models\image\Jpeg;
+use app\models\image\Png;
 use app\models\parser\Frame;
 use app\models\parser\ImageGrid;
 use app\models\parser\Point;
@@ -21,22 +24,33 @@ class ProcessChapter extends Model
         foreach ($this->chapter->getImages()->all() as $image) {
             $image->delete();
         }
+        $this->stdout("Old files deleted");
         foreach ($files as $index => $file) {
+            if ($file != '4.jpg') {
+                continue;
+            }
+            $this->stdout("Parsing ".$file);
             $fullName = $this->filename.$file;
             if (!in_array(pathinfo($file,PATHINFO_EXTENSION),array('jpg','png'))) {
                 continue;
             }
             $frames = $this->_extractFrames($fullName);
-            $gd = imagecreatefromjpeg($fullName);
+            $this->stdout("All frames found");
+            try {
+                $gd = Jpeg::loadFile($fullName);
+            } catch (\Exception $e) {
+                $gd = Png::loadFile($fullName);
+            }
             /** @var Frame $frame */
             foreach ($frames as $position => $frame) {
                 $this->_saveFrame($this->chapter, $frame, $gd, $position, $index+1);
             }
-            imagedestroy($gd);
+
         }
+        throw new \Exception('skipped');
     }
 
-    protected function _saveFrame(ar\Chapter\Model $chapter, Frame $frame, $gd, $position, $page) {
+    protected function _saveFrame(ar\Chapter\Model $chapter, Frame $frame, Image $gd, $position, $page) {
         $image = new ar\Image\Model();
         $image->position = $position;
         $image->page = $page;
@@ -45,72 +59,73 @@ class ProcessChapter extends Model
         $image->top = $frame->getMinY();
         $image->width = $frame->getMaxX()-$frame->getMinX();
         $image->height = $frame->getMaxY()-$frame->getMinY();
-        $image->filename = $chapter->chapter_id.'_'.$page.'_'.$position.'.jpg';
+        $image->filename = $chapter->number.'_'.$page.'_'.$position.'.jpg';
         if (!$image->save()) {
             throw new \Exception('Error create image:'.json_encode($image->getFirstErrors()));
         }
+        $this->stdout("Image saved to db");
         $lastPoint = null;
-        $frameGd = imagecreatetruecolor($image->width,$image->height);
-        imagealphablending($frameGd, false);
-        $transparency = imagecolorallocatealpha($frameGd, 255, 255, 255, 127);
-        imagecolortransparent($frameGd, $transparency);
-        imagefill($frameGd, 0, 0, $transparency);
-        imagesavealpha($frameGd, true);
-        $colors = array();
-        $width = imagesx($gd);
-        $height = imagesy($gd);
+        $frameGd = Png::create($image->width,$image->height);
+        $frameGd->fillBg();
+
         for ($x=$frame->getMinX();$x<=$frame->getMaxX();$x++) {
             for ($y=$frame->getMinY();$y<=$frame->getMaxY();$y++) {
                 $point = new Point($x, $y);
                 if ($frame->inFrame($point)) {
-                    if ($x<0 || $y<0 || $x>$width || $y > $height) {
-                        $color = 0xffffff;
-                    } else {
-                        $color = imagecolorat($gd,$x,$y);
-                    }
-
-                    if (!isset($colors[$color])) {
-                        $r = ($color >> 16) & 0xFF;
-                        $g = ($color >> 8) & 0xFF;
-                        $b = $color & 0xFF;
-                        $colors[$color] = imagecolorallocate($frameGd,$r, $g, $b);
-                    }
-                    imagesetpixel($frameGd,$x-$frame->getMinX(),$y-$frame->getMinY(),$colors[$color]);
+                    $color = $gd->getRGB($x, $y);
+                    $frameGd->setPixel(
+                        $x-$frame->getMinX(),
+                        $y-$frame->getMinY(),
+                        $color
+                    );
                 }
             }
         }
+        /*
+        $directions = [
+            ImageGrid::RIGHT  => ['r'=>0,  'g'=>255,'b'=>0], // green
+            ImageGrid::LEFT   => ['r'=>0,  'g'=>0,  'b'=>255], // blue
+            ImageGrid::TOP    => ['r'=>255,'g'=>0,  'b'=>0], // red
+            ImageGrid::BOTTOM => ['r'=>255,'g'=>255,'b'=>0] // yellow
+        ];
+        foreach ($frame->getPoints() as $x => $ys) {
+            foreach ($ys as $y => $border) {
+                if (in_array(ImageGrid::BOTTOM, $border->side)) {
+                    $frameGd->setPixel(
+                        $x - $frame->getMinX(),
+                        $y - $frame->getMinY(),
+                        $directions[ImageGrid::BOTTOM]
+                    );
+                } else {
+                    $frameGd->setPixel(
+                        $x - $frame->getMinX(),
+                        $y - $frame->getMinY(),
+                        $directions[$border->side[0]]
+                    );
+                }
+            }
+        }*/
         $fullPath = $image->getFullPath();
-        $dirName = dirname($fullPath);
-        if (!file_exists($dirName)) {
-            mkdir($dirName,0777,true);
-        }
-        imagejpeg($frameGd,$fullPath,80);
-        imagedestroy($frameGd);
-
+        $frameGd->save($fullPath, 80);
+        $this->stdout("Image saved to disk");
     }
 
     protected function _extractFrames($fullName) {
-
         $grid = new ImageGrid($fullName);
-
         $width = $grid->getWidth();
         $height = $grid->getHeight();
         $frames = [];
         $isReverted = ($this->manga->is_reverted == ar\Manga\Model::IS_REVERTED_YES);
-        for ($y = 0; $y <= $height; $y++) {
-            if ($isReverted) {
-                for ($x = 0; $x <= $width; $x++) {
-                    $frame = $this->_getFrameByXY($grid, $x, $y);
-                    if ($frame) {
-                        $frames[] = $frame;
-                    }
-                }
-            } else {
-                for ($x = $width; $x >= 0; $x--) {
-                    $frame = $this->_getFrameByXY($grid, $x, $y);
-                    if ($frame) {
-                        $frames[] = $frame;
-                    }
+        $yValues = range(0, $height);
+        $xValues = range(0, $width);
+        if (!$isReverted) {
+            rsort($xValues);
+        }
+        foreach ($yValues as $y) {
+            foreach ($xValues  as $x) {
+                $frame = $this->_getFrameByXY($grid, $x, $y);
+                if ($frame) {
+                    $frames[] = $frame;
                 }
             }
         }
@@ -119,7 +134,7 @@ class ProcessChapter extends Model
 
     protected function _getFrameByXY(ImageGrid $grid, $x, $y) {
         $point = new Point($x, $y);
-        if ($grid->isWhite($point)) {
+        if ($grid->isBackground($point)) {
             return null;
         }
         $isReverted = ($this->manga->is_reverted == ar\Manga\Model::IS_REVERTED_YES);
@@ -129,6 +144,7 @@ class ProcessChapter extends Model
         if ($frame->isSmall()) {
             return null;
         }
+        $this->stdout("Found frame");
         return $frame;
     }
 
