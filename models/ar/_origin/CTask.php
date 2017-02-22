@@ -12,11 +12,13 @@ use app\models\ar;
  * @property string $manga_id
  * @property string $chapter_id
  * @property string $task
+ * @property string $storage_id
  * @property string $filename
  * @property string $status
  *
  * @property ar\Chapter\Model $chapter
  * @property ar\Manga\Model $manga
+ * @property ar\Storage\Model $storage
  */
 class CTask extends \yii\db\ActiveRecord
 {
@@ -34,13 +36,14 @@ class CTask extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['manga_id', 'chapter_id'], 'integer'],
-            [['task', 'filename'], 'required'],
+            [['manga_id', 'chapter_id', 'storage_id'], 'integer'],
+            [['task', 'storage_id', 'filename'], 'required'],
             [['status'], 'string'],
             [['task'], 'string', 'max' => 16],
             [['filename'], 'string', 'max' => 256],
             [['chapter_id'], 'exist', 'skipOnError' => true, 'targetClass' => ar\Chapter\Model::className(), 'targetAttribute' => ['chapter_id' => 'chapter_id']],
             [['manga_id'], 'exist', 'skipOnError' => true, 'targetClass' => ar\Manga\Model::className(), 'targetAttribute' => ['manga_id' => 'manga_id']],
+            [['storage_id'], 'exist', 'skipOnError' => true, 'targetClass' => ar\Storage\Model::className(), 'targetAttribute' => ['storage_id' => 'storage_id']],
         ];
     }
 
@@ -54,6 +57,7 @@ class CTask extends \yii\db\ActiveRecord
             'manga_id' => 'Manga ID',
             'chapter_id' => 'Chapter ID',
             'task' => 'Task',
+            'storage_id' => 'Storage ID',
             'filename' => 'Filename',
             'status' => 'Status',
         ];
@@ -71,6 +75,13 @@ class CTask extends \yii\db\ActiveRecord
         public function getManga()
     {
     return $this->hasOne(ar\Manga\Model::className(), ['manga_id' => 'manga_id']);
+    }
+        /**
+     * @return \yii\db\ActiveQuery
+     */
+        public function getStorage()
+    {
+    return $this->hasOne(ar\Storage\Model::className(), ['storage_id' => 'storage_id']);
     }
     
     /**

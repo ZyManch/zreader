@@ -19,6 +19,10 @@ class Png extends Image {
         return @imagecreatefrompng($fileName);
     }
 
+    public function getExtension() {
+        return 'png';
+    }
+
     protected function _getRGB($x, $y) {
         $rgb = imagecolorat($this->_gd, $x, $y);
         if ($rgb === false) {
@@ -44,8 +48,14 @@ class Png extends Image {
         return $this->_colorIndex[$rgb];
     }
 
-    protected function _getColor($r, $g, $b) {
-        $key = $r.'-'.$g.'-'.$b;
+    protected function _getColor($r, $g, $b, $optimize = false) {
+        if ($optimize) {
+            $r = round($r/self::OPTIMIZATION_COEFFICIENT)*self::OPTIMIZATION_COEFFICIENT;
+            $g = round($g/self::OPTIMIZATION_COEFFICIENT)*self::OPTIMIZATION_COEFFICIENT;
+            $b = round($b/self::OPTIMIZATION_COEFFICIENT)*self::OPTIMIZATION_COEFFICIENT;
+
+        }
+        $key = $r . '-' . $g . '-' . $b;
         if (!isset($this->_colors[$key])) {
             $this->_colors[$key] = imagecolorallocate($this->_gd,$r, $g, $b);
         }
@@ -55,6 +65,14 @@ class Png extends Image {
 
     public function save($fileName, $quality) {
         $this->_createFolderForFileName($fileName);
-        imagepng($this->_gd,$fileName,$quality/10);
+        imagepng($this->_gd,$fileName);
+        exec('pngquant --force --skip-if-larger --quality=100 --output='.$fileName.'  '.$fileName);
+    }
+
+    /**
+     * @return Jpeg
+     */
+    public function toJpeg() {
+        return new Jpeg($this->_gd);
     }
 }

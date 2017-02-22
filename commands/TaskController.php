@@ -57,7 +57,6 @@ class TaskController extends Controller
     }
 
     public function actionIndex() {
-
         if ($this->_isAlreadyExecuted()) {
             $this->_output('Another script is already in process');
             return;
@@ -121,13 +120,22 @@ class TaskController extends Controller
         if ($this->force) {
             return false;
         }
-        return file_exists($this->_getLockFileName());
+        if (!file_exists($this->_getLockFileName())) {
+            return false;
+        }
+        $content = file_get_contents($this->_getLockFileName());
+        $parts = explode(' ',$content,2);
+        @exec(sprintf('ps %d',$parts[0]), $output, $result);
+        return sizeof($output) >= 2;
 
     }
 
     protected function _lockExecution() {
         if (!$this->force) {
-            file_put_contents($this->_getLockFileName(), date('Y-m-d H:i:s'));
+            file_put_contents(
+                $this->_getLockFileName(),
+                getmypid().' '.date('Y-m-d H:i:s')
+            );
         }
     }
 

@@ -10,18 +10,22 @@ namespace app\models\image;
 
 abstract class Image {
 
+    const OPTIMIZATION_COEFFICIENT = 5;
+
     protected $_gd;
     protected $_width;
     protected $_height;
 
     protected $_colorCache = [];
 
+    static $_count = 0;
 
     public function __construct($gd = null) {
         if ($gd) {
             $this->_gd = $gd;
             $this->_initSize();
         }
+        self::$_count++;
     }
 
     /**
@@ -58,6 +62,17 @@ abstract class Image {
 
     abstract protected function _load($fileName);
 
+    abstract public function getExtension();
+
+    public function getFileSize() {
+        $fileName = sys_get_temp_dir();
+        $fileName.='/reader.tmp';
+        $this->save($fileName, 100);
+        $fileSize = filesize($fileName);
+        unlink($fileName);
+        return $fileSize;
+    }
+
     public function getRGB($x, $y) {
         if ($x<0 || $y<0 || $x>=$this->_width || $y>=$this->_height) {
             return $this->getBgColor($y);
@@ -82,18 +97,24 @@ abstract class Image {
 
     public function fillBg() {
         imagealphablending($this->_gd, false);
-        $bg = imagecolorallocate($this->_gd, 255, 255, 255);
-        //$bg = imagecolorallocatealpha($frameGd, 255, 255, 255, 127);
-        //imagecolortransparent($frameGd, $bg);
+        $bg = imagecolorallocatealpha($this->_gd, 255, 255, 255, 127);
+        imagecolortransparent($this->_gd, $bg);
         imagefill($this->_gd, 0, 0, $bg);
-        //imagesavealpha($frameGd, true);
+        imagesavealpha($this->_gd, true);
+        //imagetruecolortopalette($this->_gd, false, 255);
     }
 
-    abstract protected function _getColor($r, $g, $b);
+    abstract protected function _getColor($r, $g, $b, $optimize = false);
+
     abstract public function save($fileName, $quality);
 
-    public function setPixel($x, $y, $color) {
-        imagesetpixel($this->_gd,$x,$y, $this->_getColor($color['r'],$color['g'],$color['b']));
+    public function setPixel($x, $y, $color, $optimize = false) {
+        imagesetpixel(
+            $this->_gd,
+            $x,
+            $y,
+            $this->_getColor($color['r'],$color['g'],$color['b'], $optimize)
+        );
     }
 
     public function getWidth() {
@@ -110,6 +131,7 @@ abstract class Image {
 
     public function __destruct() {
         @imagedestroy($this->_gd);
+        self::$_count--;
     }
 
     protected function _createFolderForFileName($fileName) {

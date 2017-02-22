@@ -11,6 +11,8 @@ class UploadMangaList extends Model
 
     const MANGA_PER_PAGE = 70;
 
+    const STORAGE_ID = 2;
+
     public function init() {
         parent::init();
         $this->task = self::TASK_UPLOAD_MANGA;
@@ -22,17 +24,24 @@ class UploadMangaList extends Model
         do {
             $newManga = $this->_collectManga($offset, $page);
             foreach ($newManga as $url) {
-                $this->_createOrUpdateTask(null,null,self::TASK_UPLOAD_MANGA, $url);
+                $this->_createOrUpdateTask(
+                    null,
+                    null,
+                    self::TASK_UPLOAD_MANGA,
+                    self::STORAGE_ID,
+                    $url,
+                    true
+                );
             }
             $offset+=self::MANGA_PER_PAGE;
+            $this->stdout("Found $offset mangas");
         } while (sizeof($newManga) > 0);
     }
 
 
     protected function _collectManga($offset, $page) {
-        $domain = rtrim($this->filename,'/');
         $url = sprintf(
-            $domain.'/list?type=&sortType=votes&offset=%d&max=%d',
+            'list?type=&sortType=votes&offset=%d&max=%d',
             $offset,
             $page
         );
@@ -47,7 +56,7 @@ class UploadMangaList extends Model
             if (!$url || substr($url,0,1)!='/' || strlen($url) > 1000 || substr($url,0,13)=='/list/person/') {
                 continue;
             }
-            $result[] = $domain.$url;
+            $result[] = ltrim($url,'/');
         }
         return $result;
     }

@@ -10,6 +10,7 @@ use yii\helpers\Url;
 class UploadManga extends Model
 {
 
+    const STORAGE_ID=2;
 
     protected $_genreCache;
     protected $_authorCache;
@@ -38,7 +39,6 @@ class UploadManga extends Model
     protected function _assignChapters(ar\Manga\Model $manga, $html) {
         $newChapters = $this->_getChapters($html);
         $oldChapters = ArrayHelper::map($manga->getChapters()->all(),'number','chapter_id');
-        $domain = parse_url($this->filename, PHP_URL_HOST);
         foreach ($newChapters as $number => $chapterDetail) {
             if (!isset($oldChapters[$number])) {
                 $chapter = new ar\Chapter\Model();
@@ -52,8 +52,10 @@ class UploadManga extends Model
                     $manga->manga_id,
                     $chapter->chapter_id,
                     self::TASK_UPLOAD_CHAPTER,
-                    'http://'.$domain.$chapterDetail['url']
+                    self::STORAGE_ID,
+                    $chapterDetail['url']
                 );
+
             }
         }
 
@@ -139,8 +141,7 @@ class UploadManga extends Model
         if (!preg_match('#<span class="read-first"><a href="([^"]+)#',$html, $matches)) {
             return [];
         }
-        $domain = parse_url($this->filename, PHP_URL_HOST);
-        $firstChapter = $this->_requestPage('http://'.$domain.$matches[1]);
+        $firstChapter = $this->_requestPage(ltrim($matches[1].'?mature=1','/'));
         if (!preg_match('#<select id="chapterSelectorSelect"(.*)<\/select>#su',$firstChapter, $matches)) {
             return [];
         }
@@ -183,12 +184,12 @@ class UploadManga extends Model
 
                 $result[sprintf('%.1f',$parts[0])] = [
                     'title' => $parts[1],
-                    'url'   => $url
+                    'url'   => ltrim($url,'/')
                 ];
             } else {
                 $result[sprintf('%.1f',$index+1)] = [
                     'title' => $titles[$index],
-                    'url'   => $url
+                    'url'   => ltrim($url,'/')
                 ];
             }
         }

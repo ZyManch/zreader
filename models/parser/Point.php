@@ -21,6 +21,8 @@ class Point {
     public $direction;
     public $side = [];
 
+    static $_count = 0;
+
     public function __construct($x, $y, $direction = null, $side = []) {
         $this->x = $x;
         $this->y = $y;
@@ -29,31 +31,7 @@ class Point {
             $side = [$side];
         }
         $this->side = $side;
-    }
-
-
-    public function isOnLine(Point $p1, Point $p2) {
-        if (($p1->x == $p2->x) || ($p1->x == $this->x)) {
-            return (($p1->x == $p2->x) && ($p1->x == $this->x));
-        }
-        return (($p1->y-$p2->y)/($p1->x-$p2->x)-($p1->y-$this->y)/($p1->x-$this->x) < 0.000001);
-    }
-
-    public function isBetween(Point $p1, Point $p2) {
-        if (!$this->isOnLine($p1, $p2)) {
-            return false;
-        }
-        if (($p1->x == $this->x) && ($p1->y == $this->y)) {
-            return true;
-        }
-        if (($p2->x == $this->x) && ($p2->y == $this->y)) {
-            return true;
-        }
-        if ($p1->y == $p2->y) {
-            return ($this->x > $p1->x) === ($this->x < $p2->x);
-        } else {
-            return ($this->y > $p1->y) === ($this->y < $p2->y);
-        }
+        self::$_count++;
     }
 
     public function isEqual(Point $point) {
@@ -62,5 +40,9 @@ class Point {
 
     public function getNeighbor($diffX, $diffY) {
         return new Point($this->x + $diffX,$this->y+ $diffY);
+    }
+
+    public function __destruct() {
+        self::$_count--;
     }
 }

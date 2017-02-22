@@ -3,17 +3,19 @@
 namespace app\models\ar\Image;
 
 use \app\models\ar;
-use yii\helpers\Url;
-
 
 class Model extends ar\_origin\CImage {
 
     public function getFullPath() {
-        return Url::to('@app').'/public'.$this->getViewPath();
+        return $this->storage->getFullPath($this);
     }
 
     public function getViewPath() {
-        return '/manga/image/'.$this->chapter->manga->url.'/'.$this->chapter->number.'/'.$this->filename;
+        return $this->storage->getViewPath($this);
+    }
+
+    public function getRelativePath() {
+        return $this->chapter->manga->url.'/'.$this->chapter->number.'/'.$this->filename;
     }
 
 }

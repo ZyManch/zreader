@@ -18,8 +18,9 @@ class Side {
     public $x;
     public $y;
 
-    public $direction;
     public $side = [];
+
+    static $_count = 0;
 
     public function __construct($x, $y, $side = []) {
         $this->x = $x;
@@ -28,6 +29,7 @@ class Side {
             $side = [$side];
         }
         $this->side = $side;
+        self::$_count++;
     }
 
 
@@ -61,5 +63,9 @@ class Side {
 
     public function getNeighbor($diffX, $diffY) {
         return new Point($this->x + $diffX,$this->y+ $diffY);
+    }
+
+    public function __destruct() {
+        self::$_count--;
     }
 }

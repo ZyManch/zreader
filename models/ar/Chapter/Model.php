@@ -47,13 +47,21 @@ class Model extends ar\_origin\CChapter
         /** @var ar\Image\Model[] $images */
         $images = $this->
             getImages()->
+            joinWith([
+                'storage.storageEngine',
+                'chapter.manga'
+            ])->
             orderBy(array('page'=>'asc','position'=>'asc'))->
             all();
         $result = array();
         foreach ($images as $image) {
-            $result[$image->page][$image->position] = $image;
+            $result[$image->storage->storageEngine->priority][$image->page][$image->position] = $image;
         }
-        return $result;
+        ksort($result,SORT_NUMERIC);
+        if (!$result) {
+            return [];
+        }
+        return end($result);
     }
 
     /**

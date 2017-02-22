@@ -24,6 +24,7 @@ abstract class Model extends ar\_origin\CTask
 
     const TASK_UPLOAD_MANGA = 'upload_manga';
     const TASK_UPLOAD_CHAPTER = 'upload_chapter';
+    const TASK_FILL_CHAPTER = 'fill_chapter';
     const TASK_PROCESS_CHAPTER = 'process_chapter';
     const TASK_UPLOAD_MANGA_LIST = 'upload_list';
 
@@ -96,12 +97,15 @@ abstract class Model extends ar\_origin\CTask
         if (is_null($filename)) {
             $filename = $this->filename;
         }
-        if (substr($filename,0,4)=='http') {
+        if (!$this->storage->path) {
             $curl = curl_init();
             if(!$curl) {
                 throw new \Exception('CURL not installed');
             }
             $agent= 'Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1; .NET CLR 1.0.3705; .NET CLR 1.1.4322)';
+            if (substr(strtolower($filename),0,4)!='http') {
+                $filename = $this->storage->url.$filename;
+            }
             curl_setopt($curl, CURLOPT_URL,$filename);
             curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
             curl_setopt($curl, CURLOPT_VERBOSE, false);
@@ -112,11 +116,12 @@ abstract class Model extends ar\_origin\CTask
             curl_close($curl);
             return $html;
         } else {
-            return file_get_contents($filename);
+            return file_get_contents($this->storage->path.$filename);
         }
     }
 
-    protected function _createOrUpdateTask($mangaId, $chapterId, $taskType, $fileName) {
+    protected function _createOrUpdateTask($mangaId, $chapterId, $taskType,
+                                           $storageId, $fileName, $isUniqueFileName = false) {
         $query = self::find()->
             where('task=:task',array(':task'=>$taskType));
         if ($chapterId) {
@@ -129,6 +134,9 @@ abstract class Model extends ar\_origin\CTask
         } else {
             $query->andWhere('manga_id is null');
         }
+        if ($isUniqueFileName) {
+            $query->andWhere('filename=:filename',array(':filename'=>$fileName));
+        }
         $task = $query->one();
         if (!$task) {
             $task = self::instantiate(['task'=>$taskType]);
@@ -140,6 +148,7 @@ abstract class Model extends ar\_origin\CTask
                 $task->chapter_id = $chapterId;
             }
         }
+        $task->storage_id = $storageId;
         $task->filename = $fileName;
         $task->status = self::STATUS_WAIT;
         if (!$task->save()) {

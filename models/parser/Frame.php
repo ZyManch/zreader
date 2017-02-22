@@ -9,62 +9,78 @@ namespace app\models\parser;
 
 class Frame {
 
-    const MIN_POINTS_TO_SKIP = 400;
-
     const MIN_X = 'minx';
     const MAX_X = 'maxx';
     const MIN_Y = 'minY';
     const MAX_Y = 'maxY';
 
-    /** @var Point[][] */
-    protected $_points = array();
+    /** @var Side[][] */
+    protected $_sides = [];
+    protected $_points = [];
 
     protected $_stat;
 
     protected $_first;
 
-    public function addPoint(Point $point) {
+    static $_count = 0;
+
+    public function __construct() {
+        self::$_count++;
+    }
+
+    public function addSide(Side $side) {
         if (is_null($this->_first)) {
-            $this->_first = $point;
+            $this->_first = $side;
         }
-        if (isset($this->_points[$point->x][$point->y])) {
-            $this->_points[$point->x][$point->y]->side = array_merge(
-                $this->_points[$point->x][$point->y]->side,
-                $point->side
+        if (isset($this->_sides[$side->x][$side->y])) {
+            $this->_sides[$side->x][$side->y]->side = array_merge(
+                $this->_sides[$side->x][$side->y]->side,
+                $side->side
             );
         } else {
-            $this->_points[$point->x][$point->y] = $point;
-            ksort($this->_points[$point->x]);
+            $this->_sides[$side->x][$side->y] = $side;
+            ksort($this->_sides[$side->x]);
         }
     }
 
+    public function addPoint(Point $point) {
+        $this->_points[] = $point;
+    }
+
     /**
-     * @return Point[][]
+     * @return Side[][]
+     */
+    public function getSides() {
+        return $this->_sides;
+    }
+
+    /**
+     * @return Point[]
      */
     public function getPoints() {
         return $this->_points;
     }
 
     /**
-     * @return Point
+     * @return Side
      */
     public function getFirst() {
         return $this->_first;
     }
 
     public function inFrame(Point $point) {
-        if (!isset($this->_points[$point->x])) {
+        if (!isset($this->_sides[$point->x])) {
             return false;
         }
         $inFrame = false;
-        foreach ($this->_points[$point->x] as $y => $border) {
+        foreach ($this->_sides[$point->x] as $y => $border) {
             if ($point->y < $y) {
                 return $inFrame;
             }
             if ($point->y == $y) {
                 return true;
             }
-            if (in_array(ImageGrid::BOTTOM,$border->side)) {
+            if (in_array(FrameProvider::BOTTOM,$border->side)) {
                 $inFrame = false;
             } else {
                 $inFrame = true;
@@ -90,7 +106,7 @@ class Frame {
             $maxX = $first->x;
             $minY = $first->y;
             $maxY = $first->y;
-            foreach ($this->_points as $x => $points) {
+            foreach ($this->_sides as $x => $points) {
                 if ($x < $minX) {
                     $minX = $x;
                 }
@@ -117,8 +133,8 @@ class Frame {
     }
 
     public function isSmall() {
-        return ($this->getMaxX()-$this->getMinX() <= 30) ||
-               ($this->getMaxY()-$this->getMinY() <= 30);
+        return ($this->getMaxX()-$this->getMinX() <= 60) ||
+               ($this->getMaxY()-$this->getMinY() <= 60);
     }
 
     public function getTitle() {
@@ -149,6 +165,10 @@ class Frame {
     public function getMaxY() {
         $this->_loadStat();
         return $this->_stat[self::MAX_Y];
+    }
+
+    public function __destruct() {
+        self::$_count--;
     }
 
 }

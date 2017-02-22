@@ -12,6 +12,7 @@ use app\models\ar;
  * @property string $chapter_id
  * @property integer $page
  * @property integer $position
+ * @property string $storage_id
  * @property string $filename
  * @property string $type
  * @property integer $width
@@ -20,6 +21,7 @@ use app\models\ar;
  * @property integer $top
  *
  * @property ar\Chapter\Model $chapter
+ * @property ar\Storage\Model $storage
  */
 class CImage extends \yii\db\ActiveRecord
 {
@@ -37,12 +39,12 @@ class CImage extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['chapter_id', 'page', 'position', 'filename', 'width', 'height', 'left', 'top'], 'required'],
-            [['chapter_id', 'page', 'position', 'width', 'height', 'left', 'top'], 'integer'],
+            [['chapter_id', 'page', 'position', 'storage_id', 'filename', 'width', 'height', 'left', 'top'], 'required'],
+            [['chapter_id', 'page', 'position', 'storage_id', 'width', 'height', 'left', 'top'], 'integer'],
             [['type'], 'string'],
-            [['filename'], 'string', 'max' => 64],
-            [['chapter_id', 'page', 'position'], 'unique', 'targetAttribute' => ['chapter_id', 'page', 'position'], 'message' => 'The combination of Chapter ID, Page and Position has already been taken.'],
+            [['filename'], 'string', 'max' => 256],
             [['chapter_id'], 'exist', 'skipOnError' => true, 'targetClass' => ar\Chapter\Model::className(), 'targetAttribute' => ['chapter_id' => 'chapter_id']],
+            [['storage_id'], 'exist', 'skipOnError' => true, 'targetClass' => ar\Storage\Model::className(), 'targetAttribute' => ['storage_id' => 'storage_id']],
         ];
     }
 
@@ -56,6 +58,7 @@ class CImage extends \yii\db\ActiveRecord
             'chapter_id' => 'Chapter ID',
             'page' => 'Page',
             'position' => 'Position',
+            'storage_id' => 'Storage ID',
             'filename' => 'Filename',
             'type' => 'Type',
             'width' => 'Width',
@@ -70,6 +73,13 @@ class CImage extends \yii\db\ActiveRecord
         public function getChapter()
     {
     return $this->hasOne(ar\Chapter\Model::className(), ['chapter_id' => 'chapter_id']);
+    }
+        /**
+     * @return \yii\db\ActiveQuery
+     */
+        public function getStorage()
+    {
+    return $this->hasOne(ar\Storage\Model::className(), ['storage_id' => 'storage_id']);
     }
     
     /**

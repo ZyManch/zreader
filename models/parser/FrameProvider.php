@@ -7,11 +7,10 @@
  */
 namespace app\models\parser;
 
-use app\models\ar\Image;
 use app\models\image\Jpeg;
 use app\models\image\Png;
 
-class ImageGrid {
+class FrameProvider {
 
     // 6 7 8
     // 5 X 1
@@ -54,9 +53,30 @@ class ImageGrid {
         do {
             $point = $this->_getNextPoint($frame, $point);
             $step++;
-        } while (!$point->isEqual($start) && $step < 10000);
+        } while (!$point->isEqual($start) && $step < 100000);
         return $frame;
     }
+
+    public function extractFrames($isReverted) {
+        $width = $this->getWidth();
+        $height = $this->getHeight();
+        $frames = [];
+        $yValues = range(0, $height);
+        $xValues = range(0, $width);
+        if (!$isReverted) {
+            rsort($xValues);
+        }
+        foreach ($yValues as $y) {
+            foreach ($xValues  as $x) {
+                $frame = $this->_getFrameByXY($x, $y, $isReverted);
+                if ($frame) {
+                    $frames[] = $frame;
+                }
+            }
+        }
+        return $frames;
+    }
+
 
     public function markAsWhite(Frame $frame) {
         $minX = $frame->getMinX();
@@ -73,6 +93,20 @@ class ImageGrid {
         }
     }
 
+    public function _getFrameByXY($x, $y, $isReverted) {
+        $point = new Point($x, $y);
+        if ($this->isBackground($point)) {
+            return null;
+        }
+        $point = new Point($x+($isReverted?-1:1), $y, FrameProvider::BOTTOM);
+        $frame = $this->extractFrame($point);
+        $this->markAsWhite($frame);
+        if ($frame->isSmall()) {
+            return null;
+        }
+        return $frame;
+    }
+
     /**
      * @param Frame $frame
      * @param Point $start
@@ -87,10 +121,10 @@ class ImageGrid {
             self::TOP          => $start->getNeighbor(0, -1),
         ];
         $directionToSide = [
-            self::RIGHT        => ['side' => self::LEFT,  'x'=>1, 'y'=>0],
-            self::BOTTOM       => ['side' => self::TOP,   'x'=>0, 'y'=>1],
-            self::LEFT         => ['side' => self::RIGHT, 'x'=>-1,'y'=>0],
-            self::TOP          => ['side' => self::BOTTOM,'x'=>0, 'y'=>-1],
+            self::RIGHT        => self::LEFT,
+            self::BOTTOM       => self::TOP,
+            self::LEFT         => self::RIGHT,
+            self::TOP          => self::BOTTOM
         ];
         /** @var Point $point */
         for ($i=1;$i>=-2;$i--) {
@@ -102,13 +136,16 @@ class ImageGrid {
                 return $point;
             } else {
                 $config = $directionToSide[$currentDirection];
-                $side = new Point(
+                if ($point->y == -1) {
+                    print $point->x.'='.$config."\n";
+                }
+                $side = new Side(
                     $point->x,
                     $point->y,
-                    null,
-                    $config['side']
+                    $config
                 );
-                $frame->addPoint($side);
+                $frame->addSide($side);
+                $frame->addPoint($point);
             }
         }
     }

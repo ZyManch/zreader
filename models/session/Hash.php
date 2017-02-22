@@ -8,7 +8,7 @@
 namespace app\models\session;
 
 use app\models\ar;
-use \Yii\web\Cookie;
+use \yii\web\Cookie;
 
 class Hash {
 
